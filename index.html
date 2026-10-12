@@ -3,12 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kâfkef Not (@kafkefnot) | Arapça İlk Adım Defteri & Dil Kırtasiyesi</title>
+  <title>Kâfkef Not (@kafkefnot) | Arapça İlk Adım Defteri</title>
   <meta name="description" content="Arapça İlk Adım Defteri 240 TL. 3 defter alana kargo bedava, 5 defter alana 1 defter hediye ve kargo bedava! Sağdan sola açılan lüks defterler.">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%237b1633'/><text x='50%' y='65%' font-family='serif' font-size='50' fill='white' text-anchor='middle'>ق</text></svg>">
+  <link rel="icon" href="assets/kafkef_logo.jpg">
 </head>
 <body>
+
+  <!-- ADMIN ACTIVE LOGGED-IN NOTIFICATION BAR (Giriş Yapıldığında Görünür) -->
+  <div id="adminActiveBar" style="display:none;background:#280008;color:#ffd3dc;font-size:12px;font-weight:700;padding:8px 20px;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.1)">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span>🔐 Yönetici Olarak Giriş Yapıldı (Kâfkef Not Mağaza Sahibi)</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button onclick="openAdminModal()" style="background:#550012;color:#fff;border:none;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+        ⚙️ Yönetim Paneli
+      </button>
+      <button onclick="logoutAdmin()" style="background:transparent;color:#ffd3dc;border:1px solid #ffd3dc;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer">
+        Çıkış Yap
+      </button>
+    </div>
+  </div>
 
   <!-- ANNOUNCEMENT BAR (TICKER) -->
   <div class="announcement-bar">
@@ -28,22 +43,16 @@
   <!-- SITE HEADER -->
   <header class="site-header">
     <div class="container header-inner">
-      <!-- Logo -->
-      <a href="#" class="brand-logo">
-        <div class="logo-badge">
-          <span class="font-arabic">ق ك</span>
-        </div>
-        <div class="brand-text-wrap">
-          <span class="brand-name">KÂFKEF NOT</span>
-          <span class="brand-tagline">@kafkefnot · Dil Defterleri</span>
-        </div>
+      <!-- Logo: Attığınız Orijinal Logo Görseli -->
+      <a href="#" class="brand-logo" style="display:flex;align-items:center;text-decoration:none">
+        <img src="assets/kafkef_logo.jpg" alt="Kâfkef Not Logo" style="height:48px;width:auto;border-radius:8px;box-shadow:0 3px 12px rgba(62,0,13,0.3)">
       </a>
 
       <!-- Navigation -->
       <nav>
         <ul class="nav-links">
           <li><a href="#" class="nav-link active">Anasayfa</a></li>
-          <li><a href="#urunler" class="nav-link" onclick="renderProducts('active')">Satıştaki Defter (240 TL)</a></li>
+          <li><a href="#urunler" class="nav-link" onclick="renderProducts('active')">Arapça İlk Adım Defteri (240 TL)</a></li>
           <li><a href="#kampanyalar" class="nav-link">Kampanyalar</a></li>
           <li><a href="#ic-sayfalar" class="nav-link">İç Sayfa Tasarımı</a></li>
           <li><a href="#urunler" class="nav-link" onclick="renderProducts('upcoming')">Çok Yakında Gelecekler</a></li>
@@ -58,11 +67,6 @@
 
       <!-- Action Buttons -->
       <div class="header-actions">
-        <!-- Satıcı / Yönetici Paneli Butonu -->
-        <button class="admin-badge-btn" onclick="openAdminModal()" title="Satıcı Paneli">
-          <span>⚙️ Defter Yayınla & Yönet</span>
-        </button>
-
         <!-- Wishlist -->
         <button class="action-btn" onclick="filterWishlist()" title="Favorilerim" aria-label="Favorilerim">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
@@ -86,7 +90,7 @@
         <div class="hero-slides">
           <div class="hero-slide">
             <div class="hero-content">
-              <span class="hero-sub">✦ ŞU ANDA SATIŞTA · KÂFKEF NOT</span>
+              <span class="hero-sub" style="background:rgba(62,0,13,0.08);color:var(--primary)">✦ ŞU ANDA SATIŞTA · KÂFKEF NOT</span>
               <h1 class="hero-title">Arapça İlk Adım <span>Defteri</span></h1>
               <p class="hero-desc">
                 <strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>
@@ -94,14 +98,14 @@
               </p>
 
               <!-- Campaign Highlights -->
-              <div style="background:rgba(255,255,255,0.85);border:1px solid #ebd0d7;border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:6px">
+              <div style="background:rgba(255,255,255,0.9);border:1px solid #ebd0d7;border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:6px">
                 <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#167144;font-weight:700">
                   <span>✓ 3 Adet Defter Alana:</span>
                   <span style="background:#e9f8ee;padding:2px 8px;border-radius:6px">Kargo BEDAVA!</span>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7b1633;font-weight:700">
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--primary);font-weight:700">
                   <span>🎁 5 Adet Defter Alana:</span>
-                  <span style="background:#f9e7e5;padding:2px 8px;border-radius:6px">1 Defter HEDİYE + Kargo BEDAVA!</span>
+                  <span style="background:#f7ebef;padding:2px 8px;border-radius:6px">1 Defter HEDİYE + Kargo BEDAVA!</span>
                 </div>
               </div>
 
@@ -140,7 +144,7 @@
         </div>
 
         <div style="padding-left:10px">
-          <div style="display:inline-flex;align-items:center;gap:6px;background:#f2dce3;color:var(--primary);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px">
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f7ebef;color:var(--primary);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px">
             KAMPANYA 2 · EN ÇOK TERCİH EDİLEN
           </div>
           <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px">5 Defter Alana 1 Defter HEDİYE!</h3>
@@ -226,58 +230,33 @@
       </div>
     </section>
 
-    <!-- CUSTOMER REVIEWS (REAL PHOTOS) -->
+    <!-- SIKÇA SORULAN SORULAR & BİLGİLENDİRME (SAHTE YORUMLAR YERİNE GERÇEK BİLGİLER) -->
     <section class="container" style="margin-bottom:70px">
       <div class="section-head">
-        <span class="section-tag">GERÇEK ÖĞRENCİ DENEYİMLERİ</span>
-        <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
-        <p class="section-subtitle">Arapça İlk Adım Defteri ile çalışan öğrencilerin geri bildirimleri.</p>
+        <span class="section-tag">MERAK EDİLENLER</span>
+        <h2 class="section-title">Sıkça Sorulan Sorular & Bilgiler</h2>
+        <p class="section-subtitle">Kâfkef Not defterleri, kağıt kalitesi ve sipariş süreçleri hakkında bilmek istedikleriniz.</p>
       </div>
 
-      <div class="reviews-grid">
-        <div class="review-card">
-          <div class="review-card-head">
-            <span class="reviewer-name">Ayşe N. (Arapça Hazırlık)</span>
-            <span class="review-verified">✓ Onaylı Alıcı</span>
-          </div>
-          <span class="review-product-tag">Arapça İlk Adım Defteri</span>
-          <div style="color:#f59e0b;font-size:12px;margin-bottom:6px">★★★★★ 5.0</div>
-          <p class="review-body">
-            "Defter elime ulaştığında kalitesine bayıldım! Kapağındaki dokusu, kağıdının kalınlığı muazzam. Dolma kalemle yazıyorum asla arkaya geçirmiyor. 3 adet aldık kargo bedavaya geldi."
-          </p>
-          <div class="review-photo-row">
-            <img src="assets/defter_kapak_kus.jpg" alt="Fotoğraf" class="review-photo-thumb" onclick="openPhotoModal('assets/defter_kapak_kus.jpg', 'Ayşe N.')">
-          </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:960px;margin:0 auto">
+        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
+          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Kağıt dolma kalemle arkaya geçirir mi?</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Defterlerimizde 120 gsm 1. hamur lüks kağıt kullanılmıştır. Dolma kalem, divit, jel ve mürekkepli kalemlerle arkaya geçme veya kanama yapmaz.</p>
         </div>
 
-        <div class="review-card">
-          <div class="review-card-head">
-            <span class="reviewer-name">Mustafa T. (İlahiyat)</span>
-            <span class="review-verified">✓ Onaylı Alıcı</span>
-          </div>
-          <span class="review-product-tag">Arapça İlk Adım Defteri</span>
-          <div style="color:#f59e0b;font-size:12px;margin-bottom:6px">★★★★★ 5.0</div>
-          <p class="review-body">
-            "Sağdan sola açılması o kadar mantıklı ki, normal defterlerde yazı yazarken spiral sürekli rahatsız ediyordu. Sınıftan 5 arkadaş birleşip aldık 1 defter hediye geldi, çok memnunuz."
-          </p>
-          <div class="review-photo-row">
-            <img src="assets/defter_samdan_1.jpg" alt="Fotoğraf" class="review-photo-thumb" onclick="openPhotoModal('assets/defter_samdan_1.jpg', 'Mustafa T.')">
-          </div>
+        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
+          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Kampanyalardan nasıl yararlanırım?</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Sepetinize 3 adet defter eklediğinizde kargo ücreti otomatik olarak 0 TL olur. 5 adet eklediğinizde ise 1 defter hediye edilerek faturanızdan 240 TL düşülür ve kargo yine ücretsiz olur.</p>
         </div>
 
-        <div class="review-card">
-          <div class="review-card-head">
-            <span class="reviewer-name">Zehra K.</span>
-            <span class="review-verified">✓ Onaylı Alıcı</span>
-          </div>
-          <span class="review-product-tag">Arapça İlk Adım Defteri</span>
-          <div style="color:#f59e0b;font-size:12px;margin-bottom:6px">★★★★★ 5.0</div>
-          <p class="review-body">
-            "İçindeki 'Büyük hayaller için küçük bir defter' sözü her açtığımda beni motive ediyor. Çıkacak olan sticker kitaplarınızı ve kelime defterinizi de sabırsızlıkla bekliyorum!"
-          </p>
-          <div class="review-photo-row">
-            <img src="assets/defter_ic_sayfa.jpg" alt="Fotoğraf" class="review-photo-thumb" onclick="openPhotoModal('assets/defter_ic_sayfa.jpg', 'Zehra K.')">
-          </div>
+        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
+          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Siparişler ne zaman kargolanır?</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Hafta içi saat 15:00'e kadar verilen tüm siparişler aynı gün özenli ve korumalı paketlemeyle kargoya teslim edilir.</p>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
+          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Sağdan sola açılmanın faydası nedir?</h4>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Arap alfabesi sağdan sola yazıldığı için standart defterlerde el sürekli spirale veya sırta çarpar. Kâfkef Not ters açılır yapısıyla kesintisiz ve rahat bir yazım deneyimi sunar.</p>
         </div>
       </div>
     </section>
@@ -418,7 +397,28 @@
     </div>
   </div>
 
-  <!-- YÖNETİCİ / SATICI PANELİ (DEFTER YAYINLAMA & YÖNETİM) -->
+  <!-- GÜVENLİ YÖNETİCİ GİRİŞİ MODALI (ŞİFRE İLE GİRİŞ) -->
+  <div class="modal-overlay" id="adminLoginModal">
+    <div class="modal-box" style="max-width:400px;padding:28px">
+      <button class="modal-close-btn" onclick="closeAdminLoginModal()">✕</button>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:36px;margin-bottom:8px">🔒</div>
+        <h3 style="font-size:18px;font-weight:800;color:var(--primary)">Yönetici Girişi</h3>
+        <p style="font-size:12px;color:var(--text-muted)">Kâfkef Not defter yönetim paneline erişmek için şifrenizi giriniz.</p>
+      </div>
+      <form onsubmit="checkAdminPassword(event)">
+        <div style="margin-bottom:16px">
+          <input type="password" id="adminPassInput" required placeholder="Yönetici Şifresi" style="width:100%;padding:12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none">
+          <small style="display:block;margin-top:6px;font-size:11px;color:var(--text-muted)">Varsayılan şifre: <strong>kafkef2026</strong></small>
+        </div>
+        <button type="submit" class="checkout-btn" style="margin-top:0">
+          Giriş Yap
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- YÖNETİCİ / SATICI PANELİ (SADECE GİRİŞ YAPAN MAĞAZA SAHİBİ İÇİN) -->
   <div class="modal-overlay" id="adminModal">
     <div class="modal-box" style="max-width:850px;padding:32px">
       <button class="modal-close-btn" onclick="closeAdminModal()">✕</button>
@@ -427,10 +427,13 @@
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-size:24px">⚙️</span>
           <div>
-            <h2 style="font-size:20px;font-weight:800;color:var(--primary)">Kâfkef Not · Satıcı & Yönetim Paneli</h2>
-            <div style="font-size:12px;color:var(--text-muted)">Buradan yeni defterler yayınlayabilir, satış durumlarını değiştirebilir ve siparişleri görebilirsiniz.</div>
+            <h2 style="font-size:20px;font-weight:800;color:var(--primary)">Kâfkef Not · Defter Yönetim Paneli</h2>
+            <div style="font-size:12px;color:var(--text-muted)">Buradan yeni defterler yayınlayabilir, satış durumlarını değiştirebilir ve müşteri siparişlerini görebilirsiniz.</div>
           </div>
         </div>
+        <button onclick="logoutAdmin()" style="background:#fee2e2;color:#b91c1c;border:none;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+          Çıkış Yap
+        </button>
       </div>
 
       <!-- Admin Tabs -->
@@ -540,8 +543,7 @@
     <div class="container footer-grid">
       <div class="footer-col">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-          <div class="logo-badge" style="width:36px;height:36px;font-size:18px">ق ك</div>
-          <h3 style="color:#fff;font-size:20px;font-weight:800">KÂFKEF NOT</h3>
+          <img src="assets/kafkef_logo.jpg" alt="Kâfkef Not" style="height:40px;border-radius:6px">
         </div>
         <p style="font-size:13.5px;color:#c9b7be;line-height:1.6;margin-bottom:16px">
           Arapça ve dil öğrenme süreçlerini kolaylaştırmak, keyifli ve sistematik hale getirmek için tasarlanan sağdan sola açılan lüks defterler.
@@ -563,11 +565,11 @@
       </div>
 
       <div class="footer-col">
-        <h4>Yönetim</h4>
+        <h4>Mağaza Yönetimi</h4>
         <ul class="footer-links">
-          <li><a href="javascript:void(0)" onclick="openAdminModal()">⚙️ Satıcı Paneli (Defter Yayınla)</a></li>
-          <li><a href="javascript:void(0)" onclick="openAdminModal();switchAdminTab('orders');">📦 Siparişleri İncele</a></li>
+          <li><a href="javascript:void(0)" onclick="openAdminAccess()">🔒 Yönetici Girişi</a></li>
           <li><a href="#ic-sayfalar">İç Sayfa Önizlemesi</a></li>
+          <li><a href="https://www.instagram.com/kafkefnot/" target="_blank" rel="noopener">Müşteri Destek / Instagram</a></li>
         </ul>
       </div>
 

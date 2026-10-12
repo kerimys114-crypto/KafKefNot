@@ -1,6 +1,6 @@
-// Kâfkef Not (@kafkefnot) - E-Commerce Engine & Admin Management System
+// Kâfkef Not (@kafkefnot) - E-Commerce Engine & Secure Admin Management System
 
-// 1. DEFAULT PRODUCT DATABASE
+// 1. DEFAULT PRODUCT DATABASE (Orijinal Ürünler - Sahte Veri Yok)
 const DEFAULT_PRODUCTS = [
   {
     id: 'kafkef-ilk-adim-defteri',
@@ -9,10 +9,7 @@ const DEFAULT_PRODUCTS = [
     category: 'defter',
     price: 240,
     oldPrice: 290,
-    status: 'active', // SATIŞTA
-    rating: 5.0,
-    reviewsCount: 184,
-    sales5Days: 420,
+    status: 'active', // ŞU ANDA SATIŞTA
     badges: ['Şu Anda Satışta', '3 Adete Kargo Bedava', '5 Adete 1 Hediye!'],
     image: 'assets/defter_kapak_kus.jpg',
     gallery: [
@@ -23,7 +20,7 @@ const DEFAULT_PRODUCTS = [
     ],
     arabicLetter: 'ق ك',
     arabicSub: 'اللُّغَةُ العَرَبِيَّة',
-    desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan özel ergonomisi, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Dolma kalemle arkaya geçirmeyen yüksek gramajlı lüks fildişi kağıt.',
+    desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Dolma kalemle arkaya sızdırmayan yüksek gramajlı lüks fildişi kağıt.',
     features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', '120 gsm Mürekkep Geçirmez Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak']
   },
   {
@@ -34,9 +31,6 @@ const DEFAULT_PRODUCTS = [
     price: 240,
     oldPrice: null,
     status: 'upcoming', // ÇOK YAKINDA SİZİNLE
-    rating: 5.0,
-    reviewsCount: 0,
-    sales5Days: 0,
     badges: ['Çok Yakında Sizinle', 'Ön Talep Açık'],
     image: 'assets/defter_on_yuz.jpg',
     gallery: ['assets/defter_on_yuz.jpg'],
@@ -53,9 +47,6 @@ const DEFAULT_PRODUCTS = [
     price: 240,
     oldPrice: null,
     status: 'upcoming', // ÇOK YAKINDA SİZİNLE
-    rating: 5.0,
-    reviewsCount: 0,
-    sales5Days: 0,
     badges: ['Çok Yakında Sizinle', 'Gramer Serisi'],
     image: 'assets/defter_samdan_1.jpg',
     gallery: ['assets/defter_samdan_1.jpg'],
@@ -72,9 +63,6 @@ const DEFAULT_PRODUCTS = [
     price: 260,
     oldPrice: null,
     status: 'upcoming', // ÇOK YAKINDA SİZİNLE
-    rating: 5.0,
-    reviewsCount: 0,
-    sales5Days: 0,
     badges: ['Çok Yakında Sizinle', 'Planlayıcı'],
     image: 'assets/defter_ic_sayfa.jpg',
     gallery: ['assets/defter_ic_sayfa.jpg'],
@@ -91,9 +79,6 @@ const DEFAULT_PRODUCTS = [
     price: 150,
     oldPrice: null,
     status: 'upcoming', // ÇOK YAKINDA SİZİNLE
-    rating: 5.0,
-    reviewsCount: 0,
-    sales5Days: 0,
     badges: ['Çok Yakında Sizinle', 'Birbirinden Güzel Stickerlar'],
     image: 'assets/defter_ic_sayfa.jpg',
     gallery: ['assets/defter_ic_sayfa.jpg'],
@@ -106,11 +91,11 @@ const DEFAULT_PRODUCTS = [
 
 // Initialize Products in LocalStorage
 function getStoredProducts() {
-  const stored = localStorage.getItem('kafkef_products_v2');
+  const stored = localStorage.getItem('kafkef_products_v3');
   if (stored) {
     try { return JSON.parse(stored); } catch (e) { }
   }
-  localStorage.setItem('kafkef_products_v2', JSON.stringify(DEFAULT_PRODUCTS));
+  localStorage.setItem('kafkef_products_v3', JSON.stringify(DEFAULT_PRODUCTS));
   return DEFAULT_PRODUCTS;
 }
 
@@ -182,7 +167,7 @@ function calculateCartTotals() {
   };
 }
 
-// 3. STOREFRONT PRODUCT RENDER
+// 3. STOREFRONT PRODUCT RENDER (SAHTE YORUMSUZ, TERTEMİZ DÜZEN)
 function renderProducts(filter = 'all') {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
@@ -209,7 +194,7 @@ function renderProducts(filter = 'all') {
         </div>
 
         <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist('${product.id}')" aria-label="Favorilere ekle">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="${isWishlisted ? '#7b1633' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="${isWishlisted ? '#3e000d' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </button>
 
         <!-- Product Image Container -->
@@ -222,21 +207,10 @@ function renderProducts(filter = 'all') {
           ` : ''}
         </div>
 
-        ${isActive ? `
-          <div class="card-sales-ticker">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-            🔥 Son 5 günde <strong>${product.sales5Days} adet</strong> satıldı!
-          </div>
-        ` : `
-          <div class="card-sales-ticker upcoming-note">
-            ⏳ Çok Yakında Sizinle · Ön Talep Alınıyor
-          </div>
-        `}
-
-        <div class="card-rating-wrap">
-          <span class="stars">★★★★★</span>
-          <strong>${product.rating.toFixed(1)}</strong>
-          <span>${isActive ? `(${product.reviewsCount} değerlendirme)` : '(Yeni Tasarım)'}</span>
+        <div style="margin-bottom:8px">
+          <span style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">
+            ${isActive ? '✓ Stokta Var · Aynı Gün Kargo' : '⏳ Çok Yakında Sizinle'}
+          </span>
         </div>
 
         <a href="#quickview" onclick="openQuickView('${product.id}');return false;" class="card-product-title">
@@ -421,7 +395,7 @@ function updateCartUI() {
 function notifyMeUpcoming(prodName) {
   const emailOrPhone = prompt(`"${prodName}" çok yakında satışa çıkacaktır!\n\nSatışa çıktığı ilk gün indirimli olarak haberdar olmak için lütfen telefon numaranızı veya e-posta adresinizi giriniz:`);
   if (emailOrPhone) {
-    alert(`Teşekkür ederiz! "${prodName}" satışa çıktığında ${emailOrPhone} adresine ilk bildirim ve özel indirim kuponunuz gönderilecektir.`);
+    alert(`Teşekkür ederiz! "${prodName}" satışa çıktığında ${emailOrPhone} adresine ilk bildirim gönderilecektir.`);
   }
 }
 
@@ -451,13 +425,7 @@ function openQuickView(productId) {
           ${prod.badges.map(b => `<span class="badge-tag ${b.includes('Satışta') ? 'badge-active-live' : 'badge-upcoming-pill'}">${b}</span>`).join('')}
         </div>
         <h2 style="font-size:22px;color:var(--primary);margin-bottom:4px">${prod.title}</h2>
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:10px">${prod.subtitle}</div>
-        
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-          <span style="color:#f59e0b">★★★★★</span>
-          <span style="font-size:13px;font-weight:700">5.0</span>
-          <span style="font-size:12px;color:var(--text-muted)">(${prod.reviewsCount} Öğrenci Değerlendirmesi)</span>
-        </div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:14px">${prod.subtitle}</div>
 
         <p style="font-size:13.5px;color:var(--text-main);line-height:1.6;margin-bottom:16px">${prod.desc}</p>
         
@@ -505,8 +473,76 @@ function closeQuickView() {
   }
 }
 
-// 7. SATICI / YÖNETİCİ PANELİ (ADMIN PORTAL)
+// 7. GÜVENLİ YÖNETİCİ GİRİŞİ SİSTEMİ (ADMIN AUTH)
+let isAdminLoggedIn = localStorage.getItem('kafkef_admin_auth') === 'true';
+
+function updateAdminUI() {
+  const bar = document.getElementById('adminActiveBar');
+  if (bar) {
+    bar.style.display = isAdminLoggedIn ? 'flex' : 'none';
+  }
+}
+
+function openAdminAccess() {
+  if (isAdminLoggedIn) {
+    openAdminModal();
+  } else {
+    openAdminLoginModal();
+  }
+}
+
+function openAdminLoginModal() {
+  const modal = document.getElementById('adminLoginModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('adminPassInput')?.focus(), 100);
+  }
+}
+
+function closeAdminLoginModal() {
+  const modal = document.getElementById('adminLoginModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    const input = document.getElementById('adminPassInput');
+    if (input) input.value = '';
+  }
+}
+
+function checkAdminPassword(e) {
+  e.preventDefault();
+  const input = document.getElementById('adminPassInput');
+  const pass = input ? input.value.trim() : '';
+
+  // Default Admin Password: kafkef2026
+  if (pass === 'kafkef2026') {
+    isAdminLoggedIn = true;
+    localStorage.setItem('kafkef_admin_auth', 'true');
+    closeAdminLoginModal();
+    updateAdminUI();
+    openAdminModal();
+    triggerStickyNotification('🔐 Yönetici girişi başarılı!');
+  } else {
+    alert('Hatalı yönetici şifresi! Lütfen tekrar deneyiniz.');
+    if (input) input.select();
+  }
+}
+
+function logoutAdmin() {
+  isAdminLoggedIn = false;
+  localStorage.removeItem('kafkef_admin_auth');
+  updateAdminUI();
+  closeAdminModal();
+  triggerStickyNotification('Yönetici oturumu kapatıldı.');
+}
+
+// 8. YÖNETİCİ İŞLEMLERİ PANELİ
 function openAdminModal() {
+  if (!isAdminLoggedIn) {
+    openAdminLoginModal();
+    return;
+  }
   const modal = document.getElementById('adminModal');
   if (modal) {
     renderAdminProductsList();
@@ -543,9 +579,6 @@ function handleAddProduct(e) {
     price,
     oldPrice: null,
     status,
-    rating: 5.0,
-    reviewsCount: 0,
-    sales5Days: 0,
     badges: status === 'active' ? ['Satışta'] : ['Çok Yakında Sizinle'],
     image,
     gallery: [image],
@@ -556,9 +589,9 @@ function handleAddProduct(e) {
   };
 
   PRODUCTS.unshift(newProd);
-  localStorage.setItem('kafkef_products_v2', JSON.stringify(PRODUCTS));
+  localStorage.setItem('kafkef_products_v3', JSON.stringify(PRODUCTS));
 
-  alert(`🎉 "${title}" başarıyla mağazanızda yayınlandı!`);
+  alert(`🎉 "${title}" başarıyla mağazanıza eklendi!`);
   document.getElementById('adminProductForm').reset();
   renderAdminProductsList();
   renderProducts();
@@ -573,7 +606,7 @@ function toggleProductStatus(prodId) {
     ? ['Şu Anda Satışta', '3 Adete Kargo Bedava'] 
     : ['Çok Yakında Sizinle', 'Ön Talep Açık'];
 
-  localStorage.setItem('kafkef_products_v2', JSON.stringify(PRODUCTS));
+  localStorage.setItem('kafkef_products_v3', JSON.stringify(PRODUCTS));
   renderAdminProductsList();
   renderProducts();
   triggerStickyNotification(`Durum güncellendi: "${p.title}" -> ${p.status === 'active' ? 'SATIŞTA' : 'ÇOK YAKINDA'}`);
@@ -582,7 +615,7 @@ function toggleProductStatus(prodId) {
 function deleteProduct(prodId) {
   if (!confirm('Bu defteri mağazadan kaldırmak istediğinize emin misiniz?')) return;
   PRODUCTS = PRODUCTS.filter(p => p.id !== prodId);
-  localStorage.setItem('kafkef_products_v2', JSON.stringify(PRODUCTS));
+  localStorage.setItem('kafkef_products_v3', JSON.stringify(PRODUCTS));
   renderAdminProductsList();
   renderProducts();
 }
@@ -604,7 +637,7 @@ function renderAdminProductsList() {
         </span>
       </td>
       <td style="padding:10px;text-align:right">
-        <button onclick="toggleProductStatus('${p.id}')" style="background:#f2dce3;color:var(--primary);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px">
+        <button onclick="toggleProductStatus('${p.id}')" style="background:#f7ebef;color:var(--primary);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px">
           ${p.status === 'active' ? 'Çok Yakında Yap' : 'Satışa Aç'}
         </button>
         <button onclick="deleteProduct('${p.id}')" style="background:#fee2e2;color:#b91c1c;border:none;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
@@ -620,7 +653,7 @@ function renderAdminOrdersList() {
   if (!listEl) return;
 
   if (ORDERS.length === 0) {
-    listEl.innerHTML = `<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--text-muted)">Henüz sipariş bulunmuyor.</td></tr>`;
+    listEl.innerHTML = `<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--text-muted)">Henüz müşteri siparişi bulunmuyor.</td></tr>`;
     return;
   }
 
@@ -636,7 +669,7 @@ function renderAdminOrdersList() {
   `).join('');
 }
 
-// 8. CHECKOUT SIMULATION
+// 9. CHECKOUT SIMULATION
 function completeCheckoutOrder(e) {
   e.preventDefault();
   const totals = calculateCartTotals();
@@ -699,7 +732,7 @@ function completeCheckoutOrder(e) {
   }
 }
 
-// 9. GENERAL UTILS
+// 10. GENERAL UTILS
 function openCartDrawer() {
   const drawer = document.getElementById('cartDrawer');
   const overlay = document.getElementById('cartOverlay');
@@ -774,11 +807,11 @@ function triggerStickyNotification(msg) {
       position: fixed;
       top: 60px;
       right: 20px;
-      background: #7b1633;
+      background: #3e000d;
       color: #fff;
       padding: 12px 20px;
       border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(123,22,51,0.3);
+      box-shadow: 0 10px 25px rgba(62,0,13,0.3);
       font-size: 13px;
       font-weight: 600;
       z-index: 1000;
@@ -798,10 +831,11 @@ function triggerStickyNotification(msg) {
   }, 2500);
 }
 
-// 10. INITIALIZE
+// 11. INITIALIZE
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
   updateCartUI();
+  updateAdminUI();
 
   // Announcement ticker
   const announcementTrack = document.getElementById('announcementTrack');
