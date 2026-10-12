@@ -233,34 +233,16 @@
       </div>
     </section>
 
-    <!-- SIKÇA SORULAN SORULAR & BİLGİLENDİRME (SAHTE YORUMLAR YERİNE GERÇEK BİLGİLER) -->
-    <section class="container" style="margin-bottom:70px">
+    <!-- SIKÇA SORULAN SORULAR & BİLGİLENDİRME (DİNAMİK YÖNETİLEBİLİR) -->
+    <section class="container" style="margin-bottom:70px" id="sss-bolumu">
       <div class="section-head">
-        <span class="section-tag">MERAK EDİLENLER</span>
-        <h2 class="section-title">Sıkça Sorulan Sorular & Bilgiler</h2>
-        <p class="section-subtitle">Kâfkef Not defterleri, kağıt kalitesi ve sipariş süreçleri hakkında bilmek istedikleriniz.</p>
+        <span class="section-tag" data-live-edit="faqTag">MERAK EDİLENLER</span>
+        <h2 class="section-title" data-live-edit="faqTitle">Sıkça Sorulan Sorular & Bilgiler</h2>
+        <p class="section-subtitle" data-live-edit="faqSubtitle">Kâfkef Not defterleri, kağıt kalitesi ve sipariş süreçleri hakkında bilmek istedikleriniz.</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:960px;margin:0 auto">
-        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
-          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Kağıt dolma kalemle arkaya geçirir mi?</h4>
-          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Defterlerimizde 120 gsm 1. hamur lüks kağıt kullanılmıştır. Dolma kalem, divit, jel ve mürekkepli kalemlerle arkaya geçme veya kanama yapmaz.</p>
-        </div>
-
-        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
-          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Kampanyalardan nasıl yararlanırım?</h4>
-          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Sepetinize 3 adet defter eklediğinizde kargo ücreti otomatik olarak 0 TL olur. 5 adet eklediğinizde ise 1 defter hediye edilerek faturanızdan 240 TL düşülür ve kargo yine ücretsiz olur.</p>
-        </div>
-
-        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
-          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Siparişler ne zaman kargolanır?</h4>
-          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Hafta içi saat 15:00'e kadar verilen tüm siparişler aynı gün özenli ve korumalı paketlemeyle kargoya teslim edilir.</p>
-        </div>
-
-        <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px">
-          <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px">Sağdan sola açılmanın faydası nedir?</h4>
-          <p style="font-size:13px;color:var(--text-muted);line-height:1.6">Arap alfabesi sağdan sola yazıldığı için standart defterlerde el sürekli spirale veya sırta çarpar. Kâfkef Not ters açılır yapısıyla kesintisiz ve rahat bir yazım deneyimi sunar.</p>
-        </div>
+      <div id="faqContainer" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:960px;margin:0 auto">
+        <!-- app.js tarafından renderFAQs() ile dinamik listelenir -->
       </div>
     </section>
 
@@ -452,9 +434,8 @@
         <p style="font-size:12px;color:var(--text-muted)">Kâfkef Not defter yönetim paneline erişmek için şifrenizi giriniz.</p>
       </div>
       <form onsubmit="checkAdminPassword(event)">
-        <div style="margin-bottom:16px">
-          <input type="password" id="adminPassInput" required placeholder="Yönetici Şifresi" style="width:100%;padding:12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none">
-          <small style="display:block;margin-top:6px;font-size:11px;color:var(--text-muted)">Varsayılan şifre: <strong>kafkef2026</strong></small>
+        <div style="margin-bottom:18px">
+          <input type="password" id="adminPassInput" required placeholder="Yönetici Şifrenizi Giriniz" style="width:100%;padding:12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;outline:none">
         </div>
         <button type="submit" class="checkout-btn" style="margin-top:0">
           Giriş Yap
@@ -482,10 +463,12 @@
       </div>
 
       <!-- Admin Tabs -->
-      <div class="admin-tabs">
+      <div class="admin-tabs" style="display:flex;flex-wrap:wrap;gap:6px">
         <button class="admin-tab-btn active" id="tabAddProd" onclick="switchAdminTab('add')">+ Yeni Defter Yayınla</button>
         <button class="admin-tab-btn" id="tabListProd" onclick="switchAdminTab('list')">📚 Defterleri Düzenle & Sil</button>
-        <button class="admin-tab-btn" id="tabContent" onclick="switchAdminTab('content')">📝 Tüm Site Metinleri & Ayarlar</button>
+        <button class="admin-tab-btn" id="tabCampaigns" onclick="switchAdminTab('campaigns')">🎯 Kampanya & Kargo (115 TL)</button>
+        <button class="admin-tab-btn" id="tabFaqs" onclick="switchAdminTab('faqs')">❓ SSS & Bilgi Yönetimi</button>
+        <button class="admin-tab-btn" id="tabContent" onclick="switchAdminTab('content')">📝 Tüm Site Metinleri</button>
         <button class="admin-tab-btn" id="tabOrders" onclick="switchAdminTab('orders')">📦 Gelen Siparişler</button>
         <button class="admin-tab-btn" id="tabWallet" onclick="switchAdminTab('wallet')">💰 Kasa & IBAN Havuzu</button>
       </div>
@@ -563,7 +546,114 @@
         </table>
       </div>
 
-      <!-- Tab 3: Tüm Site Metinleri & Ayarlar -->
+      <!-- Tab: Kampanya & Kargo Ayarları -->
+      <div id="adminTabContentCampaigns" style="display:none">
+        <form onsubmit="handleSaveCampaignSettings(event)">
+          <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:18px">
+            <h3 style="font-size:16px;font-weight:800;color:var(--primary);margin-bottom:6px">🚚 Kargo Ücreti ve Kargo Bedava Kuralı</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px">
+              Buradan kargo fiyatını belirleyebilir ve kaç defter alana kargo bedava olacağını kolayca ayarlayabilirsiniz.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
+              <div class="admin-form-group">
+                <label>Standart Kargo Ücreti (TL):</label>
+                <input type="number" id="cfgShippingFee" required value="115" min="0">
+                <small style="color:var(--text-muted);font-size:11px">Sepette kargo ücreti olarak uygulanır.</small>
+              </div>
+              <div class="admin-form-group">
+                <label>Kargo Bedava Kampanyası:</label>
+                <select id="cfgFreeShippingEnabled">
+                  <option value="true">🟢 Aktif (Belirlenen adete kargo bedava)</option>
+                  <option value="false">🔴 Pasif (Her siparişte kargo ücretli)</option>
+                </select>
+              </div>
+            </div>
+            <div class="admin-form-group">
+              <label>Kargo Bedava İçin Minimum Defter Adedi:</label>
+              <input type="number" id="cfgFreeShippingQty" required value="3" min="1">
+              <small style="color:var(--text-muted);font-size:11px">Müşteri bu adette ve üzeri defter aldığında kargo 0 TL olur.</small>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:18px">
+            <h3 style="font-size:16px;font-weight:800;color:var(--primary);margin-bottom:6px">🎁 Hediye Defter Kampanyası</h3>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px">
+              Belirlediğiniz adet defter alan müşteriye ücretsiz hediye defter tanımlayın.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
+              <div class="admin-form-group">
+                <label>Hediye Kampanyası Durumu:</label>
+                <select id="cfgGiftCampaignEnabled">
+                  <option value="true">🟢 Aktif (Hediye defter kampanyası açık)</option>
+                  <option value="false">🔴 Pasif (Hediye kampanyası kapalı)</option>
+                </select>
+              </div>
+              <div class="admin-form-group">
+                <label>Hediye İçin Gereken Defter Adedi:</label>
+                <input type="number" id="cfgGiftMinQty" required value="5" min="1">
+                <small style="color:var(--text-muted);font-size:11px">Örn: 5 defter alana</small>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="admin-form-group">
+                <label>Hediye Edilecek Defter Sayısı:</label>
+                <input type="number" id="cfgGiftRewardQty" required value="1" min="1">
+                <small style="color:var(--text-muted);font-size:11px">Sepetten 0 TL olarak hediye edilir.</small>
+              </div>
+              <div class="admin-form-group">
+                <label>Standart Defter Bedeli (İndirim Tutarı TL):</label>
+                <input type="number" id="cfgDefaultNotebookPrice" required value="240" min="1">
+                <small style="color:var(--text-muted);font-size:11px">Faturadan düşülecek defter tutarı.</small>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button type="submit" class="btn-primary" style="flex:1;justify-content:center;padding:14px">
+              💾 Kampanya & Kargo Ayarlarını Kaydet
+            </button>
+            <button type="button" onclick="handleResetCampaignSettings()" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;padding:14px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">
+              🔄 Varsayılana Sıfırla
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab: SSS & Bilgi Yönetimi -->
+      <div id="adminTabContentFaqs" style="display:none">
+        <!-- Yeni Soru Ekleme Formu -->
+        <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:24px">
+          <h3 style="font-size:16px;font-weight:800;color:var(--primary);margin-bottom:8px">➕ Yeni Soru & Bilgi Ekle</h3>
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Müşterilerin merak ettiği konuları veya ürün detaylarını buraya soru-cevap olarak ekleyin.</p>
+          <form onsubmit="handleAddFaq(event)">
+            <div class="admin-form-group" style="margin-bottom:10px">
+              <label>Soru Başlığı</label>
+              <input type="text" id="newFaqQuestion" required placeholder="örn: Defterin sayfa sayısı kaç ve ebatı nedir?">
+            </div>
+            <div class="admin-form-group" style="margin-bottom:14px">
+              <label>Cevap & Açıklama Metni</label>
+              <textarea id="newFaqAnswer" required rows="3" placeholder="örn: Defterimiz 160 sayfa, B5 ebadında olup..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="padding:10px 18px;font-size:13px">
+              ➕ Soruyu Sitede Yayınla
+            </button>
+          </form>
+        </div>
+
+        <!-- Yayındaki Sorular Listesi -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <h3 style="font-size:16px;font-weight:800;color:var(--primary)">📋 Yayındaki Sorular & Bilgiler</h3>
+          <button type="button" onclick="handleResetFaqs()" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+            🔄 Orijinal Sorulara Sıfırla
+          </button>
+        </div>
+
+        <div id="adminFaqListContainer" style="display:flex;flex-direction:column;gap:12px">
+          <!-- Injected by app.js -->
+        </div>
+      </div>
+
+      <!-- Tab 5: Tüm Site Metinleri & Ayarlar -->
       <div id="adminTabContentContent" style="display:none">
         <form onsubmit="handleSaveSiteContent(event)">
           <!-- Duyuru Metinleri -->
@@ -818,6 +908,39 @@
     </div>
   </div>
 
+  <!-- SORU DÜZENLEME MODALI (YÖNETİCİ) -->
+  <div class="modal-overlay" id="editFaqModal">
+    <div class="modal-box" style="max-width:600px;padding:28px">
+      <button class="modal-close-btn" onclick="closeEditFaqModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--border-light);padding-bottom:12px">
+        <span style="font-size:24px">✏️</span>
+        <div>
+          <h2 style="font-size:18px;font-weight:800;color:var(--primary)">Soruyu / Bilgiyi Düzenle</h2>
+          <div style="font-size:12px;color:var(--text-muted)">Soru başlığını ve cevap açıklamasını güncelleyin.</div>
+        </div>
+      </div>
+      <form onsubmit="handleSaveEditFaq(event)">
+        <input type="hidden" id="editFaqId">
+        <div class="admin-form-group" style="margin-bottom:14px">
+          <label>Soru Başlığı</label>
+          <input type="text" id="editFaqQuestion" required style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px">
+        </div>
+        <div class="admin-form-group" style="margin-bottom:18px">
+          <label>Cevap & Açıklama Metni</label>
+          <textarea id="editFaqAnswer" required rows="4" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px"></textarea>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button type="submit" class="btn-primary" style="flex:1;justify-content:center;padding:12px">
+            💾 Güncellemeyi Kaydet
+          </button>
+          <button type="button" onclick="handleDeleteFromEditFaqModal()" style="background:#fee2e2;color:#b91c1c;border:none;padding:12px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">
+            🗑️ Soruyu Sil
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- CANLI SAYFA DÜZENLEME ARAÇ ÇUBUĞU (YÖNETİCİ) -->
   <div id="liveEditToolbar" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#280008;color:#fff;padding:12px 24px;border-radius:50px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:99999;align-items:center;gap:16px;border:1px solid rgba(255,255,255,0.2)">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px">
@@ -895,6 +1018,10 @@
     function switchAdminTab(tab) {
       document.getElementById('adminTabContentAdd').style.display = tab === 'add' ? 'block' : 'none';
       document.getElementById('adminTabContentList').style.display = tab === 'list' ? 'block' : 'none';
+      const campEl = document.getElementById('adminTabContentCampaigns');
+      if (campEl) campEl.style.display = tab === 'campaigns' ? 'block' : 'none';
+      const faqsEl = document.getElementById('adminTabContentFaqs');
+      if (faqsEl) faqsEl.style.display = tab === 'faqs' ? 'block' : 'none';
       const contentEl = document.getElementById('adminTabContentContent');
       if (contentEl) contentEl.style.display = tab === 'content' ? 'block' : 'none';
       document.getElementById('adminTabContentOrders').style.display = tab === 'orders' ? 'block' : 'none';
@@ -903,6 +1030,10 @@
 
       document.getElementById('tabAddProd').classList.toggle('active', tab === 'add');
       document.getElementById('tabListProd').classList.toggle('active', tab === 'list');
+      const tabCampBtn = document.getElementById('tabCampaigns');
+      if (tabCampBtn) tabCampBtn.classList.toggle('active', tab === 'campaigns');
+      const tabFaqsBtn = document.getElementById('tabFaqs');
+      if (tabFaqsBtn) tabFaqsBtn.classList.toggle('active', tab === 'faqs');
       const tabContentBtn = document.getElementById('tabContent');
       if (tabContentBtn) tabContentBtn.classList.toggle('active', tab === 'content');
       document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
@@ -911,6 +1042,12 @@
 
       if (tab === 'wallet' && typeof renderWalletUI === 'function') {
         renderWalletUI();
+      }
+      if (tab === 'campaigns' && typeof populateCampaignSettingsForm === 'function') {
+        populateCampaignSettingsForm();
+      }
+      if (tab === 'faqs' && typeof renderAdminFaqList === 'function') {
+        renderAdminFaqList();
       }
       if (tab === 'content' && typeof populateSiteContentForm === 'function') {
         populateSiteContentForm();

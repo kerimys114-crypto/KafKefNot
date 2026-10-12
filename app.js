@@ -119,15 +119,32 @@ const COUPONS = {
   'HOSGELDIN': 0.15
 };
 
-const SHIPPING_FEE = 45;
-
 function saveCart() {
   localStorage.setItem('kafkef_cart', JSON.stringify(cart));
   updateCartUI();
 }
 
-// 2. KAMPANYA HESAPLAMA MOTORU (3 ALANA KARGO BEDAVA, 5 ALANA 1 HEDİYE + KARGO BEDAVA)
+// 2. DİNAMİK KAMPANYA VE KARGO MOTORU (115 TL KARGO & TAM YÖNETİLEBİLİR KAMPANYALAR)
+const DEFAULT_CAMPAIGN_SETTINGS = {
+  shippingFee: 115,           // Standart kargo ücreti 115 TL
+  freeShippingQty: 3,         // 3 defter alana kargo bedava
+  giftMinQty: 5,              // 5 defter alana
+  giftRewardQty: 1,           // 1 defter hediye
+  defaultNotebookPrice: 240,  // Hediye defter bedeli
+  freeShippingEnabled: true,  // Kargo bedava kampanyası aktif
+  giftCampaignEnabled: true   // Hediye defter kampanyası aktif
+};
+
+function getCampaignSettings() {
+  const stored = localStorage.getItem('kafkef_campaign_settings_v1');
+  if (stored) {
+    try { return { ...DEFAULT_CAMPAIGN_SETTINGS, ...JSON.parse(stored) }; } catch (e) { }
+  }
+  return DEFAULT_CAMPAIGN_SETTINGS;
+}
+
 function calculateCartTotals() {
+  const camp = getCampaignSettings();
   let subtotal = 0;
   let totalNotebookQty = 0;
 
@@ -136,14 +153,17 @@ function calculateCartTotals() {
     totalNotebookQty += item.quantity;
   });
 
-  // Kampanya kuralları:
-  // 1. 3 veya daha fazla defter -> Kargo BEDAVA
-  // 2. 5 defter alan müşteriye -> 1 defter HEDİYE (0 TL) ve kargo BEDAVA
-  let freeGiftCount = Math.floor(totalNotebookQty / 5);
-  let giftDiscount = freeGiftCount * 240; // Hediye edilen defter bedeli
+  // Hediye defter hesaplama
+  let freeGiftCount = 0;
+  let giftDiscount = 0;
+  if (camp.giftCampaignEnabled && camp.giftMinQty > 0) {
+    freeGiftCount = Math.floor(totalNotebookQty / camp.giftMinQty) * (camp.giftRewardQty || 1);
+    giftDiscount = freeGiftCount * (camp.defaultNotebookPrice || 240);
+  }
 
-  let isFreeShipping = totalNotebookQty >= 3;
-  let shipping = (isFreeShipping || subtotal === 0) ? 0 : SHIPPING_FEE;
+  // Kargo hesaplama (Standart 115 TL veya ücretsiz)
+  let isFreeShipping = camp.freeShippingEnabled ? (totalNotebookQty >= camp.freeShippingQty) : false;
+  let shipping = (isFreeShipping || subtotal === 0) ? 0 : Number(camp.shippingFee || 115);
 
   // Kupon indirimi
   let couponDiscount = 0;
@@ -151,7 +171,7 @@ function calculateCartTotals() {
     couponDiscount = (subtotal - giftDiscount) * COUPONS[appliedCoupon];
   }
 
-  let finalSubtotal = subtotal - giftDiscount - couponDiscount;
+  let finalSubtotal = Math.max(0, subtotal - giftDiscount - couponDiscount);
   let total = finalSubtotal + shipping;
 
   return {
@@ -481,6 +501,9 @@ function updateAdminUI() {
   if (bar) {
     bar.style.display = isAdminLoggedIn ? 'flex' : 'none';
   }
+  if (typeof renderFAQs === 'function') {
+    renderFAQs();
+  }
 }
 
 function openAdminAccess() {
@@ -514,9 +537,10 @@ function checkAdminPassword(e) {
   e.preventDefault();
   const input = document.getElementById('adminPassInput');
   const pass = input ? input.value.trim() : '';
+  const storedPass = localStorage.getItem('kafkef_admin_password') || 'ProfAY.4001';
 
-  // Default Admin Password: kafkef2026
-  if (pass === 'kafkef2026') {
+  // Secure Admin Password
+  if (pass === storedPass || pass === 'ProfAY.4001') {
     isAdminLoggedIn = true;
     localStorage.setItem('kafkef_admin_auth', 'true');
     closeAdminLoginModal();
@@ -552,6 +576,12 @@ function openAdminModal() {
     }
     if (typeof populateSiteContentForm === 'function') {
       populateSiteContentForm();
+    }
+    if (typeof populateCampaignSettingsForm === 'function') {
+      populateCampaignSettingsForm();
+    }
+    if (typeof renderAdminFaqList === 'function') {
+      renderAdminFaqList();
     }
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1025,6 +1055,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof applySiteContent === 'function') {
     applySiteContent();
   }
+
+  // Dinamik SSS Listeleme
+  if (typeof renderFAQs === 'function') {
+    renderFAQs();
+  }
 });
 
 // 12. IBAN & HAVUZ (KASA) YÖNETİM SİSTEMİ
@@ -1397,3 +1432,232 @@ function applyLiveEdits() {
     });
   } catch (e) { }
 }
+
+// 14. KAMPANYA & KARGO YÖNETİMİ (115 TL KARGO VE ÖZEL KAMPANYALAR)
+function populateCampaignSettingsForm() {
+  const camp = getCampaignSettings();
+  const fFee = document.getElementById('cfgShippingFee');
+  const fFreeQty = document.getElementById('cfgFreeShippingQty');
+  const fFreeEnabled = document.getElementById('cfgFreeShippingEnabled');
+  const fGiftMin = document.getElementById('cfgGiftMinQty');
+  const fGiftReward = document.getElementById('cfgGiftRewardQty');
+  const fGiftEnabled = document.getElementById('cfgGiftCampaignEnabled');
+  const fDefPrice = document.getElementById('cfgDefaultNotebookPrice');
+
+  if (fFee) fFee.value = camp.shippingFee;
+  if (fFreeQty) fFreeQty.value = camp.freeShippingQty;
+  if (fFreeEnabled) fFreeEnabled.value = camp.freeShippingEnabled ? 'true' : 'false';
+  if (fGiftMin) fGiftMin.value = camp.giftMinQty;
+  if (fGiftReward) fGiftReward.value = camp.giftRewardQty;
+  if (fGiftEnabled) fGiftEnabled.value = camp.giftCampaignEnabled ? 'true' : 'false';
+  if (fDefPrice) fDefPrice.value = camp.defaultNotebookPrice;
+}
+
+function handleSaveCampaignSettings(e) {
+  e.preventDefault();
+  const newCamp = {
+    shippingFee: Number(document.getElementById('cfgShippingFee').value) || 115,
+    freeShippingQty: Number(document.getElementById('cfgFreeShippingQty').value) || 3,
+    freeShippingEnabled: document.getElementById('cfgFreeShippingEnabled').value === 'true',
+    giftMinQty: Number(document.getElementById('cfgGiftMinQty').value) || 5,
+    giftRewardQty: Number(document.getElementById('cfgGiftRewardQty').value) || 1,
+    giftCampaignEnabled: document.getElementById('cfgGiftCampaignEnabled').value === 'true',
+    defaultNotebookPrice: Number(document.getElementById('cfgDefaultNotebookPrice').value) || 240
+  };
+
+  localStorage.setItem('kafkef_campaign_settings_v1', JSON.stringify(newCamp));
+  updateCartUI();
+  alert(`✅ Kampanya ve kargo ayarları başarıyla kaydedildi!\n\n• Kargo Ücreti: ${newCamp.shippingFee} TL\n• Kargo Bedava Eşiği: ${newCamp.freeShippingQty} Defter (${newCamp.freeShippingEnabled ? 'Aktif' : 'Pasif'})\n• Hediye Defter Eşiği: ${newCamp.giftMinQty} Defter (${newCamp.giftCampaignEnabled ? 'Aktif' : 'Pasif'})`);
+}
+
+function handleResetCampaignSettings() {
+  if (confirm('Kampanya ve kargo ayarlarını varsayılan (115 TL kargo, 3 defter kargo bedava, 5 defter 1 hediye) ayarlara sıfırlamak istiyor musunuz?')) {
+    localStorage.removeItem('kafkef_campaign_settings_v1');
+    populateCampaignSettingsForm();
+    updateCartUI();
+    alert('🔄 Kampanya ayarları varsayılana döndürüldü.');
+  }
+}
+
+// 15. DİNAMİK SSS (SIKÇA SORULAN SORULAR) & BİLGİ YÖNETİMİ
+const DEFAULT_FAQS = [
+  {
+    id: 'faq-1',
+    question: 'Kağıt dolma kalemle arkaya geçirir mi?',
+    answer: 'Defterlerimizde 120 gsm 1. hamur lüks kağıt kullanılmıştır. Dolma kalem, divit, jel ve mürekkepli kalemlerle arkaya geçme veya kanama yapmaz.'
+  },
+  {
+    id: 'faq-2',
+    question: 'Kampanyalardan nasıl yararlanırım?',
+    answer: 'Sepetinize 3 adet defter eklediğinizde kargo ücreti otomatik olarak 0 TL olur. 5 adet eklediğinizde ise 1 defter hediye edilerek faturanızdan 240 TL düşülür ve kargo yine ücretsiz olur.'
+  },
+  {
+    id: 'faq-3',
+    question: 'Siparişler ne zaman kargolanır?',
+    answer: 'Hafta içi saat 15:00\'e kadar verilen tüm siparişler aynı gün özenli ve korumalı paketlemeyle kargoya teslim edilir.'
+  },
+  {
+    id: 'faq-4',
+    question: 'Sağdan sola açılmanın faydası nedir?',
+    answer: 'Arap alfabesi sağdan sola yazıldığı için standart defterlerde el sürekli spirale veya sırta çarpar. Kâfkef Not ters açılır yapısıyla kesintisiz ve rahat bir yazım deneyimi sunar.'
+  }
+];
+
+function getStoredFAQs() {
+  const stored = localStorage.getItem('kafkef_faqs_v1');
+  if (stored) {
+    try { return JSON.parse(stored); } catch (e) { }
+  }
+  localStorage.setItem('kafkef_faqs_v1', JSON.stringify(DEFAULT_FAQS));
+  return DEFAULT_FAQS;
+}
+
+function renderFAQs() {
+  const container = document.getElementById('faqContainer');
+  if (!container) return;
+
+  const faqs = getStoredFAQs();
+  if (faqs.length === 0) {
+    container.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted)">Henüz soru bulunmuyor.</div>`;
+    return;
+  }
+
+  container.innerHTML = faqs.map(f => `
+    <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:20px;position:relative">
+      ${isAdminLoggedIn ? `
+        <div style="position:absolute;top:12px;right:12px;display:flex;gap:4px">
+          <button onclick="openEditFaqModal('${f.id}')" title="Düzenle" style="background:#f7ebef;color:var(--primary);border:none;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer">✏️</button>
+          <button onclick="deleteFaq('${f.id}')" title="Sil" style="background:#fee2e2;color:#b91c1c;border:none;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer">🗑️</button>
+        </div>
+      ` : ''}
+      <h4 style="color:var(--primary);font-size:15px;font-weight:700;margin-bottom:8px;padding-right:${isAdminLoggedIn ? '60px' : '0'}">${f.question}</h4>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.6">${f.answer}</p>
+    </div>
+  `).join('');
+}
+
+function renderAdminFaqList() {
+  const container = document.getElementById('adminFaqListContainer');
+  if (!container) return;
+
+  const faqs = getStoredFAQs();
+  if (faqs.length === 0) {
+    container.innerHTML = `<div style="padding:16px;text-align:center;color:var(--text-muted)">Henüz eklenmiş soru yok. Yukarıdaki formdan ekleyebilirsiniz.</div>`;
+    return;
+  }
+
+  container.innerHTML = faqs.map(f => `
+    <div style="background:#fff;border:1px solid var(--border-color);border-radius:10px;padding:14px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+      <div style="flex:1">
+        <h4 style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px">❓ ${f.question}</h4>
+        <p style="font-size:12.5px;color:var(--text-muted);line-height:1.5">${f.answer}</p>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button onclick="openEditFaqModal('${f.id}')" style="background:var(--primary);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+          ✏️ Düzenle
+        </button>
+        <button onclick="deleteFaq('${f.id}')" style="background:#fee2e2;color:#b91c1c;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+          Sil
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function handleAddFaq(e) {
+  e.preventDefault();
+  const q = document.getElementById('newFaqQuestion').value.trim();
+  const a = document.getElementById('newFaqAnswer').value.trim();
+
+  if (!q || !a) return;
+
+  const faqs = getStoredFAQs();
+  const newFaq = {
+    id: 'faq-' + Date.now(),
+    question: q,
+    answer: a
+  };
+
+  faqs.push(newFaq);
+  localStorage.setItem('kafkef_faqs_v1', JSON.stringify(faqs));
+
+  document.getElementById('newFaqQuestion').value = '';
+  document.getElementById('newFaqAnswer').value = '';
+
+  renderFAQs();
+  renderAdminFaqList();
+  triggerStickyNotification(`✅ Yeni soru başarıyla yayınlandı: "${q}"`);
+}
+
+function openEditFaqModal(id) {
+  const faqs = getStoredFAQs();
+  const f = faqs.find(item => item.id === id);
+  if (!f) return;
+
+  document.getElementById('editFaqId').value = f.id;
+  document.getElementById('editFaqQuestion').value = f.question;
+  document.getElementById('editFaqAnswer').value = f.answer;
+
+  const modal = document.getElementById('editFaqModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeEditFaqModal() {
+  const modal = document.getElementById('editFaqModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleSaveEditFaq(e) {
+  e.preventDefault();
+  const id = document.getElementById('editFaqId').value;
+  const q = document.getElementById('editFaqQuestion').value.trim();
+  const a = document.getElementById('editFaqAnswer').value.trim();
+
+  const faqs = getStoredFAQs();
+  const item = faqs.find(f => f.id === id);
+  if (!item) return;
+
+  item.question = q;
+  item.answer = a;
+
+  localStorage.setItem('kafkef_faqs_v1', JSON.stringify(faqs));
+  renderFAQs();
+  renderAdminFaqList();
+  closeEditFaqModal();
+  triggerStickyNotification('✅ Soru başarıyla güncellendi!');
+}
+
+function handleDeleteFromEditFaqModal() {
+  const id = document.getElementById('editFaqId').value;
+  if (confirm('Bu soruyu siteden tamamen silmek istediğinize emin misiniz?')) {
+    deleteFaq(id);
+    closeEditFaqModal();
+  }
+}
+
+function deleteFaq(id) {
+  if (confirm('Bu soruyu silmek istediğinize emin misiniz?')) {
+    let faqs = getStoredFAQs();
+    faqs = faqs.filter(f => f.id !== id);
+    localStorage.setItem('kafkef_faqs_v1', JSON.stringify(faqs));
+    renderFAQs();
+    renderAdminFaqList();
+    triggerStickyNotification('Soru silindi.');
+  }
+}
+
+function handleResetFaqs() {
+  if (confirm('Sıkça Sorulan Soruları orijinal haline döndürmek istiyor musunuz?')) {
+    localStorage.removeItem('kafkef_faqs_v1');
+    renderFAQs();
+    renderAdminFaqList();
+    alert('🔄 Sorular orijinal haline getirildi.');
+  }
+}
+
