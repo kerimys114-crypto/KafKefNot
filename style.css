@@ -2004,3 +2004,22 @@ body {
 .copy-pill-btn:hover {
   background: var(--primary-hover);
 }
+
+/* CANLI DÜZENLEME STİLLERİ */
+[contenteditable="true"] {
+  outline: 2px dashed #c9933b !important;
+  outline-offset: 4px;
+  cursor: text !important;
+  border-radius: 4px;
+  background-color: rgba(201, 147, 59, 0.08) !important;
+  transition: all 0.2s;
+}
+
+[contenteditable="true"]:hover {
+  background-color: rgba(201, 147, 59, 0.16) !important;
+}
+
+[contenteditable="true"]:focus {
+  outline: 2px solid var(--primary) !important;
+  background-color: rgba(62, 0, 13, 0.05) !important;
+}

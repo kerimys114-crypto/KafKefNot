@@ -15,11 +15,14 @@
     <div style="display:flex;align-items:center;gap:8px">
       <span>🔐 Yönetici Olarak Giriş Yapıldı (Kâfkef Not Mağaza Sahibi)</span>
     </div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <button onclick="openAdminModal()" style="background:#550012;color:#fff;border:none;padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="btnLiveEditToggle" onclick="toggleLiveEditMode()" style="background:#ffd3dc;color:#3e000d;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer">
+        ✏️ Canlı Yazı Düzenleme: KAPALI
+      </button>
+      <button onclick="openAdminModal()" style="background:#550012;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
         ⚙️ Yönetim Paneli
       </button>
-      <button onclick="logoutAdmin()" style="background:transparent;color:#ffd3dc;border:1px solid #ffd3dc;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer">
+      <button onclick="logoutAdmin()" style="background:transparent;color:#ffd3dc;border:1px solid #ffd3dc;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer">
         Çıkış Yap
       </button>
     </div>
@@ -29,13 +32,13 @@
   <div class="announcement-bar">
     <div class="announcement-track" id="announcementTrack">
       <div class="announcement-item">
-        <span>🎉 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!</span>
+        <span data-live-edit="announcement1">🎉 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!</span>
       </div>
       <div class="announcement-item">
-        <span>📖 <strong>Arapça İlk Adım Defteri</strong> Satışta! Sadece <strong>240 TL</strong> (Aynı Gün Kargo)</span>
+        <span data-live-edit="announcement2">📖 <strong>Arapça İlk Adım Defteri</strong> Satışta! Sadece <strong>240 TL</strong> (Aynı Gün Kargo)</span>
       </div>
       <div class="announcement-item">
-        <span>✨ <strong>Sticker Kitaplarımız & Yeni Defterlerimiz</strong> Çok Yakında Sizinle!</span>
+        <span data-live-edit="announcement3">✨ <strong>Sticker Kitaplarımız & Yeni Defterlerimiz</strong> Çok Yakında Sizinle!</span>
       </div>
     </div>
   </div>
@@ -90,9 +93,9 @@
         <div class="hero-slides">
           <div class="hero-slide">
             <div class="hero-content">
-              <span class="hero-sub" style="background:rgba(62,0,13,0.08);color:var(--primary)">✦ ŞU ANDA SATIŞTA · KÂFKEF NOT</span>
-              <h1 class="hero-title">Arapça İlk Adım <span>Defteri</span></h1>
-              <p class="hero-desc">
+              <span class="hero-sub" data-live-edit="heroSub" style="background:rgba(62,0,13,0.08);color:var(--primary)">✦ ŞU ANDA SATIŞTA · KÂFKEF NOT</span>
+              <h1 class="hero-title" data-live-edit="heroTitle">Arapça İlk Adım <span>Defteri</span></h1>
+              <p class="hero-desc" data-live-edit="heroDesc">
                 <strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>
                 Arapça'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, 120 gsm dolma kalemle arkaya geçirmeyen kaliteli kağıt.
               </p>
@@ -481,7 +484,8 @@
       <!-- Admin Tabs -->
       <div class="admin-tabs">
         <button class="admin-tab-btn active" id="tabAddProd" onclick="switchAdminTab('add')">+ Yeni Defter Yayınla</button>
-        <button class="admin-tab-btn" id="tabListProd" onclick="switchAdminTab('list')">📚 Yayındaki Defterler</button>
+        <button class="admin-tab-btn" id="tabListProd" onclick="switchAdminTab('list')">📚 Defterleri Düzenle & Sil</button>
+        <button class="admin-tab-btn" id="tabContent" onclick="switchAdminTab('content')">📝 Tüm Site Metinleri & Ayarlar</button>
         <button class="admin-tab-btn" id="tabOrders" onclick="switchAdminTab('orders')">📦 Gelen Siparişler</button>
         <button class="admin-tab-btn" id="tabWallet" onclick="switchAdminTab('wallet')">💰 Kasa & IBAN Havuzu</button>
       </div>
@@ -559,7 +563,72 @@
         </table>
       </div>
 
-      <!-- Tab 3: Gelen Siparişler -->
+      <!-- Tab 3: Tüm Site Metinleri & Ayarlar -->
+      <div id="adminTabContentContent" style="display:none">
+        <form onsubmit="handleSaveSiteContent(event)">
+          <!-- Duyuru Metinleri -->
+          <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:12px;padding:18px;margin-bottom:16px">
+            <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:12px">📢 Kayan Duyuru Çubuğu Metinleri (Ticker)</h3>
+            <div class="admin-form-group" style="margin-bottom:10px">
+              <label>Duyuru 1 (Kampanya):</label>
+              <input type="text" id="cfgAnnounce1" placeholder="3 Defter Alana KARGO BEDAVA! • 5 Defter Alana 1 Defter HEDİYE + Kargo Bedava!">
+            </div>
+            <div class="admin-form-group" style="margin-bottom:10px">
+              <label>Duyuru 2 (Satış & Fiyat):</label>
+              <input type="text" id="cfgAnnounce2" placeholder="Arapça İlk Adım Defteri Satışta! Sadece 240 TL (Aynı Gün Kargo)">
+            </div>
+            <div class="admin-form-group">
+              <label>Duyuru 3 (Yakında Gelecekler):</label>
+              <input type="text" id="cfgAnnounce3" placeholder="Sticker Kitaplarımız & Yeni Defterlerimiz Çok Yakında Sizinle!">
+            </div>
+          </div>
+
+          <!-- Hero Vitrin Metinleri -->
+          <div style="background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:18px;margin-bottom:16px">
+            <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:12px">✨ Anasayfa Vitrin (Hero) Metinleri</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px">
+              <div class="admin-form-group">
+                <label>Üst Rozet Metni:</label>
+                <input type="text" id="cfgHeroBadge" placeholder="✦ ŞU ANDA SATIŞTA · KÂFKEF NOT">
+              </div>
+              <div class="admin-form-group">
+                <label>Ana Başlık:</label>
+                <input type="text" id="cfgHeroTitle" placeholder="Arapça İlk Adım Defteri">
+              </div>
+            </div>
+            <div class="admin-form-group">
+              <label>Vitrin Açıklama Paragrafı:</label>
+              <textarea id="cfgHeroDesc" rows="3" placeholder="Arapça'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı..."></textarea>
+            </div>
+          </div>
+
+          <!-- İletişim & Sosyal Medya -->
+          <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:12px;padding:18px;margin-bottom:16px">
+            <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:12px">📱 İletişim & Sosyal Medya</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="admin-form-group">
+                <label>Instagram Linki:</label>
+                <input type="text" id="cfgInstagramUrl" placeholder="https://www.instagram.com/kafkefnot/">
+              </div>
+              <div class="admin-form-group">
+                <label>WhatsApp Destek Hattı:</label>
+                <input type="text" id="cfgWhatsappPhone" placeholder="0555 123 45 67">
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button type="submit" class="btn-primary" style="flex:1;justify-content:center;padding:14px">
+              💾 Tüm Site Metinlerini Kaydet
+            </button>
+            <button type="button" onclick="handleResetSiteContent()" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;padding:14px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">
+              🔄 Orijinal Metinlere Sıfırla
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab 4: Gelen Siparişler -->
       <div id="adminTabContentOrders" style="display:none">
         <table style="width:100%;border-collapse:collapse;font-size:13px">
           <thead>
@@ -569,7 +638,8 @@
               <th style="padding:8px">Adet</th>
               <th style="padding:8px">Tutar</th>
               <th style="padding:8px">Tarih</th>
-              <th style="padding:8px">Durum</th>
+              <th style="padding:8px">Sipariş Durumu</th>
+              <th style="padding:8px;text-align:right">İşlem</th>
             </tr>
           </thead>
           <tbody id="adminOrdersTableBody">
@@ -686,6 +756,84 @@
     </div>
   </div>
 
+  <!-- DEFTER DÜZENLEME MODALI (YÖNETİCİ) -->
+  <div class="modal-overlay" id="editProductModal">
+    <div class="modal-box" style="max-width:700px;padding:28px">
+      <button class="modal-close-btn" onclick="closeEditProductModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--border-light);padding-bottom:12px">
+        <span style="font-size:24px">✏️</span>
+        <div>
+          <h2 style="font-size:18px;font-weight:800;color:var(--primary)">Defter Bilgilerini Düzenle</h2>
+          <div style="font-size:12px;color:var(--text-muted)">Defterin başlığını, fiyatını, görselini, açıklamasını veya satış durumunu anında güncelleyin.</div>
+        </div>
+      </div>
+      <form id="editProductForm" onsubmit="handleSaveEditProduct(event)">
+        <input type="hidden" id="editProdId">
+        <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px">
+          <div class="admin-form-group">
+            <label>Defter Başlığı</label>
+            <input type="text" id="editProdTitle" required>
+          </div>
+          <div class="admin-form-group">
+            <label>Satış Fiyatı (TL)</label>
+            <input type="number" id="editProdPrice" required>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="admin-form-group">
+            <label>Eski Fiyat / İndirim Öncesi (TL)</label>
+            <input type="number" id="editProdOldPrice" placeholder="örn: 290">
+          </div>
+          <div class="admin-form-group">
+            <label>Yayın Durumu</label>
+            <select id="editProdStatus">
+              <option value="active">🟢 Satışta (Hemen Al Açık)</option>
+              <option value="upcoming">⏳ Çok Yakında Sizinle (Ön Talep)</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="admin-form-group">
+            <label>Alt Başlık / Kapsam</label>
+            <input type="text" id="editProdSubtitle">
+          </div>
+          <div class="admin-form-group">
+            <label>Görsel Dosyası / Yolu</label>
+            <input type="text" id="editProdImage">
+          </div>
+        </div>
+        <div class="admin-form-group">
+          <label>Açıklama</label>
+          <textarea id="editProdDesc" rows="3"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button type="submit" class="btn-primary" style="flex:1;justify-content:center;padding:12px">
+            💾 Güncellemeyi Kaydet
+          </button>
+          <button type="button" onclick="handleDeleteFromEditModal()" style="background:#fee2e2;color:#b91c1c;border:none;padding:12px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">
+            🗑️ Defteri Sil
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CANLI SAYFA DÜZENLEME ARAÇ ÇUBUĞU (YÖNETİCİ) -->
+  <div id="liveEditToolbar" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#280008;color:#fff;padding:12px 24px;border-radius:50px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:99999;align-items:center;gap:16px;border:1px solid rgba(255,255,255,0.2)">
+    <div style="display:flex;align-items:center;gap:8px;font-size:13px">
+      <span>✏️</span>
+      <span><strong>Canlı Düzenleme Açık:</strong> Sayfadaki herhangi bir yazıya tıklayarak anında değiştirebilirsiniz.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="saveLiveEdits()" style="background:#167144;color:#fff;border:none;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer">
+        💾 Değişiklikleri Kaydet
+      </button>
+      <button onclick="toggleLiveEditMode()" style="background:transparent;color:#ffd3dc;border:1px solid #ffd3dc;padding:8px 14px;border-radius:20px;font-size:12px;cursor:pointer">
+        Kapat
+      </button>
+    </div>
+  </div>
+
   <!-- SITE FOOTER -->
   <footer class="site-footer">
     <div class="container footer-grid">
@@ -747,18 +895,25 @@
     function switchAdminTab(tab) {
       document.getElementById('adminTabContentAdd').style.display = tab === 'add' ? 'block' : 'none';
       document.getElementById('adminTabContentList').style.display = tab === 'list' ? 'block' : 'none';
+      const contentEl = document.getElementById('adminTabContentContent');
+      if (contentEl) contentEl.style.display = tab === 'content' ? 'block' : 'none';
       document.getElementById('adminTabContentOrders').style.display = tab === 'orders' ? 'block' : 'none';
       const walletEl = document.getElementById('adminTabContentWallet');
       if (walletEl) walletEl.style.display = tab === 'wallet' ? 'block' : 'none';
 
       document.getElementById('tabAddProd').classList.toggle('active', tab === 'add');
       document.getElementById('tabListProd').classList.toggle('active', tab === 'list');
+      const tabContentBtn = document.getElementById('tabContent');
+      if (tabContentBtn) tabContentBtn.classList.toggle('active', tab === 'content');
       document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
       const tabWalletBtn = document.getElementById('tabWallet');
       if (tabWalletBtn) tabWalletBtn.classList.toggle('active', tab === 'wallet');
 
       if (tab === 'wallet' && typeof renderWalletUI === 'function') {
         renderWalletUI();
+      }
+      if (tab === 'content' && typeof populateSiteContentForm === 'function') {
+        populateSiteContentForm();
       }
     }
 

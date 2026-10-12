@@ -550,6 +550,9 @@ function openAdminModal() {
     if (typeof renderWalletUI === 'function') {
       renderWalletUI();
     }
+    if (typeof populateSiteContentForm === 'function') {
+      populateSiteContentForm();
+    }
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -640,7 +643,10 @@ function renderAdminProductsList() {
         </span>
       </td>
       <td style="padding:10px;text-align:right">
-        <button onclick="toggleProductStatus('${p.id}')" style="background:#f7ebef;color:var(--primary);border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px">
+        <button onclick="openEditProductModal('${p.id}')" style="background:var(--primary);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px">
+          ✏️ Düzenle
+        </button>
+        <button onclick="toggleProductStatus('${p.id}')" style="background:#f7ebef;color:var(--primary);border:none;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px">
           ${p.status === 'active' ? 'Çok Yakında Yap' : 'Satışa Aç'}
         </button>
         <button onclick="deleteProduct('${p.id}')" style="background:#fee2e2;color:#b91c1c;border:none;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
@@ -651,12 +657,81 @@ function renderAdminProductsList() {
   `).join('');
 }
 
+function openEditProductModal(prodId) {
+  const prod = PRODUCTS.find(p => p.id === prodId);
+  if (!prod) return;
+
+  document.getElementById('editProdId').value = prod.id;
+  document.getElementById('editProdTitle').value = prod.title;
+  document.getElementById('editProdPrice').value = prod.price;
+  document.getElementById('editProdOldPrice').value = prod.oldPrice || '';
+  document.getElementById('editProdStatus').value = prod.status;
+  document.getElementById('editProdSubtitle').value = prod.subtitle || '';
+  document.getElementById('editProdImage').value = prod.image || '';
+  document.getElementById('editProdDesc').value = prod.desc || '';
+
+  const modal = document.getElementById('editProductModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeEditProductModal() {
+  const modal = document.getElementById('editProductModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleSaveEditProduct(e) {
+  e.preventDefault();
+  const id = document.getElementById('editProdId').value;
+  const prod = PRODUCTS.find(p => p.id === id);
+  if (!prod) return;
+
+  const title = document.getElementById('editProdTitle').value.trim();
+  const price = Number(document.getElementById('editProdPrice').value);
+  const oldPriceVal = document.getElementById('editProdOldPrice').value.trim();
+  const oldPrice = oldPriceVal ? Number(oldPriceVal) : null;
+  const status = document.getElementById('editProdStatus').value;
+  const subtitle = document.getElementById('editProdSubtitle').value.trim();
+  const image = document.getElementById('editProdImage').value.trim() || prod.image;
+  const desc = document.getElementById('editProdDesc').value.trim();
+
+  prod.title = title;
+  prod.price = price;
+  prod.oldPrice = oldPrice;
+  prod.status = status;
+  prod.subtitle = subtitle;
+  prod.image = image;
+  if (!prod.gallery || prod.gallery.length === 0) prod.gallery = [image];
+  else prod.gallery[0] = image;
+  prod.desc = desc;
+  prod.badges = status === 'active' ? ['Şu Anda Satışta', '3 Adete Kargo Bedava', '5 Adete 1 Hediye!'] : ['Çok Yakında Sizinle', 'Ön Talep Açık'];
+
+  localStorage.setItem('kafkef_products_v3', JSON.stringify(PRODUCTS));
+  renderAdminProductsList();
+  renderProducts();
+  closeEditProductModal();
+  triggerStickyNotification(`✅ "${title}" defteri başarıyla güncellendi!`);
+}
+
+function handleDeleteFromEditModal() {
+  const id = document.getElementById('editProdId').value;
+  if (confirm('Bu defteri mağazadan tamamen silmek istediğinize emin misiniz?')) {
+    deleteProduct(id);
+    closeEditProductModal();
+  }
+}
+
 function renderAdminOrdersList() {
   const listEl = document.getElementById('adminOrdersTableBody');
   if (!listEl) return;
 
   if (ORDERS.length === 0) {
-    listEl.innerHTML = `<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--text-muted)">Henüz müşteri siparişi bulunmuyor.</td></tr>`;
+    listEl.innerHTML = `<tr><td colspan="7" style="padding:20px;text-align:center;color:var(--text-muted)">Henüz müşteri siparişi bulunmuyor.</td></tr>`;
     return;
   }
 
@@ -667,9 +742,39 @@ function renderAdminOrdersList() {
       <td style="padding:8px">${o.qty} Defter</td>
       <td style="padding:8px;font-weight:700;color:var(--primary)">${o.total} TL</td>
       <td style="padding:8px">${o.date}</td>
-      <td style="padding:8px"><span style="color:#167144;background:#e9f8ee;padding:2px 6px;border-radius:4px;font-weight:700">${o.status}</span></td>
+      <td style="padding:8px">
+        <select onchange="updateOrderStatus('${o.code}', this.value)" style="padding:4px 6px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid var(--border-color);background:#fff;cursor:pointer">
+          <option value="Hazırlanıyor" ${o.status === 'Hazırlanıyor' ? 'selected' : ''}>🟡 Hazırlanıyor</option>
+          <option value="Kargoya Verildi" ${o.status === 'Kargoya Verildi' ? 'selected' : ''}>🚚 Kargoya Verildi</option>
+          <option value="Teslim Edildi" ${o.status === 'Teslim Edildi' ? 'selected' : ''}>✅ Teslim Edildi</option>
+          <option value="İptal Edildi" ${o.status === 'İptal Edildi' ? 'selected' : ''}>❌ İptal Edildi</option>
+        </select>
+      </td>
+      <td style="padding:8px;text-align:right">
+        <button onclick="deleteOrder('${o.code}')" style="background:#fee2e2;color:#b91c1c;border:none;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer">
+          Sil
+        </button>
+      </td>
     </tr>
   `).join('');
+}
+
+function updateOrderStatus(code, newStatus) {
+  const order = ORDERS.find(o => o.code === code);
+  if (order) {
+    order.status = newStatus;
+    localStorage.setItem('kafkef_orders', JSON.stringify(ORDERS));
+    triggerStickyNotification(`Sipariş ${code} durumu: ${newStatus}`);
+  }
+}
+
+function deleteOrder(code) {
+  if (confirm(`${code} numaralı siparişi silmek istediğinize emin misiniz?`)) {
+    ORDERS = ORDERS.filter(o => o.code !== code);
+    localStorage.setItem('kafkef_orders', JSON.stringify(ORDERS));
+    renderAdminOrdersList();
+    triggerStickyNotification(`Sipariş ${code} silindi.`);
+  }
 }
 
 // 9. CHECKOUT & SİPARİŞ ENTEGRASYONU (HAVUZ VE IBAN BAĞLANTISI)
@@ -915,6 +1020,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // IBAN & Cüzdan Başlatma
   updateCheckoutIbanDisplay();
   renderWalletUI();
+
+  // Site Metinleri ve Canlı Değişiklikleri Uygula
+  if (typeof applySiteContent === 'function') {
+    applySiteContent();
+  }
 });
 
 // 12. IBAN & HAVUZ (KASA) YÖNETİM SİSTEMİ
@@ -1138,4 +1248,152 @@ function toggleCheckoutPayment(method) {
   const cardBox = document.getElementById('checkoutCardBox');
   if (ibanBox) ibanBox.style.display = method === 'iban' ? 'block' : 'none';
   if (cardBox) cardBox.style.display = method === 'card' ? 'block' : 'none';
+}
+
+// 13. SİTE METİNLERİ & CANLI DÜZENLEYİCİ (HER ŞEYİ DEĞİŞTİRME / SİLME)
+const DEFAULT_SITE_CONTENT = {
+  announce1: '🎉 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!',
+  announce2: '📖 <strong>Arapça İlk Adım Defteri</strong> Satışta! Sadece <strong>240 TL</strong> (Aynı Gün Kargo)',
+  announce3: '✨ <strong>Sticker Kitaplarımız & Yeni Defterlerimiz</strong> Çok Yakında Sizinle!',
+  heroBadge: '✦ ŞU ANDA SATIŞTA · KÂFKEF NOT',
+  heroTitle: 'Arapça İlk Adım <span>Defteri</span>',
+  heroDesc: '<strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>Arapça\'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, 120 gsm dolma kalemle arkaya geçirmeyen kaliteli kağıt.',
+  instagramUrl: 'https://www.instagram.com/kafkefnot/',
+  whatsappPhone: '0555 123 45 67'
+};
+
+function getSiteContent() {
+  const stored = localStorage.getItem('kafkef_site_content_v1');
+  if (stored) {
+    try { return { ...DEFAULT_SITE_CONTENT, ...JSON.parse(stored) }; } catch (e) { }
+  }
+  return DEFAULT_SITE_CONTENT;
+}
+
+function populateSiteContentForm() {
+  const cfg = getSiteContent();
+  const f1 = document.getElementById('cfgAnnounce1');
+  const f2 = document.getElementById('cfgAnnounce2');
+  const f3 = document.getElementById('cfgAnnounce3');
+  const fb = document.getElementById('cfgHeroBadge');
+  const ft = document.getElementById('cfgHeroTitle');
+  const fd = document.getElementById('cfgHeroDesc');
+  const fi = document.getElementById('cfgInstagramUrl');
+  const fw = document.getElementById('cfgWhatsappPhone');
+
+  if (f1) f1.value = cfg.announce1;
+  if (f2) f2.value = cfg.announce2;
+  if (f3) f3.value = cfg.announce3;
+  if (fb) fb.value = cfg.heroBadge;
+  if (ft) ft.value = cfg.heroTitle;
+  if (fd) fd.value = cfg.heroDesc;
+  if (fi) fi.value = cfg.instagramUrl;
+  if (fw) fw.value = cfg.whatsappPhone;
+}
+
+function handleSaveSiteContent(e) {
+  e.preventDefault();
+  const newCfg = {
+    announce1: document.getElementById('cfgAnnounce1').value.trim() || DEFAULT_SITE_CONTENT.announce1,
+    announce2: document.getElementById('cfgAnnounce2').value.trim() || DEFAULT_SITE_CONTENT.announce2,
+    announce3: document.getElementById('cfgAnnounce3').value.trim() || DEFAULT_SITE_CONTENT.announce3,
+    heroBadge: document.getElementById('cfgHeroBadge').value.trim() || DEFAULT_SITE_CONTENT.heroBadge,
+    heroTitle: document.getElementById('cfgHeroTitle').value.trim() || DEFAULT_SITE_CONTENT.heroTitle,
+    heroDesc: document.getElementById('cfgHeroDesc').value.trim() || DEFAULT_SITE_CONTENT.heroDesc,
+    instagramUrl: document.getElementById('cfgInstagramUrl').value.trim() || DEFAULT_SITE_CONTENT.instagramUrl,
+    whatsappPhone: document.getElementById('cfgWhatsappPhone').value.trim() || DEFAULT_SITE_CONTENT.whatsappPhone
+  };
+
+  localStorage.setItem('kafkef_site_content_v1', JSON.stringify(newCfg));
+  applySiteContent();
+  alert('✅ Tüm site metinleri ve ayarları başarıyla güncellendi!');
+}
+
+function handleResetSiteContent() {
+  if (confirm('Tüm site metinlerini orijinal varsayılan ayarlara döndürmek istediğinize emin misiniz?')) {
+    localStorage.removeItem('kafkef_site_content_v1');
+    localStorage.removeItem('kafkef_live_edits');
+    applySiteContent();
+    populateSiteContentForm();
+    alert('🔄 Site metinleri orijinal haline döndürüldü.');
+    location.reload();
+  }
+}
+
+function applySiteContent() {
+  const cfg = getSiteContent();
+
+  const elA1 = document.querySelector('[data-live-edit="announcement1"]');
+  const elA2 = document.querySelector('[data-live-edit="announcement2"]');
+  const elA3 = document.querySelector('[data-live-edit="announcement3"]');
+  const elHB = document.querySelector('[data-live-edit="heroSub"]');
+  const elHT = document.querySelector('[data-live-edit="heroTitle"]');
+  const elHD = document.querySelector('[data-live-edit="heroDesc"]');
+
+  if (elA1) elA1.innerHTML = cfg.announce1;
+  if (elA2) elA2.innerHTML = cfg.announce2;
+  if (elA3) elA3.innerHTML = cfg.announce3;
+  if (elHB) elHB.innerHTML = cfg.heroBadge;
+  if (elHT) elHT.innerHTML = cfg.heroTitle;
+  if (elHD) elHD.innerHTML = cfg.heroDesc;
+
+  // Canlı görsel düzenlemeleri uygula
+  applyLiveEdits();
+}
+
+// CANLI GÖRSEL METİN DÜZENLEYİCİ (WIX / WORD TARZI TIKLA-YAZ)
+let isLiveEditMode = false;
+
+function toggleLiveEditMode() {
+  isLiveEditMode = !isLiveEditMode;
+  const btn = document.getElementById('btnLiveEditToggle');
+  const toolbar = document.getElementById('liveEditToolbar');
+  const editableNodes = document.querySelectorAll('[data-live-edit]');
+
+  if (btn) {
+    btn.textContent = isLiveEditMode ? '✏️ Canlı Yazı Düzenleme: AÇIK' : '✏️ Canlı Yazı Düzenleme: KAPALI';
+    btn.style.background = isLiveEditMode ? '#167144' : '#ffd3dc';
+    btn.style.color = isLiveEditMode ? '#fff' : '#3e000d';
+  }
+
+  if (toolbar) {
+    toolbar.style.display = isLiveEditMode ? 'flex' : 'none';
+  }
+
+  editableNodes.forEach(node => {
+    node.contentEditable = isLiveEditMode ? 'true' : 'false';
+  });
+
+  if (isLiveEditMode) {
+    triggerStickyNotification('✏️ Canlı Düzenleme Açık! Metinlerin üzerine tıklayıp doğrudan değiştirebilirsiniz.');
+  }
+}
+
+function saveLiveEdits() {
+  const editableNodes = document.querySelectorAll('[data-live-edit]');
+  const edits = {};
+  editableNodes.forEach(node => {
+    const key = node.getAttribute('data-live-edit');
+    if (key) {
+      edits[key] = node.innerHTML;
+    }
+  });
+
+  localStorage.setItem('kafkef_live_edits', JSON.stringify(edits));
+  triggerStickyNotification('💾 Tüm canlı metin değişiklikleri kaydedildi!');
+  toggleLiveEditMode();
+}
+
+function applyLiveEdits() {
+  const stored = localStorage.getItem('kafkef_live_edits');
+  if (!stored) return;
+  try {
+    const edits = JSON.parse(stored);
+    Object.keys(edits).forEach(key => {
+      const node = document.querySelector(`[data-live-edit="${key}"]`);
+      if (node) {
+        node.innerHTML = edits[key];
+      }
+    });
+  } catch (e) { }
 }
