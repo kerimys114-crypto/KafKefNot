@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kâfkef Not (@kafkefnot) | Arapça İlk Adım Defteri & Dil Kırtasiyesi</title>
+  <meta name="description" content="Arapça İlk Adım Defteri 240 TL. 3 defter alana kargo bedava, 5 defter alana 1 defter hediye ve kargo bedava! Sağdan sola açılan lüks defterler.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%237b1633'/><text x='50%' y='65%' font-family='serif' font-size='50' fill='white' text-anchor='middle'>ق</text></svg>">
+</head>
+<body>
+
+  <!-- ANNOUNCEMENT BAR (TICKER) -->
+  <div class="announcement-bar">
+    <div class="announcement-track" id="announcementTrack">
+      <div class="announcement-item">
+        <span>🎉 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!</span>
+      </div>
+      <div class="announcement-item">
+        <span>📖 <strong>Arapça İlk Adım Defteri</strong> Satışta! Sadece <strong>240 TL</strong> (Aynı Gün Kargo)</span>
+      </div>
+      <div class="announcement-item">
+        <span>✨ <strong>Sticker Kitaplarımız & Yeni Defterlerimiz</strong> Çok Yakında Sizinle!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SITE HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- Logo -->
+      <a href="#" class="brand-logo">
+        <div class="logo-badge">
+          <span class="font-arabic">ق ك</span>
+        </div>
+        <div class="brand-text-wrap">
+          <span class="brand-name">KÂFKEF NOT</span>
+          <span class="brand-tagline">@kafkefnot · Dil Defterleri</span>
+        </div>
+      </a>
+
+      <!-- Navigation -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#" class="nav-link active">Anasayfa</a></li>
+          <li><a href="#urunler" class="nav-link" onclick="renderProducts('active')">Satıştaki Defter (240 TL)</a></li>
+          <li><a href="#kampanyalar" class="nav-link">Kampanyalar</a></li>
+          <li><a href="#ic-sayfalar" class="nav-link">İç Sayfa Tasarımı</a></li>
+          <li><a href="#urunler" class="nav-link" onclick="renderProducts('upcoming')">Çok Yakında Gelecekler</a></li>
+          <li>
+            <a href="https://www.instagram.com/kafkefnot/" target="_blank" rel="noopener" class="nav-link" style="color:var(--primary);font-weight:700">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:2px"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              @kafkefnot
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="header-actions">
+        <!-- Satıcı / Yönetici Paneli Butonu -->
+        <button class="admin-badge-btn" onclick="openAdminModal()" title="Satıcı Paneli">
+          <span>⚙️ Defter Yayınla & Yönet</span>
+        </button>
+
+        <!-- Wishlist -->
+        <button class="action-btn" onclick="filterWishlist()" title="Favorilerim" aria-label="Favorilerim">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </button>
+
+        <!-- Cart Drawer Button -->
+        <button class="action-btn" onclick="openCartDrawer()" title="Sepetim" aria-label="Sepetim">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span class="cart-count" id="cartBadge" style="display:none">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main>
+
+    <!-- HERO SECTION (REAL BOOK PHOTOS SHOWCASE) -->
+    <section class="hero-section container">
+      <div class="hero-slider-wrap">
+        <div class="hero-slides">
+          <div class="hero-slide">
+            <div class="hero-content">
+              <span class="hero-sub">✦ ŞU ANDA SATIŞTA · KÂFKEF NOT</span>
+              <h1 class="hero-title">Arapça İlk Adım <span>Defteri</span></h1>
+              <p class="hero-desc">
+                <strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>
+                Arapça'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, 120 gsm dolma kalemle arkaya geçirmeyen kaliteli kağıt.
+              </p>
+
+              <!-- Campaign Highlights -->
+              <div style="background:rgba(255,255,255,0.85);border:1px solid #ebd0d7;border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#167144;font-weight:700">
+                  <span>✓ 3 Adet Defter Alana:</span>
+                  <span style="background:#e9f8ee;padding:2px 8px;border-radius:6px">Kargo BEDAVA!</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#7b1633;font-weight:700">
+                  <span>🎁 5 Adet Defter Alana:</span>
+                  <span style="background:#f9e7e5;padding:2px 8px;border-radius:6px">1 Defter HEDİYE + Kargo BEDAVA!</span>
+                </div>
+              </div>
+
+              <div class="hero-btn-group">
+                <button class="btn-primary" onclick="addToCart('kafkef-ilk-adim-defteri')">
+                  🛒 Hemen Satın Al · 240 TL
+                </button>
+                <a href="#ic-sayfalar" class="btn-secondary">
+                  İç Sayfaları İncele
+                </a>
+              </div>
+            </div>
+
+            <div class="hero-visual">
+              <div class="hero-image-card" style="padding:0;overflow:hidden;transform:rotate(-1deg)">
+                <img src="assets/defter_on_yuz.jpg" alt="Arapça İlk Adım Defteri" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-md)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE CAMPAIGN PROMOTION BANNER -->
+    <section class="container" id="kampanyalar" style="margin-bottom:40px">
+      <div style="background:linear-gradient(135deg, #fff7f2 0%, #faedf2 100%);border:2px solid var(--border-color);border-radius:var(--radius-lg);padding:24px 30px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;box-shadow:var(--shadow-sm)">
+        <div style="border-right:1px dashed var(--border-color);padding-right:20px">
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#e9f8ee;color:#167144;font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px">
+            KAMPANYA 1
+          </div>
+          <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px">3 Defter Alana Kargo BEDAVA</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Kendinize ve dil öğrenen arkadaşlarınıza birlikte alın, tüm Türkiye'ye kargo ücretini biz karşılayalım!</p>
+          <button class="btn-primary" style="padding:8px 16px;font-size:12px" onclick="addToCart('kafkef-ilk-adim-defteri', 3)">
+            + 3 Adet Sepete Ekle (720 TL · Kargo Bedava)
+          </button>
+        </div>
+
+        <div style="padding-left:10px">
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f2dce3;color:var(--primary);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px">
+            KAMPANYA 2 · EN ÇOK TERCİH EDİLEN
+          </div>
+          <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px">5 Defter Alana 1 Defter HEDİYE!</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Sınıf arkadaşlarınızla veya çalışma grubunuzla toplu sipariş verin; 1 defter hediye gelsin ve kargo bedava olsun!</p>
+          <button class="btn-primary" style="padding:8px 16px;font-size:12px;background:#167144" onclick="addToCart('kafkef-ilk-adim-defteri', 5)">
+            🎁 5 Adet Ekle (1 Defter Hediye Kazan)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS CATALOG SECTION (FILTERABLE) -->
+    <section class="container" id="urunler" style="margin-bottom:60px">
+      <div class="section-head">
+        <span class="section-tag">KÂFKEF NOT DEFTER VE AKSESUARLARI</span>
+        <h2 class="section-title">Defter Koleksiyonumuz</h2>
+        <p class="section-subtitle">Şu anda satışta olan başucu defterimiz ve çok yakında sizlerle buluşacak yeni tasarımlarımız.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="renderProducts('all')">Tüm Ürünler</button>
+        <button class="filter-tab" onclick="renderProducts('active')">🟢 Şu Anda Satışta (240 TL)</button>
+        <button class="filter-tab" onclick="renderProducts('upcoming')">⏳ Çok Yakında Gelecekler</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Rendered dynamically by app.js with real photos! -->
+      </div>
+    </section>
+
+    <!-- REAL INSIDE PAGE SHOWCASE WITH TEA CUP PHOTO -->
+    <section class="container interior-preview-section" id="ic-sayfalar">
+      <div class="section-head" style="margin-bottom:24px">
+        <span class="section-tag">BÜYÜK HAYALLER İÇİN KÜÇÜK BİR DEFTER</span>
+        <h2 class="section-title">Defterimizin İçini İnceleyin</h2>
+        <p class="section-subtitle">«دفتر صغير لأحلام كبيرة» — Kelime, cümle, dilbilgisi ve pratik alanlarıyla Arapça öğrenme sürecinizdeki en ilham verici yol arkadaşınız.</p>
+      </div>
+
+      <div class="preview-grid" style="grid-template-columns:1fr 1fr;gap:40px;align-items:center">
+        <div>
+          <h3 style="font-size:22px;font-weight:800;color:var(--primary);margin-bottom:12px">
+            Arapça'nın Ruhuyla Uyumlu Pedagojik Düzen
+          </h3>
+          <p style="font-size:14px;color:var(--text-main);line-height:1.7;margin-bottom:16px">
+            Kâfkef Not defteri, sıradan bir çizgili defter değildir. Arapça öğrenirken en çok zorlanılan kelime ezberi, kök analizi, harekeleme ve cümle kurma pratiğini adım adım kolaylaştırmak için özel olarak kurgulanmıştır.
+          </p>
+
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <span style="font-size:20px">📖</span>
+              <div>
+                <strong style="color:var(--primary);font-size:14px">Sağdan Sola (RTL) Açılan Ciltleme:</strong>
+                <p style="font-size:13px;color:var(--text-muted)">Arap alfabesinin yazım yönüne göre ters açılır, eliniz spirale veya cilde çarpmaz.</p>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <span style="font-size:20px">✒️</span>
+              <div>
+                <strong style="color:var(--primary);font-size:14px">120 gsm Dolma Kalem Kağıdı:</strong>
+                <p style="font-size:13px;color:var(--text-muted)">Dolma kalem, jel kalem ve divit uçlarla yazsanız dahi arkaya leke bırakmaz.</p>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <span style="font-size:20px">🌿</span>
+              <div>
+                <strong style="color:var(--primary);font-size:14px">Zarif Motifli Sert Kapak:</strong>
+                <p style="font-size:13px;color:var(--text-muted)">Kuş ve çiçek işlemeleriyle çalışma masanıza estetik ve huzur katar.</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="addToCart('kafkef-ilk-adim-defteri')">
+            🛒 240 TL · Hemen Satın Al
+          </button>
+        </div>
+
+        <div style="text-align:center">
+          <img src="assets/defter_ic_sayfa.jpg" alt="Kâfkef Defter İç Sayfa" style="width:100%;max-width:440px;border-radius:16px;box-shadow:var(--shadow-lg);object-fit:cover" onclick="openPhotoModal('assets/defter_ic_sayfa.jpg', 'Kâfkef Not İç Sayfası')">
+          <small style="display:block;margin-top:8px;color:var(--text-muted);font-size:12px">Büyütmek için fotoğrafa tıklayabilirsiniz</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOMER REVIEWS (REAL PHOTOS) -->
+    <section class="container" style="margin-bottom:70px">
+      <div class="section-head">
+        <span class="section-tag">GERÇEK ÖĞRENCİ DENEYİMLERİ</span>
+        <h2 class="section-title">Müşterilerimiz Ne Diyor?</h2>
+        <p class="section-subtitle">Arapça İlk Adım Defteri ile çalışan öğrencilerin geri bildirimleri.</p>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-card-head">
+            <span class="reviewer-name">Ayşe N. (Arapça Hazırlık)</span>
+            <span class="review-verified">✓ Onaylı Alıcı</span>
+          </div>
+          <span class="review-product-tag">Arapça İlk Adım Defteri</span>
+          <div style="color:#f59e0b;font-size:12px;margin-bottom:6px">★★★★★ 5.0</div>
+          <p class="review-body">
+            "Defter elime ulaştığında kalitesine bayıldım! Kapağındaki dokusu, kağıdının kalınlığı muazzam. Dolma kalemle yazıyorum asla arkaya geçirmiyor. 3 adet aldık kargo bedavaya geldi."
+          </p>
+          <div class="review-photo-row">
+            <img src="assets/defter_kapak_kus.jpg" alt="Fotoğraf" class="review-photo-thumb" onclick="openPhotoModal('assets/defter_kapak_kus.jpg', 'Ayşe N.')">
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card-head">
+            <span class="reviewer-name">Mustafa T. (İlahiyat)</span>
+            <span class="review-verified">✓ Onaylı Alıcı</span>
+          </div>
+          <span class="review-product-tag">Arapça İlk Adım Defteri</span>
+          <div style="color:#f59e0b;font-size:12px;margin-bottom:6px">★★★★★ 5.0</div>
+          <p class="review-body">
+            "Sağdan sola açılması o kadar mantıklı ki, normal defterlerde yazı yazarken spiral sürekli rahatsız ediyordu. Sınıftan 5 arkadaş birleşip aldık 1 defter hediye geldi, çok memnunuz."
+          </p>
+          <div class="review-photo-row">
+            <img src="assets/defter_samdan_1.jpg" alt="Fotoğraf" class="review-photo-thumb" onclick="openPhotoModal('assets/defter_samdan_1.jpg', 'Mustafa T.')">
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-card-head">
+            <span class="reviewer-name">Zehra K.</span>
+            <span class="review-verified">✓ Onaylı Alıcı</span>
+          </div>
+          <span class="review-product-tag">Arapça İlk Adım Defteri</span>
+          <div style="color:#f59e0b;font-size:12px;margin-bottom:6px">★★★★★ 5.0</div>
+          <p class="review-body">
+            "İçindeki 'Büyük hayaller için küçük bir defter' sözü her açtığımda beni motive ediyor. Çıkacak olan sticker kitaplarınızı ve kelime defterinizi de sabırsızlıkla bekliyorum!"
+          </p>
+          <div class="review-photo-row">
+            <img src="assets/defter_ic_sayfa.jpg" alt="Fotoğraf" class="review-photo-thumb" onclick="openPhotoModal('assets/defter_ic_sayfa.jpg', 'Zehra K.')">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SLIDE-OVER CART DRAWER -->
+  <div class="cart-drawer-overlay" id="cartOverlay" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        Alışveriş Sepetim
+      </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Sepeti kapat">✕</button>
+    </div>
+
+    <!-- Free Shipping & Gift Progress Bar -->
+    <div class="cart-shipping-bar">
+      <div id="shippingProgressText">3 defter alana kargo bedava, 5 defter alana 1 hediye!</div>
+      <div class="shipping-progress-track">
+        <div class="shipping-progress-fill" id="shippingProgressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items List -->
+    <div class="cart-items-list" id="cartItemsList">
+      <!-- Injected by app.js -->
+    </div>
+
+    <!-- Cart Footer & Calculations -->
+    <div class="cart-drawer-footer">
+      <div class="coupon-row">
+        <input type="text" id="couponCodeInput" class="coupon-input" placeholder="Kupon Kodu (KAFKEF10)">
+        <button class="coupon-btn" onclick="applyCoupon()">Uygula</button>
+      </div>
+      <div class="cart-calc-row">
+        <span>Ara Toplam</span>
+        <span id="cartSubtotal">0 TL</span>
+      </div>
+      <div class="cart-calc-row" id="cartDiscountRow" style="display:none;color:#167144">
+        <span>Kampanya İndirimi</span>
+        <span id="cartDiscountVal">-0 TL</span>
+      </div>
+      <div class="cart-calc-row">
+        <span>Kargo Ücreti</span>
+        <span id="cartShippingVal">0 TL</span>
+      </div>
+      <div class="cart-calc-row total">
+        <span>Genel Toplam</span>
+        <span id="cartTotal">0 TL</span>
+      </div>
+      <button class="checkout-btn" onclick="openCheckoutModal()">
+        Siparişi Tamamla →
+      </button>
+      <div style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px">
+        🔒 256-Bit SSL Güvenli Alışveriş & İade Güvencesi
+      </div>
+    </div>
+  </aside>
+
+  <!-- STICKY BUY BAR (FOBINOTE STYLE BOTTOM BAR) -->
+  <aside class="sticky-buy-bar" id="stickyBuyBar">
+    <div class="sticky-bar-inner">
+      <div class="sticky-bar-info">
+        <span class="sticky-bar-badge">✓ Stokta Var · 240 TL</span>
+        <span class="sticky-bar-title">Arapça İlk Adım Defteri · 3 Alana Kargo Bedava!</span>
+      </div>
+      <div class="sticky-bar-action">
+        <div style="text-align:right">
+          <small style="text-decoration:line-through;color:#9ca3af;font-size:11px">290 TL</small>
+          <div style="font-weight:900;color:var(--primary);font-size:18px">240 TL</div>
+        </div>
+        <button class="add-cart-btn" style="height:42px;padding:0 24px;font-size:13px" onclick="addToCart('kafkef-ilk-adim-defteri')">
+          SEPETE EKLE
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- QUICK VIEW MODAL -->
+  <div class="modal-overlay" id="quickViewModal">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeQuickView()">✕</button>
+      <div id="quickViewContent">
+        <!-- Injected by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOTO ZOOM LIGHTBOX MODAL -->
+  <div class="modal-overlay" id="photoModal">
+    <div class="modal-box" style="max-width:540px;padding:20px;text-align:center">
+      <button class="modal-close-btn" onclick="closePhotoModal()">✕</button>
+      <img id="photoModalImg" src="" alt="Müşteri fotoğrafı" style="width:100%;max-height:70vh;object-fit:contain;border-radius:10px;margin-bottom:12px">
+      <div id="photoModalCaption" style="font-size:13px;color:var(--text-muted)"></div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL (SATIN ALACAKLAR İÇİN) -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-box" style="max-width:620px;padding:32px">
+      <button class="modal-close-btn" onclick="closeCheckoutModal()">✕</button>
+      <div id="checkoutModalContent">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+          <span style="font-size:24px">🛍️</span>
+          <h2 style="font-size:20px;font-weight:800;color:var(--primary)">Siparişi Tamamla</h2>
+        </div>
+        <form onsubmit="completeCheckoutOrder(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+            <div>
+              <label style="font-size:12px;font-weight:700">Ad Soyad</label>
+              <input type="text" id="coName" required placeholder="Adınız ve Soyadınız" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:13px;margin-top:4px">
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:700">Telefon Numarası</label>
+              <input type="tel" id="coPhone" required placeholder="0555 123 45 67" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:13px;margin-top:4px">
+            </div>
+          </div>
+          <div style="margin-bottom:14px">
+            <label style="font-size:12px;font-weight:700">Teslimat Adresi</label>
+            <textarea id="coAddress" required rows="2" placeholder="Mahalle, Cadde, Sokak, No, İlçe / İl" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:13px;margin-top:4px"></textarea>
+          </div>
+          <div style="background:var(--bg-warm);padding:14px;border-radius:10px;border:1px solid var(--border-color);margin-bottom:20px">
+            <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:8px">Ödeme Seçeneği:</div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer">
+              <input type="radio" name="payMethod" checked> Kredi / Banka Kartı (İyzico 3D Güvenli Ödeme)
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
+              <input type="radio" name="payMethod"> Kapıda Ödeme (Nakit veya Kartla)
+            </label>
+          </div>
+          <button type="submit" class="checkout-btn">
+            Siparişi Onayla & Satın Al
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- YÖNETİCİ / SATICI PANELİ (DEFTER YAYINLAMA & YÖNETİM) -->
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal-box" style="max-width:850px;padding:32px">
+      <button class="modal-close-btn" onclick="closeAdminModal()">✕</button>
+      
+      <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-light);padding-bottom:14px;margin-bottom:18px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:24px">⚙️</span>
+          <div>
+            <h2 style="font-size:20px;font-weight:800;color:var(--primary)">Kâfkef Not · Satıcı & Yönetim Paneli</h2>
+            <div style="font-size:12px;color:var(--text-muted)">Buradan yeni defterler yayınlayabilir, satış durumlarını değiştirebilir ve siparişleri görebilirsiniz.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" id="tabAddProd" onclick="switchAdminTab('add')">+ Yeni Defter Yayınla</button>
+        <button class="admin-tab-btn" id="tabListProd" onclick="switchAdminTab('list')">📚 Yayındaki Defterler</button>
+        <button class="admin-tab-btn" id="tabOrders" onclick="switchAdminTab('orders')">📦 Gelen Siparişler</button>
+      </div>
+
+      <!-- Tab 1: Yeni Defter Yayınlama Formu -->
+      <div id="adminTabContentAdd">
+        <form id="adminProductForm" onsubmit="handleAddProduct(event)">
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:14px">
+            <div class="admin-form-group">
+              <label>Defter Başlığı</label>
+              <input type="text" id="admTitle" required placeholder="örn: Arapça Kelime Defteri (Mu'cem)">
+            </div>
+            <div class="admin-form-group">
+              <label>Satış Fiyatı (TL)</label>
+              <input type="number" id="admPrice" required placeholder="240" value="240">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="admin-form-group">
+              <label>Alt Başlık / Kapsam</label>
+              <input type="text" id="admSubtitle" placeholder="örn: Kök-Vezin Tablolu · Sağdan Sola">
+            </div>
+            <div class="admin-form-group">
+              <label>Yayın Durumu</label>
+              <select id="admStatus">
+                <option value="active">🟢 Hemen Satışa Çıkar (Satışta)</option>
+                <option value="upcoming">⏳ Çok Yakında Sizinle (Ön Talep)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="admin-form-group">
+              <label>Kategori</label>
+              <select id="admCategory">
+                <option value="defter">Defter</option>
+                <option value="sarf">Sarf & Nahiv</option>
+                <option value="ajanda">Ajanda & Planlayıcı</option>
+                <option value="sticker">Sticker Book</option>
+              </select>
+            </div>
+            <div class="admin-form-group">
+              <label>Görsel Yolu / Dosya Adı</label>
+              <input type="text" id="admImage" value="assets/defter_kapak_kus.jpg" placeholder="assets/defter_kapak_kus.jpg">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label>Ürün Açıklaması</label>
+            <textarea id="admDesc" rows="3" placeholder="Defterin özellikleri, sayfa gramajı ve öğrenciye faydası..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:14px">
+            🚀 Defteri Sitede Yayınla
+          </button>
+        </form>
+      </div>
+
+      <!-- Tab 2: Yayındaki Defterler Listesi -->
+      <div id="adminTabContentList" style="display:none">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:var(--bg-warm);border-bottom:2px solid var(--border-color);text-align:left">
+              <th style="padding:10px">Görsel</th>
+              <th style="padding:10px">Başlık</th>
+              <th style="padding:10px">Fiyat</th>
+              <th style="padding:10px">Durum</th>
+              <th style="padding:10px;text-align:right">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsTableBody">
+            <!-- Injected by app.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab 3: Gelen Siparişler -->
+      <div id="adminTabContentOrders" style="display:none">
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:var(--bg-warm);border-bottom:2px solid var(--border-color);text-align:left">
+              <th style="padding:8px">Kod</th>
+              <th style="padding:8px">Müşteri</th>
+              <th style="padding:8px">Adet</th>
+              <th style="padding:8px">Tutar</th>
+              <th style="padding:8px">Tarih</th>
+              <th style="padding:8px">Durum</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrdersTableBody">
+            <!-- Injected by app.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <div class="logo-badge" style="width:36px;height:36px;font-size:18px">ق ك</div>
+          <h3 style="color:#fff;font-size:20px;font-weight:800">KÂFKEF NOT</h3>
+        </div>
+        <p style="font-size:13.5px;color:#c9b7be;line-height:1.6;margin-bottom:16px">
+          Arapça ve dil öğrenme süreçlerini kolaylaştırmak, keyifli ve sistematik hale getirmek için tasarlanan sağdan sola açılan lüks defterler.
+        </p>
+        <a href="https://www.instagram.com/kafkefnot/" target="_blank" rel="noopener" style="color:#ffd3dc;font-weight:700;font-size:13.5px;text-decoration:none;display:inline-flex;align-items:center;gap:6px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          Instagram: @kafkefnot
+        </a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Kampanyalar</h4>
+        <ul class="footer-links">
+          <li><a href="#kampanyalar">3 Defter Alana Kargo Bedava</a></li>
+          <li><a href="#kampanyalar">5 Defter Alana 1 Defter Hediye</a></li>
+          <li><a href="#urunler">Arapça İlk Adım Defteri (240 TL)</a></li>
+          <li><a href="#urunler">Çok Yakında Çıkacaklar</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Yönetim</h4>
+        <ul class="footer-links">
+          <li><a href="javascript:void(0)" onclick="openAdminModal()">⚙️ Satıcı Paneli (Defter Yayınla)</a></li>
+          <li><a href="javascript:void(0)" onclick="openAdminModal();switchAdminTab('orders');">📦 Siparişleri İncele</a></li>
+          <li><a href="#ic-sayfalar">İç Sayfa Önizlemesi</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Bülten</h4>
+        <p style="font-size:13px;color:#c9b7be;margin-bottom:10px">Yeni sticker kitaplarımız ve defterlerimiz çıktığında ilk siz haberdar olun.</p>
+        <div class="footer-newsletter-box">
+          <input type="email" placeholder="E-posta veya telefon" class="footer-input">
+          <button class="btn-primary" style="padding:10px 16px;font-size:12px" onclick="alert('Kaydınız alındı! Teşekkür ederiz.')">Abone Ol</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <div>
+        © 2026 Kâfkef Not (@kafkefnot). Tüm hakları saklıdır.
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:18px">
+        <span>💳 İyzico</span>
+        <span>🛡️ 3D Secure</span>
+        <span>🔒 256-Bit SSL</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchAdminTab(tab) {
+      document.getElementById('adminTabContentAdd').style.display = tab === 'add' ? 'block' : 'none';
+      document.getElementById('adminTabContentList').style.display = tab === 'list' ? 'block' : 'none';
+      document.getElementById('adminTabContentOrders').style.display = tab === 'orders' ? 'block' : 'none';
+
+      document.getElementById('tabAddProd').classList.toggle('active', tab === 'add');
+      document.getElementById('tabListProd').classList.toggle('active', tab === 'list');
+      document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
+    }
+
+    function openPhotoModal(imgSrc, title) {
+      const modal = document.getElementById('photoModal');
+      const img = document.getElementById('photoModalImg');
+      const cap = document.getElementById('photoModalCaption');
+      if (modal && img) {
+        img.src = imgSrc;
+        if (cap) cap.textContent = title;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePhotoModal() {
+      const modal = document.getElementById('photoModal');
+      if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function filterWishlist() {
+      if (wishlist.length === 0) {
+        alert('Henüz favorilere ürün eklemediniz.');
+        return;
+      }
+      renderProducts();
+    }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
