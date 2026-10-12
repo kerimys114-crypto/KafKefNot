@@ -380,13 +380,55 @@
             <label style="font-size:12px;font-weight:700">Teslimat Adresi</label>
             <textarea id="coAddress" required rows="2" placeholder="Mahalle, Cadde, Sokak, No, İlçe / İl" style="width:100%;padding:10px;border:1px solid var(--border-color);border-radius:8px;font-size:13px;margin-top:4px"></textarea>
           </div>
-          <div style="background:var(--bg-warm);padding:14px;border-radius:10px;border:1px solid var(--border-color);margin-bottom:20px">
-            <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:8px">Ödeme Seçeneği:</div>
-            <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:6px;cursor:pointer">
-              <input type="radio" name="payMethod" checked> Kredi / Banka Kartı (İyzico 3D Güvenli Ödeme)
+          <div style="background:var(--bg-warm);padding:16px;border-radius:12px;border:1px solid var(--border-color);margin-bottom:20px">
+            <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px">Ödeme Yöntemi:</div>
+            
+            <!-- Seçenek 1: IBAN / FAST -->
+            <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:8px;cursor:pointer;font-weight:600">
+              <input type="radio" name="payMethod" value="iban" checked onchange="toggleCheckoutPayment(this.value)"> 
+              <span>🏦 Havale & FAST ile Öde (Kâfkef Havuz IBAN)</span>
             </label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer">
-              <input type="radio" name="payMethod"> Kapıda Ödeme (Nakit veya Kartla)
+
+            <!-- IBAN Gösterim Kutusu -->
+            <div id="checkoutIbanBox" style="background:#fff;border:1px dashed var(--border-color);border-radius:10px;padding:14px;margin:6px 0 14px;font-size:12.5px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="color:var(--text-muted)">Banka:</span>
+                <strong id="coBankName">Ziraat Bankası</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <span style="color:var(--text-muted)">Alıcı / Hesap Sahibi:</span>
+                <strong id="coHolderName">Kâfkef Not</strong>
+              </div>
+              <div style="margin:8px 0;padding:10px;background:var(--bg-warm);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <div style="overflow:hidden">
+                  <div style="font-size:10px;color:var(--text-muted);font-weight:700">IBAN NUMARASI</div>
+                  <span id="coIbanDisplay" style="font-family:monospace;font-weight:700;font-size:13px;color:var(--primary);word-break:break-all">TR12 0001 0000 0000 0000 0000 00</span>
+                </div>
+                <button type="button" onclick="copyIbanToClipboard()" class="copy-pill-btn" style="white-space:nowrap">
+                  📋 Kopyala
+                </button>
+              </div>
+              <div style="font-size:11.5px;color:var(--text-muted);background:#fcf8ee;border:1px solid #faeacc;padding:8px;border-radius:6px;line-height:1.4">
+                💡 <strong>Ödeme Adımı:</strong> Siparişinizi onayladıktan sonra yukarıdaki IBAN'a sipariş tutarını FAST veya Havale yapabilirsiniz. Paranız güvenli şekilde Kâfkef Not havuzuna aktarılır ve siparişiniz anında hazırlanır.
+              </div>
+            </div>
+
+            <!-- Seçenek 2: Kartla Ödeme -->
+            <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:8px;cursor:pointer;font-weight:600">
+              <input type="radio" name="payMethod" value="card" onchange="toggleCheckoutPayment(this.value)"> 
+              <span>💳 Kredi / Banka Kartı (3D Secure Güvenli Havuz)</span>
+            </label>
+
+            <div id="checkoutCardBox" style="display:none;background:#fff;border:1px dashed var(--border-color);border-radius:10px;padding:12px;margin:6px 0 14px;font-size:12px;color:var(--text-muted)">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <span>🛡️ 256-Bit SSL & 3D Secure güvencesiyle kart ödemeniz mağaza havuzuna aktarılır.</span>
+              </div>
+            </div>
+
+            <!-- Seçenek 3: Kapıda Ödeme -->
+            <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer;font-weight:600">
+              <input type="radio" name="payMethod" value="cod" onchange="toggleCheckoutPayment(this.value)"> 
+              <span>🚪 Kapıda Ödeme (Nakit veya Kartla)</span>
             </label>
           </div>
           <button type="submit" class="checkout-btn">
@@ -441,6 +483,7 @@
         <button class="admin-tab-btn active" id="tabAddProd" onclick="switchAdminTab('add')">+ Yeni Defter Yayınla</button>
         <button class="admin-tab-btn" id="tabListProd" onclick="switchAdminTab('list')">📚 Yayındaki Defterler</button>
         <button class="admin-tab-btn" id="tabOrders" onclick="switchAdminTab('orders')">📦 Gelen Siparişler</button>
+        <button class="admin-tab-btn" id="tabWallet" onclick="switchAdminTab('wallet')">💰 Kasa & IBAN Havuzu</button>
       </div>
 
       <!-- Tab 1: Yeni Defter Yayınlama Formu -->
@@ -535,6 +578,111 @@
         </table>
       </div>
 
+      <!-- Tab 4: Kasa & IBAN Havuzu -->
+      <div id="adminTabContentWallet" style="display:none">
+        <!-- Bakiye Özet Kartları -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;margin-bottom:20px">
+          <div class="wallet-stat-card">
+            <div style="font-size:11px;color:var(--text-muted);font-weight:700;letter-spacing:0.5px;margin-bottom:6px">🪙 ÇEKİLEBİLİR HAVUZ BAKİYESİ</div>
+            <div id="walletAvailableBalance" style="font-size:26px;font-weight:900;color:var(--primary)">0 TL</div>
+            <div style="font-size:11px;color:#167144;font-weight:700;margin-top:4px">✓ Hesaba Çekilmeye Hazır</div>
+          </div>
+          <div class="wallet-stat-card">
+            <div style="font-size:11px;color:var(--text-muted);font-weight:700;letter-spacing:0.5px;margin-bottom:6px">📈 TOPLAM SİPARİŞ GELİRİ</div>
+            <div id="walletTotalEarned" style="font-size:26px;font-weight:900;color:#167144">0 TL</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Kasa brüt hacmi</div>
+          </div>
+          <div class="wallet-stat-card">
+            <div style="font-size:11px;color:var(--text-muted);font-weight:700;letter-spacing:0.5px;margin-bottom:6px">💸 IBAN'A AKTARILAN TUTAR</div>
+            <div id="walletTotalWithdrawn" style="font-size:26px;font-weight:900;color:#92400e">0 TL</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Banka hesabınıza aktarılan</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:20px;margin-bottom:24px">
+          <!-- IBAN Ayarları Formu -->
+          <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:14px;padding:20px">
+            <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:8px">
+              <span>🏦</span> Kayıtlı IBAN Bilgileriniz (Havuz Hesabı)
+            </h3>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px">
+              Müşterilerin Havale/FAST yapacağı ve havuzdan çekeceğiniz paraların aktarılacağı banka hesabınızdır.
+            </p>
+            <form onsubmit="handleSaveIbanSettings(event)">
+              <div class="admin-form-group" style="margin-bottom:10px">
+                <label style="font-size:12px;font-weight:700">Banka Adı</label>
+                <input type="text" id="cfgBankName" required placeholder="örn: Ziraat Bankası / Kuveyt Türk">
+              </div>
+              <div class="admin-form-group" style="margin-bottom:10px">
+                <label style="font-size:12px;font-weight:700">Hesap Sahibi (Ad Soyad)</label>
+                <input type="text" id="cfgHolderName" required placeholder="örn: Kerim Yılmaz">
+              </div>
+              <div class="admin-form-group" style="margin-bottom:14px">
+                <label style="font-size:12px;font-weight:700">IBAN Numarası</label>
+                <input type="text" id="cfgIbanNo" required placeholder="TR00 0000 0000 0000 0000 0000 00" style="font-family:monospace;letter-spacing:1px">
+              </div>
+              <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:10px;font-size:13px">
+                💾 IBAN Bilgilerini Kaydet
+              </button>
+            </form>
+          </div>
+
+          <!-- Hesaba Para Çekme Formu -->
+          <div style="background:#fff;border:1px solid var(--border-color);border-radius:14px;padding:20px">
+            <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:8px;display:flex;align-items:center;gap:8px">
+              <span>💸</span> Havuzdan IBAN'a Para Çek
+            </h3>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px">
+              Havuzda toplanan sipariş gelirlerini kayıtlı IBAN hesabınıza anında FAST ile transfer edin.
+            </p>
+            <form onsubmit="handleRequestPayout(event)">
+              <div class="admin-form-group" style="margin-bottom:10px">
+                <label style="font-size:12px;font-weight:700">Çekilecek Tutar (TL)</label>
+                <input type="number" id="payoutAmountInput" required min="1" placeholder="örn: 480">
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:14px">
+                <button type="button" onclick="setPayoutAmountQuick('all')" style="background:#f7ebef;color:var(--primary);border:1px solid var(--border-color);padding:5px 8px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">Tüm Bakiyeyi Çek</button>
+                <button type="button" onclick="setPayoutAmountQuick(500)" style="background:#f7ebef;color:var(--primary);border:1px solid var(--border-color);padding:5px 8px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">500 TL</button>
+                <button type="button" onclick="setPayoutAmountQuick(1000)" style="background:#f7ebef;color:var(--primary);border:1px solid var(--border-color);padding:5px 8px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">1.000 TL</button>
+              </div>
+              <div style="font-size:11.5px;color:var(--text-muted);background:var(--bg-warm);padding:10px;border-radius:8px;margin-bottom:14px">
+                Aktarılacak IBAN: <strong id="payoutTargetIban" style="color:var(--primary);word-break:break-all">Yükleniyor...</strong>
+              </div>
+              <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:12px;background:#167144;border-color:#167144">
+                ⚡ IBAN Hesabıma Aktar (FAST)
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Finans & Transfer Geçmişi -->
+        <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:10px">📋 Kasa Hareketleri & Transfer Geçmişi</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--border-color)">
+          <thead>
+            <tr style="background:var(--bg-warm);border-bottom:2px solid var(--border-color);text-align:left">
+              <th style="padding:10px">Tarih</th>
+              <th style="padding:10px">İşlem Türü</th>
+              <th style="padding:10px">Tutar</th>
+              <th style="padding:10px">Açıklama / Hedef</th>
+              <th style="padding:10px">Durum</th>
+            </tr>
+          </thead>
+          <tbody id="walletTransactionsBody">
+            <!-- Injected by app.js -->
+          </tbody>
+        </table>
+
+        <!-- Resmi Ödeme Kuruluşu Bilgilendirmesi (Shopier / PayTR) -->
+        <div style="margin-top:20px;background:#f0f9ff;border:1px solid #b9e6fe;border-radius:12px;padding:16px;display:flex;align-items:flex-start;gap:12px">
+          <span style="font-size:22px">ℹ️</span>
+          <div style="font-size:12px;color:#034c75;line-height:1.5">
+            <strong>Türkiye'de Kredi Kartı ile Otomatik IBAN Aktarımı Hakkında:</strong><br>
+            Müşterilerinizin kredi veya banka kartıyla yaptığı alışverişlerin yasal olarak hesabınıza geçmesi için TCMB lisanslı <strong>Shopier</strong> veya <strong>PayTR</strong> kullanılır. 
+            Özellikle <strong>Shopier</strong> ile şirket kurmadan, bireysel olarak sadece IBAN numaranızı girerek hesap açabilir ve kart ödemelerinin haftalık olarak otomatik IBAN'ınıza geçmesini sağlayabilirsiniz.
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -600,10 +748,18 @@
       document.getElementById('adminTabContentAdd').style.display = tab === 'add' ? 'block' : 'none';
       document.getElementById('adminTabContentList').style.display = tab === 'list' ? 'block' : 'none';
       document.getElementById('adminTabContentOrders').style.display = tab === 'orders' ? 'block' : 'none';
+      const walletEl = document.getElementById('adminTabContentWallet');
+      if (walletEl) walletEl.style.display = tab === 'wallet' ? 'block' : 'none';
 
       document.getElementById('tabAddProd').classList.toggle('active', tab === 'add');
       document.getElementById('tabListProd').classList.toggle('active', tab === 'list');
       document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
+      const tabWalletBtn = document.getElementById('tabWallet');
+      if (tabWalletBtn) tabWalletBtn.classList.toggle('active', tab === 'wallet');
+
+      if (tab === 'wallet' && typeof renderWalletUI === 'function') {
+        renderWalletUI();
+      }
     }
 
     function openPhotoModal(imgSrc, title) {

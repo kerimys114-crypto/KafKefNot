@@ -547,6 +547,9 @@ function openAdminModal() {
   if (modal) {
     renderAdminProductsList();
     renderAdminOrdersList();
+    if (typeof renderWalletUI === 'function') {
+      renderWalletUI();
+    }
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -669,7 +672,7 @@ function renderAdminOrdersList() {
   `).join('');
 }
 
-// 9. CHECKOUT SIMULATION
+// 9. CHECKOUT & SİPARİŞ ENTEGRASYONU (HAVUZ VE IBAN BAĞLANTISI)
 function completeCheckoutOrder(e) {
   e.preventDefault();
   const totals = calculateCartTotals();
@@ -677,8 +680,13 @@ function completeCheckoutOrder(e) {
   const phone = document.getElementById('coPhone').value.trim();
   const address = document.getElementById('coAddress').value.trim();
 
+  const payRadio = document.querySelector('input[name="payMethod"]:checked');
+  const payMethod = payRadio ? payRadio.value : 'iban';
+  const payLabel = payMethod === 'iban' ? 'Havale & FAST (Havuz IBAN)' : (payMethod === 'card' ? 'Kart (Güvenli Havuz)' : 'Kapıda Ödeme');
+
   const orderNumber = 'KF-' + Math.floor(100000 + Math.random() * 900000);
   const now = new Date().toLocaleDateString('tr-TR');
+  const orderAmount = Number(totals.total.toFixed(0));
 
   const newOrder = {
     code: orderNumber,
@@ -687,30 +695,47 @@ function completeCheckoutOrder(e) {
     address,
     qty: totals.totalNotebookQty,
     giftCount: totals.freeGiftCount,
-    total: totals.total.toFixed(0),
+    total: orderAmount,
     date: now,
+    paymentMethod: payLabel,
     status: 'Hazırlanıyor'
   };
 
   ORDERS.unshift(newOrder);
   localStorage.setItem('kafkef_orders', JSON.stringify(ORDERS));
 
+  // PARAYI MAĞAZA HAVUZUNA (KASAYA) AKTAR
+  recordWalletTransaction({
+    id: 'TX-' + Date.now(),
+    type: 'order_income',
+    amount: orderAmount,
+    title: `Sipariş #${orderNumber} (${name})`,
+    method: payLabel,
+    status: 'Havuzda (Hazır)',
+    date: now
+  });
+
+  const ibanCfg = getIbanSettings();
   const container = document.getElementById('checkoutModalContent');
   if (container) {
     container.innerHTML = `
-      <div style="text-align:center;padding:40px 20px">
-        <div style="width:70px;height:70px;border-radius:50%;background:#e9f8ee;color:#167144;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 16px">✓</div>
-        <h2 style="color:var(--primary);font-size:24px;margin-bottom:8px">Siparişiniz Başarıyla Alındı! 🎉</h2>
-        <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Kâfkef Not defterleriniz özenle hazırlanıp en kısa sürede kargoya verilecektir.</p>
+      <div style="text-align:center;padding:30px 16px">
+        <div style="width:64px;height:64px;border-radius:50%;background:#e9f8ee;color:#167144;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px">✓</div>
+        <h2 style="color:var(--primary);font-size:22px;margin-bottom:6px">Siparişiniz Başarıyla Alındı! 🎉</h2>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Kâfkef Not defterleriniz özenle hazırlanıp en kısa sürede kargoya verilecektir.</p>
         
-        <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:10px;padding:16px;max-width:380px;margin:0 auto 24px;text-align:left">
+        <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:10px;padding:16px;max-width:420px;margin:0 auto 20px;text-align:left">
           <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
-            <span>Sipariş Numarası:</span>
+            <span>Sipariş Kodu:</span>
             <strong>${orderNumber}</strong>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
-            <span>Sipariş Tutarı:</span>
-            <strong>${totals.total.toFixed(0)} TL</strong>
+            <span>Toplam Tutar:</span>
+            <strong style="color:var(--primary);font-size:15px">${orderAmount} TL</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+            <span>Ödeme Şekli:</span>
+            <span>${payLabel}</span>
           </div>
           ${totals.freeGiftCount > 0 ? `
             <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;color:#167144">
@@ -724,8 +749,23 @@ function completeCheckoutOrder(e) {
           </div>
         </div>
 
+        ${payMethod === 'iban' ? `
+          <div style="background:#fff;border:1px dashed var(--border-color);border-radius:10px;padding:14px;max-width:420px;margin:0 auto 20px;text-align:left;font-size:12.5px">
+            <div style="font-weight:700;color:var(--primary);margin-bottom:6px">🏦 FAST / Havale Yapılacak Havuz Hesabı:</div>
+            <div style="margin-bottom:3px"><strong>Banka:</strong> ${ibanCfg.bankName}</div>
+            <div style="margin-bottom:3px"><strong>Alıcı:</strong> ${ibanCfg.holderName}</div>
+            <div style="background:var(--bg-warm);padding:8px;border-radius:6px;margin:6px 0;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-family:monospace;font-weight:700;font-size:12px;color:var(--primary)">${ibanCfg.ibanNo}</span>
+              <button type="button" onclick="copyIbanToClipboard()" class="copy-pill-btn">Kopyala</button>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted)">
+              📌 Açıklama alanına <strong>${orderNumber}</strong> yazarak <strong>${orderAmount} TL</strong> transfer ediniz. Paranız Kâfkef Not havuzuna geçtiğinde siparişiniz anında sevk edilir.
+            </div>
+          </div>
+        ` : ''}
+
         <button class="btn-primary" onclick="cart=[];saveCart();closeCheckoutModal();location.reload();">
-          Alışverişe Devam Et
+          Tamamla & Alışverişe Dön
         </button>
       </div>
     `;
@@ -759,6 +799,7 @@ function openCheckoutModal() {
     return;
   }
   closeCartDrawer();
+  updateCheckoutIbanDisplay();
   const modal = document.getElementById('checkoutModal');
   if (modal) {
     modal.classList.add('open');
@@ -870,4 +911,231 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // IBAN & Cüzdan Başlatma
+  updateCheckoutIbanDisplay();
+  renderWalletUI();
 });
+
+// 12. IBAN & HAVUZ (KASA) YÖNETİM SİSTEMİ
+const DEFAULT_IBAN_SETTINGS = {
+  bankName: 'Ziraat Bankası',
+  holderName: 'Kâfkef Not · Kerim Yılmaz',
+  ibanNo: 'TR12 0001 0000 0000 0000 0000 00'
+};
+
+const DEFAULT_WALLET_TXS = [
+  {
+    id: 'TX-101',
+    type: 'order_income',
+    amount: 480,
+    title: 'Sipariş #KF-829104 (Hatice Y.)',
+    method: 'FAST / IBAN',
+    status: 'Havuzda (Hazır)',
+    date: '10.10.2026 14:22'
+  },
+  {
+    id: 'TX-102',
+    type: 'order_income',
+    amount: 960,
+    title: 'Sipariş #KF-512093 (Muhammed B.)',
+    method: 'Kart Havuzu',
+    status: 'Havuzda (Hazır)',
+    date: '11.10.2026 18:05'
+  }
+];
+
+function getIbanSettings() {
+  const stored = localStorage.getItem('kafkef_iban_settings');
+  if (stored) {
+    try { return JSON.parse(stored); } catch (e) { }
+  }
+  return DEFAULT_IBAN_SETTINGS;
+}
+
+function getWalletTransactions() {
+  const stored = localStorage.getItem('kafkef_wallet_txs');
+  if (stored) {
+    try { return JSON.parse(stored); } catch (e) { }
+  }
+  localStorage.setItem('kafkef_wallet_txs', JSON.stringify(DEFAULT_WALLET_TXS));
+  return DEFAULT_WALLET_TXS;
+}
+
+function recordWalletTransaction(tx) {
+  const txs = getWalletTransactions();
+  txs.unshift(tx);
+  localStorage.setItem('kafkef_wallet_txs', JSON.stringify(txs));
+  if (typeof renderWalletUI === 'function') {
+    renderWalletUI();
+  }
+}
+
+function getWalletStats() {
+  const txs = getWalletTransactions();
+  let totalEarned = 0;
+  let totalWithdrawn = 0;
+
+  txs.forEach(t => {
+    if (t.type === 'order_income') {
+      totalEarned += Number(t.amount);
+    } else if (t.type === 'payout') {
+      totalWithdrawn += Number(t.amount);
+    }
+  });
+
+  const availableBalance = Math.max(0, totalEarned - totalWithdrawn);
+  return { totalEarned, totalWithdrawn, availableBalance };
+}
+
+function handleSaveIbanSettings(e) {
+  e.preventDefault();
+  const bankName = document.getElementById('cfgBankName').value.trim();
+  const holderName = document.getElementById('cfgHolderName').value.trim();
+  const ibanNo = document.getElementById('cfgIbanNo').value.trim();
+
+  const settings = { bankName, holderName, ibanNo };
+  localStorage.setItem('kafkef_iban_settings', JSON.stringify(settings));
+
+  updateCheckoutIbanDisplay();
+  renderWalletUI();
+  alert('✅ IBAN ve banka hesap bilgileriniz başarıyla güncellendi! Müşteri ödeme ekranında ve para çekme alanında artık bu bilgiler geçerlidir.');
+}
+
+function setPayoutAmountQuick(val) {
+  const stats = getWalletStats();
+  const input = document.getElementById('payoutAmountInput');
+  if (!input) return;
+
+  if (val === 'all') {
+    input.value = stats.availableBalance;
+  } else {
+    input.value = Math.min(Number(val), stats.availableBalance);
+  }
+}
+
+function handleRequestPayout(e) {
+  e.preventDefault();
+  const stats = getWalletStats();
+  const input = document.getElementById('payoutAmountInput');
+  const amount = Number(input ? input.value : 0);
+  const ibanSettings = getIbanSettings();
+
+  if (amount <= 0) {
+    alert('Lütfen geçerli bir tutar giriniz.');
+    return;
+  }
+
+  if (amount > stats.availableBalance) {
+    alert(`Çekilmek istenen tutar (${amount} TL) kullanılabilir havuz bakiyenizden (${stats.availableBalance} TL) fazla olamaz!`);
+    return;
+  }
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('tr-TR') + ' ' + now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+
+  const payoutTx = {
+    id: 'TX-' + Date.now(),
+    type: 'payout',
+    amount: amount,
+    title: `IBAN Transferi (${ibanSettings.bankName} - FAST)`,
+    method: ibanSettings.ibanNo,
+    status: 'Aktarıldı (Hesapta)',
+    date: dateStr
+  };
+
+  recordWalletTransaction(payoutTx);
+  if (input) input.value = '';
+
+  alert(`🎉 TRANSFER BAŞARILI!\n\n${amount.toLocaleString('tr-TR')} TL tutarındaki havuz bakiyeniz:\n${ibanSettings.holderName} adına kayıtlı\n${ibanSettings.ibanNo} (${ibanSettings.bankName})\nhesabınıza FAST ile başarıyla aktarıldı!`);
+}
+
+function renderWalletUI() {
+  const stats = getWalletStats();
+  const ibanSettings = getIbanSettings();
+  const txs = getWalletTransactions();
+
+  const availEl = document.getElementById('walletAvailableBalance');
+  const earnedEl = document.getElementById('walletTotalEarned');
+  const withdrawnEl = document.getElementById('walletTotalWithdrawn');
+
+  if (availEl) availEl.textContent = stats.availableBalance.toLocaleString('tr-TR') + ' TL';
+  if (earnedEl) earnedEl.textContent = stats.totalEarned.toLocaleString('tr-TR') + ' TL';
+  if (withdrawnEl) withdrawnEl.textContent = stats.totalWithdrawn.toLocaleString('tr-TR') + ' TL';
+
+  const cfgBank = document.getElementById('cfgBankName');
+  const cfgHolder = document.getElementById('cfgHolderName');
+  const cfgIban = document.getElementById('cfgIbanNo');
+
+  if (cfgBank && !cfgBank.value) cfgBank.value = ibanSettings.bankName;
+  if (cfgHolder && !cfgHolder.value) cfgHolder.value = ibanSettings.holderName;
+  if (cfgIban && !cfgIban.value) cfgIban.value = ibanSettings.ibanNo;
+
+  const payoutTargetEl = document.getElementById('payoutTargetIban');
+  if (payoutTargetEl) {
+    payoutTargetEl.textContent = `${ibanSettings.bankName} - ${ibanSettings.ibanNo} (${ibanSettings.holderName})`;
+  }
+
+  const bodyEl = document.getElementById('walletTransactionsBody');
+  if (bodyEl) {
+    if (txs.length === 0) {
+      bodyEl.innerHTML = `<tr><td colspan="5" style="padding:16px;text-align:center;color:var(--text-muted)">Henüz kasa hareketi bulunmuyor.</td></tr>`;
+      return;
+    }
+
+    bodyEl.innerHTML = txs.map(t => {
+      const isIncome = t.type === 'order_income';
+      return `
+        <tr style="border-bottom:1px solid var(--border-light)">
+          <td style="padding:10px;font-size:11.5px;color:var(--text-muted)">${t.date}</td>
+          <td style="padding:10px">
+            <span class="${isIncome ? 'wallet-badge-income' : 'wallet-badge-payout'}">
+              ${isIncome ? '➕ Gelir' : '⚡ IBAN Çekim'}
+            </span>
+          </td>
+          <td style="padding:10px;font-weight:800;color:${isIncome ? '#167144' : '#92400e'}">
+            ${isIncome ? '+' : '-'}${Number(t.amount).toLocaleString('tr-TR')} TL
+          </td>
+          <td style="padding:10px;font-size:12px">
+            <strong>${t.title}</strong><br>
+            <small style="color:var(--text-muted)">${t.method}</small>
+          </td>
+          <td style="padding:10px">
+            <span style="font-size:11px;font-weight:700;color:${isIncome ? '#167144' : '#2563eb'}">${t.status}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+}
+
+function updateCheckoutIbanDisplay() {
+  const settings = getIbanSettings();
+  const bankEl = document.getElementById('coBankName');
+  const holderEl = document.getElementById('coHolderName');
+  const displayEl = document.getElementById('coIbanDisplay');
+
+  if (bankEl) bankEl.textContent = settings.bankName;
+  if (holderEl) holderEl.textContent = settings.holderName;
+  if (displayEl) displayEl.textContent = settings.ibanNo;
+}
+
+function copyIbanToClipboard() {
+  const settings = getIbanSettings();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(settings.ibanNo).then(() => {
+      alert(`📋 IBAN kopyalandı:\n${settings.ibanNo}`);
+    }).catch(() => {
+      prompt('IBAN numarasını kopyalayabilirsiniz:', settings.ibanNo);
+    });
+  } else {
+    prompt('IBAN numarasını kopyalayabilirsiniz:', settings.ibanNo);
+  }
+}
+
+function toggleCheckoutPayment(method) {
+  const ibanBox = document.getElementById('checkoutIbanBox');
+  const cardBox = document.getElementById('checkoutCardBox');
+  if (ibanBox) ibanBox.style.display = method === 'iban' ? 'block' : 'none';
+  if (cardBox) cardBox.style.display = method === 'card' ? 'block' : 'none';
+}
