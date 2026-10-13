@@ -20,8 +20,8 @@ const DEFAULT_PRODUCTS = [
     ],
     arabicLetter: 'ق ك',
     arabicSub: 'اللُّغَةُ العَرَبِيَّة',
-    desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Dolma kalemle arkaya sızdırmayan yüksek gramajlı lüks fildişi kağıt.',
-    features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', '120 gsm Mürekkep Geçirmez Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak']
+    desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Dolma kalemle arkaya sızdırmayan lüks fildişi kağıt.',
+    features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', 'Mürekkep Geçirmez Lüks Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak']
   },
   {
     id: 'kafkef-kelime-defteri',
@@ -37,7 +37,7 @@ const DEFAULT_PRODUCTS = [
     arabicLetter: 'ق',
     arabicSub: 'المُعْجَم الشَّامِل',
     desc: 'Fa-Ayn-Lam sülasi kök harfleri, mazi-muzari fiil çekimleri ve cem\'i/çoğul sütunları ile Arapça kelime haznenizi zirveye taşıyacak özel kelime defterimiz çok yakında sizlerle buluşuyor.',
-    features: ['Sülasi Kök Tablosu', 'Mazi-Muzari-Masdar Düzeni', '120 gsm Kağıt', '160 Sayfa']
+    features: ['Sülasi Kök Tablosu', 'Mazi-Muzari-Masdar Düzeni', 'Lüks 1. Hamur Kağıt', '160 Sayfa']
   },
   {
     id: 'kafkef-sarf-nahiv-defteri',
@@ -360,7 +360,7 @@ function updateCartUI() {
           <img src="${item.image}" alt="${item.title}" class="cart-item-img" style="object-fit:cover">
           <div class="cart-item-info">
             <div class="cart-item-title">${item.title}</div>
-            <div class="cart-item-variant">240 TL · 120 gsm Lüks Kağıt</div>
+            <div class="cart-item-variant">240 TL · Kâfkef Not Özel Tasarımı</div>
             <div class="cart-item-pricing" style="margin-top:6px">
               <div class="qty-controls">
                 <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">−</button>
@@ -501,8 +501,15 @@ function updateAdminUI() {
   if (bar) {
     bar.style.display = isAdminLoggedIn ? 'flex' : 'none';
   }
+  const sectionBars = document.querySelectorAll('.admin-section-bar');
+  sectionBars.forEach(sb => {
+    sb.style.display = isAdminLoggedIn ? 'flex' : 'none';
+  });
   if (typeof renderFAQs === 'function') {
     renderFAQs();
+  }
+  if (typeof applySectionVisibility === 'function') {
+    applySectionVisibility();
   }
 }
 
@@ -580,6 +587,12 @@ function openAdminModal() {
     if (typeof populateCampaignSettingsForm === 'function') {
       populateCampaignSettingsForm();
     }
+    if (typeof populateInteriorForm === 'function') {
+      populateInteriorForm();
+    }
+    if (typeof renderAdminSectionsList === 'function') {
+      renderAdminSectionsList();
+    }
     if (typeof renderAdminFaqList === 'function') {
       renderAdminFaqList();
     }
@@ -621,7 +634,7 @@ function handleAddProduct(e) {
     arabicLetter: 'ق ك',
     arabicSub: 'كِتَاب جَدِيد',
     desc,
-    features: ['Sağdan Sola Cilt', '120 gsm Kağıt', 'Kâfkef Özel Tasarımı']
+    features: ['Sağdan Sola Cilt', 'Lüks 1. Hamur Kağıt', 'Kâfkef Özel Tasarımı']
   };
 
   PRODUCTS.unshift(newProd);
@@ -1056,6 +1069,14 @@ document.addEventListener('DOMContentLoaded', () => {
     applySiteContent();
   }
 
+  // Bölüm Görünürlüğü ve Defter İçi Önizleme Uygula
+  if (typeof applySectionVisibility === 'function') {
+    applySectionVisibility();
+  }
+  if (typeof applyInteriorContent === 'function') {
+    applyInteriorContent();
+  }
+
   // Dinamik SSS Listeleme
   if (typeof renderFAQs === 'function') {
     renderFAQs();
@@ -1292,7 +1313,7 @@ const DEFAULT_SITE_CONTENT = {
   announce3: '✨ <strong>Sticker Kitaplarımız & Yeni Defterlerimiz</strong> Çok Yakında Sizinle!',
   heroBadge: '✦ ŞU ANDA SATIŞTA · KÂFKEF NOT',
   heroTitle: 'Arapça İlk Adım <span>Defteri</span>',
-  heroDesc: '<strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>Arapça\'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, 120 gsm dolma kalemle arkaya geçirmeyen kaliteli kağıt.',
+  heroDesc: '<strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>Arapça\'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, kaliteli ve pürüzsüz yazı kağıdı.',
   instagramUrl: 'https://www.instagram.com/kafkefnot/',
   whatsappPhone: '0555 123 45 67'
 };
@@ -1484,7 +1505,7 @@ const DEFAULT_FAQS = [
   {
     id: 'faq-1',
     question: 'Kağıt dolma kalemle arkaya geçirir mi?',
-    answer: 'Defterlerimizde 120 gsm 1. hamur lüks kağıt kullanılmıştır. Dolma kalem, divit, jel ve mürekkepli kalemlerle arkaya geçme veya kanama yapmaz.'
+    answer: 'Defterlerimizde 1. hamur lüks kaliteli kağıt kullanılmıştır. Dolma kalem, divit, jel ve mürekkepli kalemlerle arkaya geçme veya kanama yapmaz.'
   },
   {
     id: 'faq-2',
@@ -1660,4 +1681,298 @@ function handleResetFaqs() {
     alert('🔄 Sorular orijinal haline getirildi.');
   }
 }
+
+// 16. BÖLÜM YÖNETİMİ & SİLME / GİZLEME SİSTEMİ (HER BÖLÜMÜ SİLİP DÜZENLEME)
+const DEFAULT_SECTION_VISIBILITY = {
+  announcement: true,
+  hero: true,
+  campaigns: true,
+  products: true,
+  interior: true,
+  faqs: true
+};
+
+const SECTION_CONFIGS = [
+  { key: 'announcement', id: 'duyuru-cubugu', name: '📢 Üst Kayan Duyuru Çubuğu (Ticker)' },
+  { key: 'hero', id: 'hero-bolumu', name: '🌟 Giriş / Hero Defter Tanıtım Bölümü' },
+  { key: 'campaigns', id: 'kampanyalar', name: '🎯 Kampanyalar Bölümü (3 Alana Kargo Bedava & 5 Alana 1 Hediye)' },
+  { key: 'products', id: 'urunler', name: '📚 Defter Koleksiyonu & Ürünler Vitrini' },
+  { key: 'interior', id: 'ic-sayfalar', name: '📖 "Defterimizin İçini İnceleyin" Bölümü' },
+  { key: 'faqs', id: 'sss-bolumu', name: '❓ Sıkça Sorulan Sorular & Bilgiler Bölümü' }
+];
+
+function getSectionVisibility() {
+  const stored = localStorage.getItem('kafkef_sections_visibility_v1');
+  if (stored) {
+    try { return { ...DEFAULT_SECTION_VISIBILITY, ...JSON.parse(stored) }; } catch (e) { }
+  }
+  return { ...DEFAULT_SECTION_VISIBILITY };
+}
+
+function applySectionVisibility() {
+  const vis = getSectionVisibility();
+  SECTION_CONFIGS.forEach(sec => {
+    const el = document.getElementById(sec.id);
+    if (el) {
+      el.style.display = vis[sec.key] === false ? 'none' : '';
+    }
+  });
+
+  // Eğer interior bölümü durumu değiştiyse rozetini de güncelle
+  const interiorBadge = document.getElementById('interiorStatusBadge');
+  if (interiorBadge) {
+    if (vis.interior === false) {
+      interiorBadge.textContent = '🔴 Siteden Silindi (Gizli)';
+      interiorBadge.style.background = '#fee2e2';
+      interiorBadge.style.color = '#b91c1c';
+    } else {
+      interiorBadge.textContent = '🟢 Sitede Gösteriliyor';
+      interiorBadge.style.background = '#e9f8ee';
+      interiorBadge.style.color = '#167144';
+    }
+  }
+
+  // Admin çubuklarının görünürlüğü
+  if (isAdminLoggedIn) {
+    document.querySelectorAll('.admin-section-bar').forEach(bar => {
+      bar.style.display = 'flex';
+    });
+  }
+}
+
+function toggleSectionVisibility(key, visible) {
+  const vis = getSectionVisibility();
+  vis[key] = visible;
+  localStorage.setItem('kafkef_sections_visibility_v1', JSON.stringify(vis));
+  applySectionVisibility();
+  renderAdminSectionsList();
+}
+
+function deleteSectionWithConfirm(key, name) {
+  if (confirm(`"${name}" bölümünü siteden silmek / gizlemek istediğinize emin misiniz?\n\n(Bu bölümü istediğiniz zaman Yönetici Paneli > Bölüm Yönetimi sekmesinden tekrar açabilirsiniz.)`)) {
+    toggleSectionVisibility(key, false);
+    triggerStickyNotification(`🗑️ "${name}" bölümü siteden kaldırıldı.`);
+  }
+}
+
+function renderAdminSectionsList() {
+  const container = document.getElementById('adminSectionsListContainer');
+  if (!container) return;
+
+  const vis = getSectionVisibility();
+  container.innerHTML = SECTION_CONFIGS.map(sec => {
+    const isVisible = vis[sec.key] !== false;
+    return `
+      <div style="background:#fff;border:1px solid var(--border-color);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:4px">${sec.name}</div>
+          <div style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:${isVisible ? '#167144' : '#b91c1c'}">
+            <span>${isVisible ? '🟢 Sitede Yayında (Görünüyor)' : '🔴 Siteden Silindi / Gizlendi'}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          ${isVisible ? `
+            <button type="button" onclick="deleteSectionWithConfirm('${sec.key}', '${sec.name}')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+              🗑️ Bölümü Sil (Gizle)
+            </button>
+          ` : `
+            <button type="button" onclick="toggleSectionVisibility('${sec.key}', true); triggerStickyNotification('🟢 Bölüm tekrar görünür yapıldı!');" style="background:#e9f8ee;color:#167144;border:1px solid #86efac;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+              👁️ Sitede Tekrar Göster
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function handleResetSectionsVisibility() {
+  if (confirm('Tüm bölümleri varsayılan olarak tekrar görünür hale getirmek istiyor musunuz?')) {
+    localStorage.removeItem('kafkef_sections_visibility_v1');
+    applySectionVisibility();
+    renderAdminSectionsList();
+    alert('🔄 Tüm bölümler tekrar görünür yapıldı.');
+  }
+}
+
+// 17. DEFTER İÇİ & TANITIM BÖLÜMÜ YÖNETİM SİSTEMİ
+const DEFAULT_INTERIOR_CONTENT = {
+  tag: 'BÜYÜK HAYALLER İÇİN KÜÇÜK BİR DEFTER',
+  title: 'Defterimizin İçini İnceleyin',
+  subtitle: '«دفتر صغير لأحلام كبيرة» — Kelime, cümle, dilbilgisi ve pratik alanlarıyla Arapça öğrenme sürecinizdeki en ilham verici yol arkadaşınız.',
+  heading: "Arapça'nın Ruhuyla Uyumlu Pedagojik Düzen",
+  desc: 'Kâfkef Not defteri, sıradan bir çizgili defter değildir. Arapça öğrenirken en çok zorlanılan kelime ezberi, kök analizi, harekeleme ve cümle kurma pratiğini adım adım kolaylaştırmak için özel olarak kurgulanmıştır.',
+  feat1Icon: '📖',
+  feat1Title: 'Sağdan Sola (RTL) Açılan Ciltleme:',
+  feat1Desc: 'Arap alfabesinin yazım yönüne göre ters açılır, eliniz spirale veya cilde çarpmaz.',
+  feat2Icon: '🌿',
+  feat2Title: 'Zarif Motifli Sert Kapak:',
+  feat2Desc: 'Kuş ve çiçek işlemeleriyle çalışma masanıza estetik ve huzur katar.',
+  image: 'assets/defter_ic_sayfa.jpg',
+  btnText: '🛒 240 TL · Hemen Satın Al'
+};
+
+function getInteriorContent() {
+  const stored = localStorage.getItem('kafkef_interior_content_v1');
+  if (stored) {
+    try { return { ...DEFAULT_INTERIOR_CONTENT, ...JSON.parse(stored) }; } catch (e) { }
+  }
+  return { ...DEFAULT_INTERIOR_CONTENT };
+}
+
+function applyInteriorContent() {
+  const data = getInteriorContent();
+
+  const elTag = document.querySelector('[data-live-edit="interiorTag"]');
+  const elTitle = document.querySelector('[data-live-edit="interiorTitle"]');
+  const elSub = document.querySelector('[data-live-edit="interiorSubtitle"]');
+  const elHead = document.querySelector('[data-live-edit="interiorHeading"]');
+  const elDesc = document.querySelector('[data-live-edit="interiorDesc"]');
+  const elFeat1T = document.querySelector('[data-live-edit="interiorFeat1Title"]');
+  const elFeat1D = document.querySelector('[data-live-edit="interiorFeat1Desc"]');
+  const elFeat2T = document.querySelector('[data-live-edit="interiorFeat2Title"]');
+  const elFeat2D = document.querySelector('[data-live-edit="interiorFeat2Desc"]');
+  const elBtn = document.querySelector('[data-live-edit="interiorBtnText"]');
+  const elImg = document.getElementById('interiorPageImg');
+
+  if (elTag) elTag.textContent = data.tag;
+  if (elTitle) elTitle.textContent = data.title;
+  if (elSub) elSub.textContent = data.subtitle;
+  if (elHead) elHead.textContent = data.heading;
+  if (elDesc) elDesc.textContent = data.desc;
+  if (elFeat1T) elFeat1T.textContent = data.feat1Title;
+  if (elFeat1D) elFeat1D.textContent = data.feat1Desc;
+  if (elFeat2T) elFeat2T.textContent = data.feat2Title;
+  if (elFeat2D) elFeat2D.textContent = data.feat2Desc;
+  if (elBtn) elBtn.textContent = data.btnText;
+  if (elImg && data.image) {
+    elImg.src = data.image;
+  }
+}
+
+function populateInteriorForm() {
+  const data = getInteriorContent();
+  const fTag = document.getElementById('cfgInteriorTag');
+  const fTitle = document.getElementById('cfgInteriorTitle');
+  const fSub = document.getElementById('cfgInteriorSubtitle');
+  const fHead = document.getElementById('cfgInteriorHeading');
+  const fDesc = document.getElementById('cfgInteriorDesc');
+  const fFeat1T = document.getElementById('cfgInteriorFeat1Title');
+  const fFeat1D = document.getElementById('cfgInteriorFeat1Desc');
+  const fFeat2T = document.getElementById('cfgInteriorFeat2Title');
+  const fFeat2D = document.getElementById('cfgInteriorFeat2Desc');
+  const fImg = document.getElementById('cfgInteriorImage');
+  const fBtn = document.getElementById('cfgInteriorBtnText');
+
+  if (fTag) fTag.value = data.tag;
+  if (fTitle) fTitle.value = data.title;
+  if (fSub) fSub.value = data.subtitle;
+  if (fHead) fHead.value = data.heading;
+  if (fDesc) fDesc.value = data.desc;
+  if (fFeat1T) fFeat1T.value = data.feat1Title;
+  if (fFeat1D) fFeat1D.value = data.feat1Desc;
+  if (fFeat2T) fFeat2T.value = data.feat2Title;
+  if (fFeat2D) fFeat2D.value = data.feat2Desc;
+  if (fImg) fImg.value = data.image;
+  if (fBtn) fBtn.value = data.btnText;
+}
+
+function handleSaveInteriorContent(e) {
+  e.preventDefault();
+  const newContent = {
+    tag: document.getElementById('cfgInteriorTag').value.trim() || DEFAULT_INTERIOR_CONTENT.tag,
+    title: document.getElementById('cfgInteriorTitle').value.trim() || DEFAULT_INTERIOR_CONTENT.title,
+    subtitle: document.getElementById('cfgInteriorSubtitle').value.trim() || DEFAULT_INTERIOR_CONTENT.subtitle,
+    heading: document.getElementById('cfgInteriorHeading').value.trim() || DEFAULT_INTERIOR_CONTENT.heading,
+    desc: document.getElementById('cfgInteriorDesc').value.trim() || DEFAULT_INTERIOR_CONTENT.desc,
+    feat1Icon: '📖',
+    feat1Title: document.getElementById('cfgInteriorFeat1Title').value.trim() || DEFAULT_INTERIOR_CONTENT.feat1Title,
+    feat1Desc: document.getElementById('cfgInteriorFeat1Desc').value.trim() || DEFAULT_INTERIOR_CONTENT.feat1Desc,
+    feat2Icon: '🌿',
+    feat2Title: document.getElementById('cfgInteriorFeat2Title').value.trim() || DEFAULT_INTERIOR_CONTENT.feat2Title,
+    feat2Desc: document.getElementById('cfgInteriorFeat2Desc').value.trim() || DEFAULT_INTERIOR_CONTENT.feat2Desc,
+    image: document.getElementById('cfgInteriorImage').value.trim() || DEFAULT_INTERIOR_CONTENT.image,
+    btnText: document.getElementById('cfgInteriorBtnText').value.trim() || DEFAULT_INTERIOR_CONTENT.btnText
+  };
+
+  localStorage.setItem('kafkef_interior_content_v1', JSON.stringify(newContent));
+  applyInteriorContent();
+  triggerStickyNotification('✅ "Defterimizin İçini İnceleyin" bölümü başarıyla güncellendi!');
+}
+
+function handleResetInteriorContent() {
+  if (confirm('Defter İçi bölümünü orijinal haline döndürmek istediğinize emin misiniz?')) {
+    localStorage.removeItem('kafkef_interior_content_v1');
+    applyInteriorContent();
+    populateInteriorForm();
+    alert('🔄 Defter İçi bölümü orijinal varsayılan ayarlara döndürüldü.');
+  }
+}
+
+// HIZLI DÜZENLEME MODALI FONKSİYONLARI
+function openEditInteriorModal() {
+  const data = getInteriorContent();
+  const mTag = document.getElementById('modalInteriorTag');
+  const mTitle = document.getElementById('modalInteriorTitle');
+  const mSub = document.getElementById('modalInteriorSubtitle');
+  const mHead = document.getElementById('modalInteriorHeading');
+  const mDesc = document.getElementById('modalInteriorDesc');
+  const mFeat1T = document.getElementById('modalInteriorFeat1Title');
+  const mFeat1D = document.getElementById('modalInteriorFeat1Desc');
+  const mFeat2T = document.getElementById('modalInteriorFeat2Title');
+  const mFeat2D = document.getElementById('modalInteriorFeat2Desc');
+  const mImg = document.getElementById('modalInteriorImage');
+  const mBtn = document.getElementById('modalInteriorBtnText');
+
+  if (mTag) mTag.value = data.tag;
+  if (mTitle) mTitle.value = data.title;
+  if (mSub) mSub.value = data.subtitle;
+  if (mHead) mHead.value = data.heading;
+  if (mDesc) mDesc.value = data.desc;
+  if (mFeat1T) mFeat1T.value = data.feat1Title;
+  if (mFeat1D) mFeat1D.value = data.feat1Desc;
+  if (mFeat2T) mFeat2T.value = data.feat2Title;
+  if (mFeat2D) mFeat2D.value = data.feat2Desc;
+  if (mImg) mImg.value = data.image;
+  if (mBtn) mBtn.value = data.btnText;
+
+  const modal = document.getElementById('editInteriorModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeEditInteriorModal() {
+  const modal = document.getElementById('editInteriorModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleSaveInteriorModalForm(e) {
+  e.preventDefault();
+  const newContent = {
+    tag: document.getElementById('modalInteriorTag').value.trim() || DEFAULT_INTERIOR_CONTENT.tag,
+    title: document.getElementById('modalInteriorTitle').value.trim() || DEFAULT_INTERIOR_CONTENT.title,
+    subtitle: document.getElementById('modalInteriorSubtitle').value.trim() || DEFAULT_INTERIOR_CONTENT.subtitle,
+    heading: document.getElementById('modalInteriorHeading').value.trim() || DEFAULT_INTERIOR_CONTENT.heading,
+    desc: document.getElementById('modalInteriorDesc').value.trim() || DEFAULT_INTERIOR_CONTENT.desc,
+    feat1Icon: '📖',
+    feat1Title: document.getElementById('modalInteriorFeat1Title').value.trim() || DEFAULT_INTERIOR_CONTENT.feat1Title,
+    feat1Desc: document.getElementById('modalInteriorFeat1Desc').value.trim() || DEFAULT_INTERIOR_CONTENT.feat1Desc,
+    feat2Icon: '🌿',
+    feat2Title: document.getElementById('modalInteriorFeat2Title').value.trim() || DEFAULT_INTERIOR_CONTENT.feat2Title,
+    feat2Desc: document.getElementById('modalInteriorFeat2Desc').value.trim() || DEFAULT_INTERIOR_CONTENT.feat2Desc,
+    image: document.getElementById('modalInteriorImage').value.trim() || DEFAULT_INTERIOR_CONTENT.image,
+    btnText: document.getElementById('modalInteriorBtnText').value.trim() || DEFAULT_INTERIOR_CONTENT.btnText
+  };
+
+  localStorage.setItem('kafkef_interior_content_v1', JSON.stringify(newContent));
+  applyInteriorContent();
+  closeEditInteriorModal();
+  triggerStickyNotification('✅ "Defterimizin İçini İnceleyin" bölümü güncellendi!');
+}
+
 

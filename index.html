@@ -19,6 +19,9 @@
       <button id="btnLiveEditToggle" onclick="toggleLiveEditMode()" style="background:#ffd3dc;color:#3e000d;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:800;cursor:pointer">
         ✏️ Canlı Yazı Düzenleme: KAPALI
       </button>
+      <button onclick="openAdminModalWithTab('sections')" style="background:#550012;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+        🎛️ Bölüm Aç / Kapat & Sil
+      </button>
       <button onclick="openAdminModal()" style="background:#550012;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
         ⚙️ Yönetim Paneli
       </button>
@@ -29,7 +32,7 @@
   </div>
 
   <!-- ANNOUNCEMENT BAR (TICKER) -->
-  <div class="announcement-bar">
+  <div class="announcement-bar" id="duyuru-cubugu">
     <div class="announcement-track" id="announcementTrack">
       <div class="announcement-item">
         <span data-live-edit="announcement1">🎉 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!</span>
@@ -88,7 +91,23 @@
   <main>
 
     <!-- HERO SECTION (REAL BOOK PHOTOS SHOWCASE) -->
-    <section class="hero-section container">
+    <section class="hero-section container" id="hero-bolumu">
+      <!-- Admin Section Toolbar (Only visible when admin is logged in) -->
+      <div class="admin-section-bar" data-section-for="hero" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🌟</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Hero / Giriş Tanıtım Bölümü</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openAdminModalWithTab('content')" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Giriş Yazılarını Düzenle
+          </button>
+          <button onclick="deleteSectionWithConfirm('hero', 'Giriş / Hero Bölümü')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ Bu Bölümü Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
+
       <div class="hero-slider-wrap">
         <div class="hero-slides">
           <div class="hero-slide">
@@ -97,7 +116,7 @@
               <h1 class="hero-title" data-live-edit="heroTitle">Arapça İlk Adım <span>Defteri</span></h1>
               <p class="hero-desc" data-live-edit="heroDesc">
                 <strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>
-                Arapça'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, 120 gsm dolma kalemle arkaya geçirmeyen kaliteli kağıt.
+                Arapça'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, kaliteli ve pürüzsüz yazı kağıdı.
               </p>
 
               <!-- Campaign Highlights -->
@@ -134,24 +153,40 @@
 
     <!-- LIVE CAMPAIGN PROMOTION BANNER -->
     <section class="container" id="kampanyalar" style="margin-bottom:40px">
+      <!-- Admin Section Toolbar -->
+      <div class="admin-section-bar" data-section-for="campaigns" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🎯</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Kampanyalar Bölümü (3 Alana Kargo Bedava & 5 Alana 1 Hediye)</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openAdminModalWithTab('campaigns')" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Kampanya & Kargo Fiyatını Düzenle
+          </button>
+          <button onclick="deleteSectionWithConfirm('campaigns', 'Kampanyalar Bölümü')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ Kampanyaları Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
+
       <div style="background:linear-gradient(135deg, #fff7f2 0%, #faedf2 100%);border:2px solid var(--border-color);border-radius:var(--radius-lg);padding:24px 30px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;box-shadow:var(--shadow-sm)">
         <div style="border-right:1px dashed var(--border-color);padding-right:20px">
-          <div style="display:inline-flex;align-items:center;gap:6px;background:#e9f8ee;color:#167144;font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px">
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#e9f8ee;color:#167144;font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px" data-live-edit="camp1Badge">
             KAMPANYA 1
           </div>
-          <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px">3 Defter Alana Kargo BEDAVA</h3>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Kendinize ve dil öğrenen arkadaşlarınıza birlikte alın, tüm Türkiye'ye kargo ücretini biz karşılayalım!</p>
+          <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px" data-live-edit="camp1Title">3 Defter Alana Kargo BEDAVA</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px" data-live-edit="camp1Desc">Kendinize ve dil öğrenen arkadaşlarınıza birlikte alın, tüm Türkiye'ye kargo ücretini biz karşılayalım!</p>
           <button class="btn-primary" style="padding:8px 16px;font-size:12px" onclick="addToCart('kafkef-ilk-adim-defteri', 3)">
             + 3 Adet Sepete Ekle (720 TL · Kargo Bedava)
           </button>
         </div>
 
         <div style="padding-left:10px">
-          <div style="display:inline-flex;align-items:center;gap:6px;background:#f7ebef;color:var(--primary);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px">
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f7ebef;color:var(--primary);font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;margin-bottom:8px" data-live-edit="camp2Badge">
             KAMPANYA 2 · EN ÇOK TERCİH EDİLEN
           </div>
-          <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px">5 Defter Alana 1 Defter HEDİYE!</h3>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Sınıf arkadaşlarınızla veya çalışma grubunuzla toplu sipariş verin; 1 defter hediye gelsin ve kargo bedava olsun!</p>
+          <h3 style="font-size:20px;font-weight:800;color:var(--primary);margin-bottom:6px" data-live-edit="camp2Title">5 Defter Alana 1 Defter HEDİYE!</h3>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px" data-live-edit="camp2Desc">Sınıf arkadaşlarınızla veya çalışma grubunuzla toplu sipariş verin; 1 defter hediye gelsin ve kargo bedava olsun!</p>
           <button class="btn-primary" style="padding:8px 16px;font-size:12px;background:#167144" onclick="addToCart('kafkef-ilk-adim-defteri', 5)">
             🎁 5 Adet Ekle (1 Defter Hediye Kazan)
           </button>
@@ -161,10 +196,26 @@
 
     <!-- PRODUCTS CATALOG SECTION (FILTERABLE) -->
     <section class="container" id="urunler" style="margin-bottom:60px">
+      <!-- Admin Section Toolbar -->
+      <div class="admin-section-bar" data-section-for="products" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">📚</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Defter Koleksiyonu & Ürünler Vitrini</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openAdminModalWithTab('list')" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Defterleri Düzenle & Yeni Ekle
+          </button>
+          <button onclick="deleteSectionWithConfirm('products', 'Defter Koleksiyonu')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ Ürün Vitrinini Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
+
       <div class="section-head">
-        <span class="section-tag">KÂFKEF NOT DEFTER VE AKSESUARLARI</span>
-        <h2 class="section-title">Defter Koleksiyonumuz</h2>
-        <p class="section-subtitle">Şu anda satışta olan başucu defterimiz ve çok yakında sizlerle buluşacak yeni tasarımlarımız.</p>
+        <span class="section-tag" data-live-edit="prodSectionTag">KÂFKEF NOT DEFTER VE AKSESUARLARI</span>
+        <h2 class="section-title" data-live-edit="prodSectionTitle">Defter Koleksiyonumuz</h2>
+        <p class="section-subtitle" data-live-edit="prodSectionSubtitle">Şu anda satışta olan başucu defterimiz ve çok yakında sizlerle buluşacak yeni tasarımlarımız.</p>
       </div>
 
       <!-- Filter Tabs -->
@@ -182,52 +233,61 @@
 
     <!-- REAL INSIDE PAGE SHOWCASE WITH TEA CUP PHOTO -->
     <section class="container interior-preview-section" id="ic-sayfalar">
+      <!-- Admin Section Toolbar -->
+      <div class="admin-section-bar" data-section-for="interior" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">📖</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Defterimizin İçini İnceleyin Bölümü</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openEditInteriorModal()" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Bu Bölümü Düzenle
+          </button>
+          <button onclick="deleteSectionWithConfirm('interior', 'Defterimizin İçini İnceleyin')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ Bu Bölümü Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
+
       <div class="section-head" style="margin-bottom:24px">
-        <span class="section-tag">BÜYÜK HAYALLER İÇİN KÜÇÜK BİR DEFTER</span>
-        <h2 class="section-title">Defterimizin İçini İnceleyin</h2>
-        <p class="section-subtitle">«دفتر صغير لأحلام كبيرة» — Kelime, cümle, dilbilgisi ve pratik alanlarıyla Arapça öğrenme sürecinizdeki en ilham verici yol arkadaşınız.</p>
+        <span class="section-tag" data-live-edit="interiorTag">BÜYÜK HAYALLER İÇİN KÜÇÜK BİR DEFTER</span>
+        <h2 class="section-title" data-live-edit="interiorTitle">Defterimizin İçini İnceleyin</h2>
+        <p class="section-subtitle" data-live-edit="interiorSubtitle">«دفتر صغير لأحلام كبيرة» — Kelime, cümle, dilbilgisi ve pratik alanlarıyla Arapça öğrenme sürecinizdeki en ilham verici yol arkadaşınız.</p>
       </div>
 
       <div class="preview-grid" style="grid-template-columns:1fr 1fr;gap:40px;align-items:center">
         <div>
-          <h3 style="font-size:22px;font-weight:800;color:var(--primary);margin-bottom:12px">
+          <h3 style="font-size:22px;font-weight:800;color:var(--primary);margin-bottom:12px" data-live-edit="interiorHeading">
             Arapça'nın Ruhuyla Uyumlu Pedagojik Düzen
           </h3>
-          <p style="font-size:14px;color:var(--text-main);line-height:1.7;margin-bottom:16px">
+          <p style="font-size:14px;color:var(--text-main);line-height:1.7;margin-bottom:16px" data-live-edit="interiorDesc">
             Kâfkef Not defteri, sıradan bir çizgili defter değildir. Arapça öğrenirken en çok zorlanılan kelime ezberi, kök analizi, harekeleme ve cümle kurma pratiğini adım adım kolaylaştırmak için özel olarak kurgulanmıştır.
           </p>
 
-          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px" id="interiorFeaturesContainer">
             <div style="display:flex;align-items:flex-start;gap:10px">
-              <span style="font-size:20px">📖</span>
+              <span style="font-size:20px" id="interiorFeat1Icon">📖</span>
               <div>
-                <strong style="color:var(--primary);font-size:14px">Sağdan Sola (RTL) Açılan Ciltleme:</strong>
-                <p style="font-size:13px;color:var(--text-muted)">Arap alfabesinin yazım yönüne göre ters açılır, eliniz spirale veya cilde çarpmaz.</p>
+                <strong style="color:var(--primary);font-size:14px" data-live-edit="interiorFeat1Title">Sağdan Sola (RTL) Açılan Ciltleme:</strong>
+                <p style="font-size:13px;color:var(--text-muted)" data-live-edit="interiorFeat1Desc">Arap alfabesinin yazım yönüne göre ters açılır, eliniz spirale veya cilde çarpmaz.</p>
               </div>
             </div>
             <div style="display:flex;align-items:flex-start;gap:10px">
-              <span style="font-size:20px">✒️</span>
+              <span style="font-size:20px" id="interiorFeat2Icon">🌿</span>
               <div>
-                <strong style="color:var(--primary);font-size:14px">120 gsm Dolma Kalem Kağıdı:</strong>
-                <p style="font-size:13px;color:var(--text-muted)">Dolma kalem, jel kalem ve divit uçlarla yazsanız dahi arkaya leke bırakmaz.</p>
-              </div>
-            </div>
-            <div style="display:flex;align-items:flex-start;gap:10px">
-              <span style="font-size:20px">🌿</span>
-              <div>
-                <strong style="color:var(--primary);font-size:14px">Zarif Motifli Sert Kapak:</strong>
-                <p style="font-size:13px;color:var(--text-muted)">Kuş ve çiçek işlemeleriyle çalışma masanıza estetik ve huzur katar.</p>
+                <strong style="color:var(--primary);font-size:14px" data-live-edit="interiorFeat2Title">Zarif Motifli Sert Kapak:</strong>
+                <p style="font-size:13px;color:var(--text-muted)" data-live-edit="interiorFeat2Desc">Kuş ve çiçek işlemeleriyle çalışma masanıza estetik ve huzur katar.</p>
               </div>
             </div>
           </div>
 
-          <button class="btn-primary" onclick="addToCart('kafkef-ilk-adim-defteri')">
+          <button class="btn-primary" id="interiorBuyBtn" onclick="addToCart('kafkef-ilk-adim-defteri')" data-live-edit="interiorBtnText">
             🛒 240 TL · Hemen Satın Al
           </button>
         </div>
 
         <div style="text-align:center">
-          <img src="assets/defter_ic_sayfa.jpg" alt="Kâfkef Defter İç Sayfa" style="width:100%;max-width:440px;border-radius:16px;box-shadow:var(--shadow-lg);object-fit:cover" onclick="openPhotoModal('assets/defter_ic_sayfa.jpg', 'Kâfkef Not İç Sayfası')">
+          <img id="interiorPageImg" src="assets/defter_ic_sayfa.jpg" alt="Kâfkef Defter İç Sayfa" style="width:100%;max-width:440px;border-radius:16px;box-shadow:var(--shadow-lg);object-fit:cover" onclick="openPhotoModal('assets/defter_ic_sayfa.jpg', 'Kâfkef Not İç Sayfası')">
           <small style="display:block;margin-top:8px;color:var(--text-muted);font-size:12px">Büyütmek için fotoğrafa tıklayabilirsiniz</small>
         </div>
       </div>
@@ -235,6 +295,21 @@
 
     <!-- SIKÇA SORULAN SORULAR & BİLGİLENDİRME (DİNAMİK YÖNETİLEBİLİR) -->
     <section class="container" style="margin-bottom:70px" id="sss-bolumu">
+      <!-- Admin Section Toolbar -->
+      <div class="admin-section-bar" data-section-for="faqs" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">❓</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Sıkça Sorulan Sorular & Bilgiler Bölümü</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openAdminModalWithTab('faqs')" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Soruları Düzenle & Yeni Soru Ekle
+          </button>
+          <button onclick="deleteSectionWithConfirm('faqs', 'Sıkça Sorulan Sorular')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ SSS Bölümünü Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
       <div class="section-head">
         <span class="section-tag" data-live-edit="faqTag">MERAK EDİLENLER</span>
         <h2 class="section-title" data-live-edit="faqTitle">Sıkça Sorulan Sorular & Bilgiler</h2>
@@ -467,7 +542,9 @@
         <button class="admin-tab-btn active" id="tabAddProd" onclick="switchAdminTab('add')">+ Yeni Defter Yayınla</button>
         <button class="admin-tab-btn" id="tabListProd" onclick="switchAdminTab('list')">📚 Defterleri Düzenle & Sil</button>
         <button class="admin-tab-btn" id="tabCampaigns" onclick="switchAdminTab('campaigns')">🎯 Kampanya & Kargo (115 TL)</button>
+        <button class="admin-tab-btn" id="tabInterior" onclick="switchAdminTab('interior')">📖 Defter İçi & Tanıtım</button>
         <button class="admin-tab-btn" id="tabFaqs" onclick="switchAdminTab('faqs')">❓ SSS & Bilgi Yönetimi</button>
+        <button class="admin-tab-btn" id="tabSections" onclick="switchAdminTab('sections')">🎛️ Bölüm Aç/Kapa & Sil</button>
         <button class="admin-tab-btn" id="tabContent" onclick="switchAdminTab('content')">📝 Tüm Site Metinleri</button>
         <button class="admin-tab-btn" id="tabOrders" onclick="switchAdminTab('orders')">📦 Gelen Siparişler</button>
         <button class="admin-tab-btn" id="tabWallet" onclick="switchAdminTab('wallet')">💰 Kasa & IBAN Havuzu</button>
@@ -650,6 +727,114 @@
 
         <div id="adminFaqListContainer" style="display:flex;flex-direction:column;gap:12px">
           <!-- Injected by app.js -->
+        </div>
+      </div>
+
+      <!-- Tab: Defter İçi & Tanıtım Düzenleme -->
+      <div id="adminTabContentInterior" style="display:none">
+        <form onsubmit="handleSaveInteriorContent(event)">
+          <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <h3 style="font-size:16px;font-weight:800;color:var(--primary)">📖 "Defterimizin İçini İnceleyin" Bölümü Düzenleyici</h3>
+              <span id="interiorStatusBadge" style="background:#e9f8ee;color:#167144;font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px">🟢 Sitede Gösteriliyor</span>
+            </div>
+            <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px">
+              Bu bölümdeki tüm başlıkları, açıklamaları, maddeleri, butonu ve görseli dilediğiniz gibi güncelleyebilir veya bölümü tek tıkla siteden tamamen kaldırabilirsiniz.
+            </p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px">
+              <div class="admin-form-group">
+                <label>Üst Rozet / Etiket:</label>
+                <input type="text" id="cfgInteriorTag" required placeholder="BÜYÜK HAYALLER İÇİN KÜÇÜK BİR DEFTER">
+              </div>
+              <div class="admin-form-group">
+                <label>Bölüm Ana Başlığı:</label>
+                <input type="text" id="cfgInteriorTitle" required placeholder="Defterimizin İçini İnceleyin">
+              </div>
+            </div>
+
+            <div class="admin-form-group" style="margin-bottom:12px">
+              <label>Alt Açıklama (Arapça & Türkçe Slogan):</label>
+              <input type="text" id="cfgInteriorSubtitle" required placeholder="«دفتر صغير لأحلام كبيرة» — Kelime, cümle, dilbilgisi ve pratik...">
+            </div>
+
+            <div class="admin-form-group" style="margin-bottom:12px">
+              <label>İçerik Detay Başlığı:</label>
+              <input type="text" id="cfgInteriorHeading" required placeholder="Arapça'nın Ruhuyla Uyumlu Pedagojik Düzen">
+            </div>
+
+            <div class="admin-form-group" style="margin-bottom:14px">
+              <label>Tanıtım Açıklama Metni:</label>
+              <textarea id="cfgInteriorDesc" required rows="3" placeholder="Kâfkef Not defteri, sıradan bir çizgili defter değildir..."></textarea>
+            </div>
+
+            <!-- Maddeler / Özellikler -->
+            <div style="border-top:1px dashed var(--border-color);padding-top:14px;margin-bottom:14px">
+              <h4 style="font-size:14px;font-weight:700;color:var(--primary);margin-bottom:10px">Öne Çıkan Özellik Maddeleri:</h4>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:10px">
+                <div class="admin-form-group">
+                  <label>Madde 1 Başlık:</label>
+                  <input type="text" id="cfgInteriorFeat1Title" placeholder="Sağdan Sola (RTL) Açılan Ciltleme:">
+                </div>
+                <div class="admin-form-group">
+                  <label>Madde 1 Açıklama:</label>
+                  <input type="text" id="cfgInteriorFeat1Desc" placeholder="Arap alfabesinin yazım yönüne göre ters açılır, eliniz spirale çarpmaz.">
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px">
+                <div class="admin-form-group">
+                  <label>Madde 2 Başlık:</label>
+                  <input type="text" id="cfgInteriorFeat2Title" placeholder="Zarif Motifli Sert Kapak:">
+                </div>
+                <div class="admin-form-group">
+                  <label>Madde 2 Açıklama:</label>
+                  <input type="text" id="cfgInteriorFeat2Desc" placeholder="Kuş ve çiçek işlemeleriyle çalışma masanıza estetik ve huzur katar.">
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="admin-form-group">
+                <label>Görsel Dosya Yolu:</label>
+                <input type="text" id="cfgInteriorImage" placeholder="assets/defter_ic_sayfa.jpg">
+              </div>
+              <div class="admin-form-group">
+                <label>Satın Al Buton Yazısı:</label>
+                <input type="text" id="cfgInteriorBtnText" placeholder="🛒 240 TL · Hemen Satın Al">
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button type="submit" class="btn-primary" style="flex:1;justify-content:center;padding:13px">
+              💾 Defter İçi Ayarlarını Kaydet
+            </button>
+            <button type="button" onclick="deleteSectionWithConfirm('interior', 'Defterimizin İçini İnceleyin')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;padding:13px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">
+              🗑️ Bu Bölümü Siteden Kaldır (Sil)
+            </button>
+            <button type="button" onclick="handleResetInteriorContent()" style="background:#f3f4f6;color:#374151;border:1px solid #d1d5db;padding:13px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">
+              🔄 Varsayılana Döndür
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab: Bölüm Aç / Kapat & Silme Yönetimi -->
+      <div id="adminTabContentSections" style="display:none">
+        <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:12px;padding:20px;margin-bottom:18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <h3 style="font-size:16px;font-weight:800;color:var(--primary)">🎛️ Tüm Site Bölümleri Yönetimi (Sil / Göster)</h3>
+            <button type="button" onclick="handleResetSectionsVisibility()" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+              🔄 Tüm Bölümleri Aç (Varsayılan)
+            </button>
+          </div>
+          <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:16px">
+            Web sitenizdeki dilediğiniz bölümü tek tıkla silebilir (gizleyebilir) veya daha sonra istediğiniz zaman tekrar görünür yapabilirsiniz.
+          </p>
+
+          <div id="adminSectionsListContainer" style="display:flex;flex-direction:column;gap:12px">
+            <!-- Dynamically populated by app.js -->
+          </div>
         </div>
       </div>
 
@@ -941,6 +1126,82 @@
     </div>
   </div>
 
+  <!-- DEFTER İÇİ DÜZENLEME MODALI (HIZLI DÜZENLEME POPUP) -->
+  <div class="modal-overlay" id="editInteriorModal">
+    <div class="modal-box" style="max-width:680px;padding:28px">
+      <button class="modal-close-btn" onclick="closeEditInteriorModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--border-light);padding-bottom:12px">
+        <span style="font-size:24px">📖</span>
+        <div>
+          <h2 style="font-size:18px;font-weight:800;color:var(--primary)">Defterimizin İçini İnceleyin Bölümünü Düzenle</h2>
+          <div style="font-size:12px;color:var(--text-muted)">Başlıkları, açıklamaları ve özellikleri güncelleyin veya bölümü kaldırın.</div>
+        </div>
+      </div>
+      <form onsubmit="handleSaveInteriorModalForm(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="admin-form-group">
+            <label>Üst Etiket:</label>
+            <input type="text" id="modalInteriorTag" required>
+          </div>
+          <div class="admin-form-group">
+            <label>Bölüm Başlığı:</label>
+            <input type="text" id="modalInteriorTitle" required>
+          </div>
+        </div>
+        <div class="admin-form-group" style="margin-bottom:12px">
+          <label>Alt Açıklama Metni:</label>
+          <input type="text" id="modalInteriorSubtitle" required>
+        </div>
+        <div class="admin-form-group" style="margin-bottom:12px">
+          <label>İçerik Detay Başlığı:</label>
+          <input type="text" id="modalInteriorHeading" required>
+        </div>
+        <div class="admin-form-group" style="margin-bottom:12px">
+          <label>Açıklama Metni:</label>
+          <textarea id="modalInteriorDesc" required rows="3"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="admin-form-group">
+            <label>Madde 1 Başlık:</label>
+            <input type="text" id="modalInteriorFeat1Title">
+          </div>
+          <div class="admin-form-group">
+            <label>Madde 1 Açıklama:</label>
+            <input type="text" id="modalInteriorFeat1Desc">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+          <div class="admin-form-group">
+            <label>Madde 2 Başlık:</label>
+            <input type="text" id="modalInteriorFeat2Title">
+          </div>
+          <div class="admin-form-group">
+            <label>Madde 2 Açıklama:</label>
+            <input type="text" id="modalInteriorFeat2Desc">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="admin-form-group">
+            <label>Görsel Dosya Yolu:</label>
+            <input type="text" id="modalInteriorImage">
+          </div>
+          <div class="admin-form-group">
+            <label>Satın Al Buton Yazısı:</label>
+            <input type="text" id="modalInteriorBtnText">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button type="submit" class="btn-primary" style="flex:1;justify-content:center;padding:12px">
+            💾 Güncellemeyi Kaydet
+          </button>
+          <button type="button" onclick="deleteSectionWithConfirm('interior', 'Defterimizin İçini İnceleyin'); closeEditInteriorModal();" style="background:#fee2e2;color:#b91c1c;border:none;padding:12px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">
+            🗑️ Bölümü Kaldır (Sil)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- CANLI SAYFA DÜZENLEME ARAÇ ÇUBUĞU (YÖNETİCİ) -->
   <div id="liveEditToolbar" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#280008;color:#fff;padding:12px 24px;border-radius:50px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:99999;align-items:center;gap:16px;border:1px solid rgba(255,255,255,0.2)">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px">
@@ -1020,8 +1281,12 @@
       document.getElementById('adminTabContentList').style.display = tab === 'list' ? 'block' : 'none';
       const campEl = document.getElementById('adminTabContentCampaigns');
       if (campEl) campEl.style.display = tab === 'campaigns' ? 'block' : 'none';
+      const intEl = document.getElementById('adminTabContentInterior');
+      if (intEl) intEl.style.display = tab === 'interior' ? 'block' : 'none';
       const faqsEl = document.getElementById('adminTabContentFaqs');
       if (faqsEl) faqsEl.style.display = tab === 'faqs' ? 'block' : 'none';
+      const secEl = document.getElementById('adminTabContentSections');
+      if (secEl) secEl.style.display = tab === 'sections' ? 'block' : 'none';
       const contentEl = document.getElementById('adminTabContentContent');
       if (contentEl) contentEl.style.display = tab === 'content' ? 'block' : 'none';
       document.getElementById('adminTabContentOrders').style.display = tab === 'orders' ? 'block' : 'none';
@@ -1032,8 +1297,12 @@
       document.getElementById('tabListProd').classList.toggle('active', tab === 'list');
       const tabCampBtn = document.getElementById('tabCampaigns');
       if (tabCampBtn) tabCampBtn.classList.toggle('active', tab === 'campaigns');
+      const tabIntBtn = document.getElementById('tabInterior');
+      if (tabIntBtn) tabIntBtn.classList.toggle('active', tab === 'interior');
       const tabFaqsBtn = document.getElementById('tabFaqs');
       if (tabFaqsBtn) tabFaqsBtn.classList.toggle('active', tab === 'faqs');
+      const tabSecBtn = document.getElementById('tabSections');
+      if (tabSecBtn) tabSecBtn.classList.toggle('active', tab === 'sections');
       const tabContentBtn = document.getElementById('tabContent');
       if (tabContentBtn) tabContentBtn.classList.toggle('active', tab === 'content');
       document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
@@ -1046,12 +1315,27 @@
       if (tab === 'campaigns' && typeof populateCampaignSettingsForm === 'function') {
         populateCampaignSettingsForm();
       }
+      if (tab === 'interior' && typeof populateInteriorForm === 'function') {
+        populateInteriorForm();
+      }
       if (tab === 'faqs' && typeof renderAdminFaqList === 'function') {
         renderAdminFaqList();
+      }
+      if (tab === 'sections' && typeof renderAdminSectionsList === 'function') {
+        renderAdminSectionsList();
       }
       if (tab === 'content' && typeof populateSiteContentForm === 'function') {
         populateSiteContentForm();
       }
+    }
+
+    function openAdminModalWithTab(tab) {
+      if (!isAdminLoggedIn) {
+        openAdminLoginModal();
+        return;
+      }
+      openAdminModal();
+      switchAdminTab(tab);
     }
 
     function openPhotoModal(imgSrc, title) {

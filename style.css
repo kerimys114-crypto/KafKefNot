@@ -2023,3 +2023,17 @@ body {
   outline: 2px solid var(--primary) !important;
   background-color: rgba(62, 0, 13, 0.05) !important;
 }
+
+/* YÖNETİCİ BÖLÜM KONTROL ÇUBUĞU */
+.admin-section-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fdf2f4;
+  border: 1px dashed #d86885;
+  border-radius: 10px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(62, 0, 13, 0.04);
+}
+
