@@ -199,27 +199,30 @@ function renderProducts(filter = 'all') {
     list = PRODUCTS.filter(p => p.status === 'upcoming');
   }
 
-  grid.innerHTML = list.map(product => {
+  grid.innerHTML = list.map((product, idx) => {
     const isWishlisted = wishlist.includes(product.id);
     const isActive = product.status === 'active';
+    const discountPercent = product.oldPrice && product.price < product.oldPrice
+      ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
+      : (isActive ? 17 : 0);
+    const tagText = idx === 0 ? 'Yeni favorin' : (idx === 1 ? 'Çok sevilen' : 'Özel Seri');
 
     return `
-      <article class="product-card ${isActive ? 'product-card-active' : 'product-card-upcoming'}" data-id="${product.id}">
-        <div class="card-top-badges">
-          ${product.badges.map(b => `
-            <span class="badge-tag ${b.includes('Satışta') ? 'badge-active-live' : b.includes('Yakında') ? 'badge-upcoming-pill' : 'badge-sale'}">
-              ${b}
-            </span>
-          `).join('')}
-        </div>
+      <article class="fobi-product-card ${isActive ? 'card-active' : 'card-upcoming'}" data-id="${product.id}">
+        <!-- Image Container -->
+        <div class="fobi-img-box" onclick="openQuickView('${product.id}')">
+          <img src="${product.image}" alt="${product.title}" class="fobi-img" loading="lazy">
 
-        <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist('${product.id}')" aria-label="Favorilere ekle">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="${isWishlisted ? '#3e000d' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-        </button>
+          <!-- Top-left pill badge -->
+          <div class="fobi-ship-badge">
+            ${isActive ? '<span>🚚 Bugün kargoda</span>' : '<span>⏳ Çok Yakında</span>'}
+          </div>
 
-        <!-- Product Image Container -->
-        <div class="product-real-img-wrap" onclick="openQuickView('${product.id}')" style="cursor:pointer">
-          <img src="${product.image}" alt="${product.title}" class="product-real-img" loading="lazy">
+          <!-- Top-right wishlist button -->
+          <button class="fobi-wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist('${product.id}')" aria-label="Favorilere ekle" title="Favorilere ekle">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="${isWishlisted ? '#5E1729' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+
           ${!isActive ? `
             <div class="upcoming-overlay">
               <span class="upcoming-ribbon">ÇOK YAKINDA SİZİNLE</span>
@@ -227,42 +230,46 @@ function renderProducts(filter = 'all') {
           ` : ''}
         </div>
 
-        <div style="margin-bottom:8px">
-          <span style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">
-            ${isActive ? '✓ Stokta Var · Aynı Gün Kargo' : '⏳ Çok Yakında Sizinle'}
-          </span>
-        </div>
-
-        <a href="#quickview" onclick="openQuickView('${product.id}');return false;" class="card-product-title">
-          ${product.title}
-        </a>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">${product.subtitle}</div>
-
-        <div class="card-features-list">
-          ${product.features.slice(0, 3).map(f => `<span>✓ ${f}</span>`).join('')}
-        </div>
-
-        <div class="card-footer">
-          <div class="price-box">
-            ${product.oldPrice ? `<span class="old-price">${product.oldPrice} TL</span>` : ''}
-            <span class="current-price">${product.price} TL</span>
+        <!-- Card Details -->
+        <div class="fobi-content">
+          <!-- Tag Pill (Fobinote Style) -->
+          <div class="fobi-tag-pill">
+            ${isActive ? tagText : 'Ön Talep Açık'}
           </div>
 
-          <div class="card-btn-group">
-            <button class="quick-view-btn" onclick="openQuickView('${product.id}')" title="İçini İncele">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <!-- Rating / Reviews -->
+          <div class="fobi-rating-row">
+            <span class="fobi-stars">★★★★★</span>
+            <span class="fobi-review-text">${isActive ? '5.0 · (18 İnceleme) 📷' : 'Tasarım Aşamasında'}</span>
+          </div>
+
+          <!-- Product Title -->
+          <h3 class="fobi-title" onclick="openQuickView('${product.id}')">
+            ${product.title}
+          </h3>
+
+          <!-- Subtitle / Notes -->
+          <div class="fobi-sub">
+            ${product.subtitle}
+          </div>
+
+          <!-- Pricing Block -->
+          <div class="fobi-price-row">
+            ${discountPercent ? `<span class="fobi-discount-pill">%${discountPercent}</span>` : ''}
+            ${product.oldPrice ? `<span class="fobi-old-price">₺ ${product.oldPrice}.00</span>` : (isActive ? '<span class="fobi-old-price">₺ 290.00</span>' : '')}
+            <span class="fobi-price">₺ ${product.price}.00</span>
+          </div>
+
+          <!-- Full-width Action Button -->
+          ${isActive ? `
+            <button class="fobi-cart-btn" onclick="addToCart('${product.id}')">
+              Sepete Ekle
             </button>
-            ${isActive ? `
-              <button class="add-cart-btn" onclick="addToCart('${product.id}')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                Sepete Ekle
-              </button>
-            ` : `
-              <button class="notify-btn" onclick="notifyMeUpcoming('${product.title}')">
-                Haber Ver
-              </button>
-            `}
-          </div>
+          ` : `
+            <button class="fobi-cart-btn fobi-notify-btn" onclick="notifyMeUpcoming('${product.title}')">
+              Haber Ver
+            </button>
+          `}
         </div>
       </article>
     `;
@@ -1685,6 +1692,7 @@ function handleResetFaqs() {
 // 16. BÖLÜM YÖNETİMİ & SİLME / GİZLEME SİSTEMİ (HER BÖLÜMÜ SİLİP DÜZENLEME)
 const DEFAULT_SECTION_VISIBILITY = {
   announcement: true,
+  highlights: true,
   hero: true,
   campaigns: true,
   products: true,
@@ -1694,6 +1702,7 @@ const DEFAULT_SECTION_VISIBILITY = {
 
 const SECTION_CONFIGS = [
   { key: 'announcement', id: 'duyuru-cubugu', name: '📢 Üst Kayan Duyuru Çubuğu (Ticker)' },
+  { key: 'highlights', id: 'story-highlights-bar', name: '🌸 Instagram Hikaye Baloncukları (Highlights)' },
   { key: 'hero', id: 'hero-bolumu', name: '🌟 Giriş / Hero Defter Tanıtım Bölümü' },
   { key: 'campaigns', id: 'kampanyalar', name: '🎯 Kampanyalar Bölümü (3 Alana Kargo Bedava & 5 Alana 1 Hediye)' },
   { key: 'products', id: 'urunler', name: '📚 Defter Koleksiyonu & Ürünler Vitrini' },

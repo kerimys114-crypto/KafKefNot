@@ -49,9 +49,13 @@
   <!-- SITE HEADER -->
   <header class="site-header">
     <div class="container header-inner">
-      <!-- Logo: Attığınız Orijinal Logo Görseli -->
-      <a href="#" class="brand-logo" style="display:flex;align-items:center;text-decoration:none">
-        <img src="assets/kafkef_logo.jpg" alt="Kâfkef Not Logo" style="height:48px;width:auto;border-radius:8px;box-shadow:0 3px 12px rgba(62,0,13,0.3)">
+      <!-- Logo: Attığınız Orijinal Logo Görseli & Butik Tipografi -->
+      <a href="#" class="brand-logo" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+        <img src="assets/kafkef_logo.jpg" alt="Kâfkef Not Logo" style="height:44px;width:auto;border-radius:10px;box-shadow:0 3px 10px rgba(94,23,41,0.18)">
+        <div>
+          <span style="font-family:var(--font-serif);font-size:24px;font-weight:700;color:var(--primary);letter-spacing:0.5px;display:block;line-height:1.1">Kâfkef Not</span>
+          <span style="font-size:10.5px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;font-weight:600">Arapça Defter & Kırtasiye</span>
+        </div>
       </a>
 
       <!-- Navigation -->
@@ -86,6 +90,48 @@
       </div>
     </div>
   </header>
+
+  <!-- STORY HIGHLIGHTS (BOUTIQUE INSTAGRAM STORIES) -->
+  <section class="container story-highlights-section" id="story-highlights-bar">
+    <div class="story-bubbles-wrap">
+      <a href="#urunler" class="story-bubble-item" onclick="renderProducts('active')">
+        <div class="story-circle active-ring">
+          <img src="assets/defter_on_yuz.jpg" alt="İlk Adım">
+        </div>
+        <span class="story-title">İlk Adım</span>
+      </a>
+      <a href="#ic-sayfalar" class="story-bubble-item">
+        <div class="story-circle">
+          <img src="assets/defter_ic_sayfa.jpg" alt="İç Sayfa">
+        </div>
+        <span class="story-title">İç Sayfalar</span>
+      </a>
+      <a href="#kampanyalar" class="story-bubble-item">
+        <div class="story-circle ring-gold">
+          <span class="story-icon-inner">🎁</span>
+        </div>
+        <span class="story-title">3 Alana Bedava</span>
+      </a>
+      <a href="#kampanyalar" class="story-bubble-item">
+        <div class="story-circle">
+          <span class="story-icon-inner">✨</span>
+        </div>
+        <span class="story-title">1 Hediye</span>
+      </a>
+      <a href="#sss-bolumu" class="story-bubble-item">
+        <div class="story-circle">
+          <span class="story-icon-inner">❓</span>
+        </div>
+        <span class="story-title">Merak Edilen</span>
+      </a>
+      <a href="https://www.instagram.com/kafkefnot/" target="_blank" rel="noopener" class="story-bubble-item">
+        <div class="story-circle ring-insta">
+          <span class="story-icon-inner">📷</span>
+        </div>
+        <span class="story-title">@kafkefnot</span>
+      </a>
+    </div>
+  </section>
 
   <!-- MAIN WRAPPER -->
   <main>
@@ -151,6 +197,40 @@
       </div>
     </section>
 
+    <!-- BOUTIQUE TRUST BADGES STRIP (GÜVEN & KALİTE STANDARTLARI) -->
+    <div class="container" style="margin:20px auto 35px">
+      <div class="trust-strip">
+        <div class="trust-strip-item">
+          <span class="trust-icon">🚚</span>
+          <div>
+            <strong>Aynı Gün Kargo</strong>
+            <p>15:00'e kadar verilen siparişlerde</p>
+          </div>
+        </div>
+        <div class="trust-strip-item">
+          <span class="trust-icon">📖</span>
+          <div>
+            <strong>Sağdan Sola Özel Cilt</strong>
+            <p>Arapça yazımına özel mimari</p>
+          </div>
+        </div>
+        <div class="trust-strip-item">
+          <span class="trust-icon">✒️</span>
+          <div>
+            <strong>Mürekkep Geçirmez</strong>
+            <p>1. hamur lüks kaliteli kağıt dokusu</p>
+          </div>
+        </div>
+        <div class="trust-strip-item">
+          <span class="trust-icon">🛡️</span>
+          <div>
+            <strong>Güvenli Alışveriş</strong>
+            <p>256-Bit SSL & Havuz Koruması</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- LIVE CAMPAIGN PROMOTION BANNER -->
     <section class="container" id="kampanyalar" style="margin-bottom:40px">
       <!-- Admin Section Toolbar -->
@@ -212,10 +292,21 @@
         </div>
       </div>
 
-      <div class="section-head">
-        <span class="section-tag" data-live-edit="prodSectionTag">KÂFKEF NOT DEFTER VE AKSESUARLARI</span>
-        <h2 class="section-title" data-live-edit="prodSectionTitle">Defter Koleksiyonumuz</h2>
-        <p class="section-subtitle" data-live-edit="prodSectionSubtitle">Şu anda satışta olan başucu defterimiz ve çok yakında sizlerle buluşacak yeni tasarımlarımız.</p>
+      <div class="section-head" style="text-align:left;margin-bottom:24px;border-bottom:1px solid var(--border-light);padding-bottom:14px">
+        <div style="font-size:12px;color:var(--text-muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px" data-live-edit="prodSectionTag">
+          Kâfkef Not · Özel Koleksiyon
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <h2 style="font-family:var(--font-serif);font-size:30px;font-weight:700;color:var(--primary);margin:0" data-live-edit="prodSectionTitle">
+            Arapça İlk Adım Defteri & Ajandalar
+          </h2>
+          <span style="font-size:13px;color:var(--text-muted);font-weight:600" data-live-edit="prodSectionCount">
+            12 Ürün & Tasarım
+          </span>
+        </div>
+        <p style="font-size:14px;color:var(--text-muted);margin-top:6px;max-width:680px" data-live-edit="prodSectionSubtitle">
+          Arapça öğrenimini masanızda huzur dolu bir yolculuğa dönüştüren sağdan sola açılan lüks defter serisi.
+        </p>
       </div>
 
       <!-- Filter Tabs -->
