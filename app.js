@@ -637,7 +637,7 @@ function handleAddProduct(e) {
     status,
     badges: status === 'active' ? ['Şu Anda Satışta', '3 Adete Kargo Bedava'] : ['Çok Yakında Sizinle', 'Ön Talep Açık'],
     image,
-    gallery: [image],
+    gallery: [image, ...(newProdGallery || [])],
     arabicLetter: 'ق ك',
     arabicSub: 'كِتَاب جَدِيد',
     desc,
@@ -646,6 +646,9 @@ function handleAddProduct(e) {
 
   PRODUCTS.unshift(newProd);
   localStorage.setItem('kafkef_products_v3', JSON.stringify(PRODUCTS));
+
+  newProdGallery = [];
+  renderNewProdGalleryThumbs();
 
   document.getElementById('adminProductForm').reset();
   const preview = document.getElementById('admImagePreview');
@@ -714,6 +717,140 @@ function renderAdminProductsList() {
   `).join('');
 }
 
+let currentEditGallery = [];
+let newProdGallery = [];
+
+// GALERİ FOTOĞRAFLARI YÖNETİMİ (DÜZENLEME MODALI)
+function renderEditGalleryThumbs() {
+  const container = document.getElementById('editProdGalleryThumbs');
+  if (!container) return;
+  if (!currentEditGallery || currentEditGallery.length === 0) {
+    container.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">Henüz fotoğraf eklenmedi.</span>';
+    return;
+  }
+  container.innerHTML = currentEditGallery.map((imgSrc, idx) => `
+    <div style="position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1.5px solid #E8B9C6;background:#fff;display:inline-block">
+      <img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover">
+      <button type="button" onclick="handleRemoveEditGalleryImage(${idx})" title="Fotoğrafı Sil" style="position:absolute;top:2px;right:2px;background:rgba(185,28,28,0.85);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</button>
+      ${idx === 0 ? '<span style="position:absolute;bottom:0;left:0;right:0;background:rgba(123,22,51,0.85);color:#fff;font-size:8px;font-weight:700;text-align:center;padding:1px 0">KAPAK</span>' : ''}
+    </div>
+  `).join('');
+}
+
+function handleAddGalleryImage(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const rawData = evt.target.result;
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      const maxDim = 900;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+      if (!currentEditGallery) currentEditGallery = [];
+      currentEditGallery.push(compressedDataUrl);
+      renderEditGalleryThumbs();
+      triggerStickyNotification('📸 Galeriye yeni fotoğraf eklendi!');
+    };
+    img.src = rawData;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function handleRemoveEditGalleryImage(idx) {
+  if (currentEditGallery.length <= 1) {
+    alert('Defterin en az 1 adet fotoğrafı bulunmalıdır.');
+    return;
+  }
+  currentEditGallery.splice(idx, 1);
+  const pImg = document.getElementById('editProdPreviewImg');
+  if (pImg && currentEditGallery[0]) pImg.src = currentEditGallery[0];
+  const pInput = document.getElementById('editProdImage');
+  if (pInput && currentEditGallery[0]) pInput.value = currentEditGallery[0];
+
+  renderEditGalleryThumbs();
+  triggerStickyNotification('🗑️ Fotoğraf galeriden kaldırıldı.');
+}
+
+// YENİ DEFTER İÇİN GALERİ YÖNETİMİ
+function renderNewProdGalleryThumbs() {
+  const container = document.getElementById('newProdGalleryThumbs');
+  if (!container) return;
+  if (!newProdGallery || newProdGallery.length === 0) {
+    container.innerHTML = '<span style="font-size:11px;color:var(--text-muted)">Henüz ek fotoğraf seçilmedi. (İsteğe bağlı)</span>';
+    return;
+  }
+  container.innerHTML = newProdGallery.map((imgSrc, idx) => `
+    <div style="position:relative;width:60px;height:60px;border-radius:8px;overflow:hidden;border:1.5px solid #E8B9C6;background:#fff;display:inline-block">
+      <img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover">
+      <button type="button" onclick="handleRemoveNewProdGalleryImage(${idx})" title="Fotoğrafı Sil" style="position:absolute;top:2px;right:2px;background:rgba(185,28,28,0.85);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer">✕</button>
+    </div>
+  `).join('');
+}
+
+function handleAddNewProdGalleryImage(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const rawData = evt.target.result;
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      const maxDim = 900;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+      if (!newProdGallery) newProdGallery = [];
+      newProdGallery.push(compressedDataUrl);
+      renderNewProdGalleryThumbs();
+      triggerStickyNotification('📸 Galeriye fotoğraf eklendi!');
+    };
+    img.src = rawData;
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function handleRemoveNewProdGalleryImage(idx) {
+  newProdGallery.splice(idx, 1);
+  renderNewProdGalleryThumbs();
+}
+
 function openEditProductModal(prodId) {
   const prod = PRODUCTS.find(p => p.id === prodId);
   if (!prod) return;
@@ -731,6 +868,10 @@ function openEditProductModal(prodId) {
   if (pImg) pImg.src = prod.image || 'assets/defter_kapak_kus.jpg';
   const pWrap = document.getElementById('editProdImagePreview');
   if (pWrap) pWrap.style.display = prod.image ? 'flex' : 'none';
+
+  // Galeri fotoğraflarını yükle ve çiz
+  currentEditGallery = prod.gallery && Array.isArray(prod.gallery) && prod.gallery.length > 0 ? [...prod.gallery] : [prod.image];
+  renderEditGalleryThumbs();
 
   const modal = document.getElementById('editProductModal');
   if (modal) {
@@ -767,9 +908,15 @@ function handleSaveEditProduct(e) {
   prod.oldPrice = oldPrice;
   prod.status = status;
   prod.subtitle = subtitle;
-  prod.image = image;
-  if (!prod.gallery || prod.gallery.length === 0) prod.gallery = [image];
-  else prod.gallery[0] = image;
+  
+  if (currentEditGallery && currentEditGallery.length > 0) {
+    prod.gallery = [...currentEditGallery];
+    prod.image = currentEditGallery[0];
+  } else {
+    prod.image = image;
+    prod.gallery = [image];
+  }
+
   prod.desc = desc;
   prod.badges = status === 'active' ? ['Şu Anda Satışta', '3 Adete Kargo Bedava', '5 Adete 1 Hediye!'] : ['Çok Yakında Sizinle', 'Ön Talep Açık'];
 
@@ -1392,7 +1539,8 @@ function handleSaveSiteContent(e) {
 
   localStorage.setItem('kafkef_site_content_v1', JSON.stringify(newCfg));
   applySiteContent();
-  alert('✅ Tüm site metinleri ve ayarları başarıyla güncellendi!');
+  triggerStickyNotification('✅ Tüm site metinleri güncellendi! Canlıya aktarılıyor...');
+  publishStoreDataToCloud();
 }
 
 function handleResetSiteContent() {
@@ -1466,8 +1614,9 @@ function saveLiveEdits() {
   });
 
   localStorage.setItem('kafkef_live_edits', JSON.stringify(edits));
-  triggerStickyNotification('💾 Tüm canlı metin değişiklikleri kaydedildi!');
+  triggerStickyNotification('💾 Tüm canlı metin değişiklikleri kaydedildi! Canlıya aktarılıyor...');
   toggleLiveEditMode();
+  publishStoreDataToCloud();
 }
 
 function applyLiveEdits() {
@@ -1518,7 +1667,8 @@ function handleSaveCampaignSettings(e) {
 
   localStorage.setItem('kafkef_campaign_settings_v1', JSON.stringify(newCamp));
   updateCartUI();
-  alert(`✅ Kampanya ve kargo ayarları başarıyla kaydedildi!\n\n• Kargo Ücreti: ${newCamp.shippingFee} TL\n• Kargo Bedava Eşiği: ${newCamp.freeShippingQty} Defter (${newCamp.freeShippingEnabled ? 'Aktif' : 'Pasif'})\n• Hediye Defter Eşiği: ${newCamp.giftMinQty} Defter (${newCamp.giftCampaignEnabled ? 'Aktif' : 'Pasif'})`);
+  triggerStickyNotification('✅ Kampanya ve kargo ayarları kaydedildi! Canlıya aktarılıyor...');
+  publishStoreDataToCloud();
 }
 
 function handleResetCampaignSettings() {
@@ -1637,7 +1787,8 @@ function handleAddFaq(e) {
 
   renderFAQs();
   renderAdminFaqList();
-  triggerStickyNotification(`✅ Yeni soru başarıyla yayınlandı: "${q}"`);
+  triggerStickyNotification(`✅ Yeni soru başarıyla yayınlandı: "${q}"! Canlıya aktarılıyor...`);
+  publishStoreDataToCloud();
 }
 
 function openEditFaqModal(id) {
@@ -1681,7 +1832,8 @@ function handleSaveEditFaq(e) {
   renderFAQs();
   renderAdminFaqList();
   closeEditFaqModal();
-  triggerStickyNotification('✅ Soru başarıyla güncellendi!');
+  triggerStickyNotification('✅ Soru başarıyla güncellendi! Canlıya aktarılıyor...');
+  publishStoreDataToCloud();
 }
 
 function handleDeleteFromEditFaqModal() {
@@ -1699,7 +1851,8 @@ function deleteFaq(id) {
     localStorage.setItem('kafkef_faqs_v1', JSON.stringify(faqs));
     renderFAQs();
     renderAdminFaqList();
-    triggerStickyNotification('Soru silindi.');
+    triggerStickyNotification('🗑️ Soru silindi. Canlıya aktarılıyor...');
+    publishStoreDataToCloud();
   }
 }
 
@@ -1782,6 +1935,7 @@ function toggleSectionVisibility(key, visible) {
   localStorage.setItem('kafkef_sections_visibility_v1', JSON.stringify(vis));
   applySectionVisibility();
   renderAdminSectionsList();
+  publishStoreDataToCloud();
 }
 
 function deleteSectionWithConfirm(key, name) {
@@ -2008,7 +2162,8 @@ function handleSaveInteriorModalForm(e) {
   localStorage.setItem('kafkef_interior_content_v1', JSON.stringify(newContent));
   applyInteriorContent();
   closeEditInteriorModal();
-  triggerStickyNotification('✅ "Defterimizin İçini İnceleyin" bölümü güncellendi!');
+  triggerStickyNotification('✅ "Defterimizin İçini İnceleyin" bölümü güncellendi! Canlıya aktarılıyor...');
+  publishStoreDataToCloud();
 }
 
 // 17. GÜVEN & KALİTE ŞERİDİ YÖNETİMİ (TAM KONTROL, SİLME, MADDE EKLEME/ÇIKARMA & DÜZENLEME)
@@ -2123,7 +2278,8 @@ function handleSaveTrustStripModalForm(e) {
   localStorage.setItem('kafkef_trust_items_v2', JSON.stringify(tempTrustItems));
   renderTrustStrip();
   closeEditTrustStripModal();
-  triggerStickyNotification('✅ Güven ve Kalite Şeridi güncellendi!');
+  triggerStickyNotification('✅ Güven ve Kalite Şeridi güncellendi! Canlıya aktarılıyor...');
+  publishStoreDataToCloud();
 }
 
 function handleResetTrustStrip() {
@@ -2176,6 +2332,14 @@ function handleImageFileUpload(e, targetInputId, previewId) {
         const pText = preview.querySelector('span');
         if (pText) pText.textContent = '✓ Fotoğraf Yüklendi';
       }
+
+      if (targetInputId === 'editProdImage') {
+        if (!currentEditGallery) currentEditGallery = [];
+        if (currentEditGallery.length === 0) currentEditGallery.push(compressedDataUrl);
+        else currentEditGallery[0] = compressedDataUrl;
+        renderEditGalleryThumbs();
+      }
+
       triggerStickyNotification('📸 Fotoğraf başarıyla seçildi ve yüklendi!');
     };
     img.src = rawData;
@@ -2229,6 +2393,7 @@ async function publishStoreDataToCloud() {
       trustItems: typeof getTrustItems === 'function' ? getTrustItems() : DEFAULT_TRUST_ITEMS,
       interiorContent: typeof getInteriorContent === 'function' ? getInteriorContent() : DEFAULT_INTERIOR_CONTENT,
       faqs: typeof getFAQs === 'function' ? getFAQs() : DEFAULT_FAQS,
+      siteContent: typeof getSiteContent === 'function' ? getSiteContent() : DEFAULT_SITE_CONTENT,
       liveEdits: JSON.parse(localStorage.getItem('kafkef_live_edits') || '{}'),
       sectionVisibility: typeof getSectionVisibility === 'function' ? getSectionVisibility() : DEFAULT_SECTION_VISIBILITY
     };
@@ -2306,6 +2471,9 @@ async function loadGlobalStoreData() {
         if (data.sectionVisibility) {
           localStorage.setItem('kafkef_sections_visibility_v1', JSON.stringify(data.sectionVisibility));
         }
+        if (data.siteContent) {
+          localStorage.setItem('kafkef_site_content_v1', JSON.stringify(data.siteContent));
+        }
         if (data.liveEdits) {
           localStorage.setItem('kafkef_live_edits', JSON.stringify(data.liveEdits));
         }
@@ -2313,6 +2481,7 @@ async function loadGlobalStoreData() {
         // Bileşenleri yeni global verilerle tekrar çiz
         renderProducts();
         renderTrustStrip();
+        applySiteContent();
         applySectionVisibility();
         applyInteriorContent();
         applyLiveEdits();

@@ -204,6 +204,16 @@
     }
   ],
   "liveEdits": {},
+  "siteContent": {
+    "announce1": "🚚 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!",
+    "announce2": "📖 <strong>Arapça İlk Adım Defteri</strong> Satışta! Sadece <strong>240 TL</strong> (Aynı Gün Kargo)",
+    "announce3": "✨ <strong>Sticker Kitaplarımız & Yeni Defterlerimiz</strong> Çok Yakında Sizinle!",
+    "heroBadge": "🌸 ŞU ANDA SATIŞTA · KÂFKEF NOT",
+    "heroTitle": "Arapça İlk Adım <span>Defteri</span>",
+    "heroDesc": "<strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>Arapça'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, kaliteli ve pürüzsüz yazı kağıdı.",
+    "instagramUrl": "https://www.instagram.com/kafkefnot/",
+    "whatsappPhone": "0555 123 45 67"
+  },
   "sectionVisibility": {
     "announcement": true,
     "highlights": true,
