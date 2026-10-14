@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T18:02:36.153Z",
+  "updatedAt": "2026-10-14T18:03:22.705Z",
   "products": [
     {
       "id": "kafkef-ilk-adim-defteri",
@@ -111,7 +111,7 @@
     },
     {
       "id": "kafkef-sticker-book",
-      "title": "Kâfkef Arapça Sticker Book · 16 Yaprak",
+      "title": "Kâfkef Arapça Sticker'lı Defter",
       "subtitle": "Birbirinden Güzel Etiketler & Ayraçlar",
       "category": "sticker",
       "price": 150,
@@ -119,7 +119,7 @@
       "status": "upcoming",
       "badges": [
         "Çok Yakında Sizinle",
-        "Birbirinden Güzel Stickerlar"
+        "Ön Talep Açık"
       ],
       "image": "assets/defter_ic_sayfa.jpg",
       "gallery": [
@@ -127,7 +127,7 @@
       ],
       "arabicLetter": "ن",
       "arabicSub": "المُلْصَقَات الجَمِيلَة",
-      "desc": "Birbirinden güzel Arapça çıkartmalar, motivasyon sözleri (Mâşâallâh, Bârekallâh), seviye etiketleri ve renkli konu ayraçlarıyla defterlerinizi süsleyecek sticker kitabımız çok yakında sizlerle!",
+      "desc": "Birbirinden güzel Arapça çıkartmalar, motivasyon sözleri (Mâşâallâh, Bârekallâh), seviye etiketleri ve renkli konu ayraçlarıyla defterlerinizi süsleyecek sticker'lı defter çok yakında sizlerle!",
       "features": [
         "16 Dolu Sayfa",
         "400+ Lüks Çıkartma",
