@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T18:02:18.838Z",
+  "updatedAt": "2026-10-14T18:02:36.153Z",
   "products": [
     {
       "id": "kafkef-ilk-adim-defteri",
@@ -86,7 +86,7 @@
     },
     {
       "id": "kafkef-dil-ajandasi",
-      "title": "90 Günlük Arapça Çalışma Ajandası",
+      "title": "Arapça Çalışma Ajandası",
       "subtitle": "Hedef & Alışkanlık Takipçisi",
       "category": "ajanda",
       "price": 260,
@@ -94,7 +94,7 @@
       "status": "upcoming",
       "badges": [
         "Çok Yakında Sizinle",
-        "Planlayıcı"
+        "Ön Talep Açık"
       ],
       "image": "assets/defter_ic_sayfa.jpg",
       "gallery": [
@@ -102,7 +102,7 @@
       ],
       "arabicLetter": "ط",
       "arabicSub": "المُفَكِّرَة",
-      "desc": "Arapça ezberlerinizi ve günlük çalışma sürelerinizi disipline sokacak 90 günlük rehber ajandanız çok yakında sizlerle.",
+      "desc": "Arapça ezberlerinizi ve günlük çalışma sürelerinizi disipline sokacak rehber ajandanız çok yakında sizlerle.",
       "features": [
         "Tarihsiz Süresiz Kullanım",
         "Pomodoro Takipçisi",
