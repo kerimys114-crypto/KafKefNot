@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-14T20:30:00Z",
+  "products": [
+    {
+      "id": "kafkef-ilk-adim-defteri",
+      "title": "Arapça İlk Adım Defteri",
+      "subtitle": "Kelime · Cümle · Dilbilgisi · Pratik",
+      "category": "defter",
+      "price": 240,
+      "oldPrice": 290,
+      "status": "active",
+      "badges": [
+        "Şu Anda Satışta",
+        "3 Adete Kargo Bedava",
+        "5 Adete 1 Hediye!"
+      ],
+      "image": "assets/defter_kapak_kus.jpg",
+      "gallery": [
+        "assets/defter_kapak_kus.jpg",
+        "assets/defter_on_yuz.jpg",
+        "assets/defter_ic_sayfa.jpg",
+        "assets/defter_samdan_1.jpg"
+      ],
+      "arabicLetter": "ق ك",
+      "arabicSub": "اللُّغَةُ العَرَبِيَّة",
+      "desc": "Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Özel dokulu pürüzsüz kaliteli yazı kağıdı.",
+      "features": [
+        "Sağdan Sola Özel Ciltleme",
+        "Kelime · Cümle · Dilbilgisi Şablonları",
+        "1. Hamur Kaliteli Lüks Kağıt",
+        "Özel Çiçek & Kuş Motifli Lüks Sert Kapak"
+      ]
+    },
+    {
+      "id": "kafkef-kelime-defteri",
+      "title": "Arapça Kelime Defteri · Mu'cem Notu",
+      "subtitle": "Kök-Vezin Tablolu · Sağdan Sola",
+      "category": "defter",
+      "price": 240,
+      "oldPrice": null,
+      "status": "upcoming",
+      "badges": [
+        "Çok Yakında Sizinle",
+        "Ön Talep Açık"
+      ],
+      "image": "assets/defter_on_yuz.jpg",
+      "gallery": [
+        "assets/defter_on_yuz.jpg"
+      ],
+      "arabicLetter": "ق",
+      "arabicSub": "المُعْجَم الشَّامِل",
+      "desc": "Fa-Ayn-Lam sülasi kök harfleri, mazi-muzari fiil çekimleri ve cem'i/çoğul sütunları ile Arapça kelime haznenizi zirveye taşıyacak özel kelime defterimiz çok yakında sizlerle buluşuyor.",
+      "features": [
+        "Sülasi Kök Tablosu",
+        "Mazi-Muzari-Masdar Düzeni",
+        "Lüks 1. Hamur Kağıt",
+        "160 Sayfa"
+      ]
+    },
+    {
+      "id": "kafkef-sarf-nahiv-defteri",
+      "title": "Sarf & Nahiv Gramer Defteri",
+      "subtitle": "İrab Tahlil Tabloları & Kurallar",
+      "category": "sarf",
+      "price": 240,
+      "oldPrice": null,
+      "status": "upcoming",
+      "badges": [
+        "Çok Yakında Sizinle",
+        "Gramer Serisi"
+      ],
+      "image": "assets/defter_samdan_1.jpg",
+      "gallery": [
+        "assets/defter_samdan_1.jpg"
+      ],
+      "arabicLetter": "ك",
+      "arabicSub": "الصَّرْف وَالنَّحْو",
+      "desc": "İlahiyat, hazırlık ve medrese öğrencileri için cümle tahlilini (fail, mef'ul, mübteda, haber) kolaylaştıran özel gramer defterimiz çok yakında stoklarda.",
+      "features": [
+        "İrab Tahlil Cetveli",
+        "Fiil Çekim Şemaları",
+        "Sert Kapak",
+        "144 Sayfa"
+      ]
+    },
+    {
+      "id": "kafkef-dil-ajandasi",
+      "title": "90 Günlük Arapça Çalışma Ajandası",
+      "subtitle": "Hedef & Alışkanlık Takipçisi",
+      "category": "ajanda",
+      "price": 260,
+      "oldPrice": null,
+      "status": "upcoming",
+      "badges": [
+        "Çok Yakında Sizinle",
+        "Planlayıcı"
+      ],
+      "image": "assets/defter_ic_sayfa.jpg",
+      "gallery": [
+        "assets/defter_ic_sayfa.jpg"
+      ],
+      "arabicLetter": "ط",
+      "arabicSub": "المُفَكِّرَة",
+      "desc": "Arapça ezberlerinizi ve günlük çalışma sürelerinizi disipline sokacak 90 günlük rehber ajandanız çok yakında sizlerle.",
+      "features": [
+        "Tarihsiz Süresiz Kullanım",
+        "Pomodoro Takipçisi",
+        "Ezber Çizelgesi"
+      ]
+    },
+    {
+      "id": "kafkef-sticker-book",
+      "title": "Kâfkef Arapça Sticker Book · 16 Yaprak",
+      "subtitle": "Birbirinden Güzel Etiketler & Ayraçlar",
+      "category": "sticker",
+      "price": 150,
+      "oldPrice": null,
+      "status": "upcoming",
+      "badges": [
+        "Çok Yakında Sizinle",
+        "Birbirinden Güzel Stickerlar"
+      ],
+      "image": "assets/defter_ic_sayfa.jpg",
+      "gallery": [
+        "assets/defter_ic_sayfa.jpg"
+      ],
+      "arabicLetter": "ن",
+      "arabicSub": "المُلْصَقَات الجَمِيلَة",
+      "desc": "Birbirinden güzel Arapça çıkartmalar, motivasyon sözleri (Mâşâallâh, Bârekallâh), seviye etiketleri ve renkli konu ayraçlarıyla defterlerinizi süsleyecek sticker kitabımız çok yakında sizlerle!",
+      "features": [
+        "16 Dolu Sayfa",
+        "400+ Lüks Çıkartma",
+        "Suya Dayanıklı Mat Kaplama"
+      ]
+    }
+  ],
+  "campaignSettings": {
+    "shippingFee": 115,
+    "freeShippingQty": 3,
+    "giftMinQty": 5,
+    "giftRewardQty": 1,
+    "defaultNotebookPrice": 240,
+    "freeShippingEnabled": true,
+    "giftCampaignEnabled": true
+  },
+  "trustItems": [
+    {
+      "icon": "🚚",
+      "title": "Aynı Gün Kargo",
+      "desc": "15:00'e kadar verilen siparişlerde"
+    },
+    {
+      "icon": "📖",
+      "title": "Sağdan Sola Özel Cilt",
+      "desc": "Arapça yazımına özel mimari"
+    },
+    {
+      "icon": "🌸",
+      "title": "Pedagojik Tasarım",
+      "desc": "Kelime ve cümle pratiğini kolaylaştıran özel düzen"
+    },
+    {
+      "icon": "🛡️",
+      "title": "Güvenli Alışveriş",
+      "desc": "256-Bit SSL & Havuz Koruması"
+    }
+  ],
+  "interiorContent": {
+    "tag": "BÜYÜK HAYALLER İÇİN KÜÇÜK BİR DEFTER",
+    "title": "Defterimizin İçini İnceleyin",
+    "subtitle": "«دفتر صغير لأحلام كبيرة» — Kelime, cümle, dilbilgisi ve pratik alanlarıyla Arapça öğrenme sürecinizdeki en ilham verici yol arkadaşınız.",
+    "heading": "Arapça'nın Ruhuyla Uyumlu Pedagojik Düzen",
+    "desc": "Kâfkef Not defteri, sıradan bir çizgili defter değildir. Arapça öğrenirken en çok zorlanılan kelime ezberi, kök analizi, harekeleme ve cümle kurma pratiğini adım adım kolaylaştırmak için özel olarak kurgulanmıştır.",
+    "feat1Icon": "📖",
+    "feat1Title": "Sağdan Sola (RTL) Açılan Ciltleme:",
+    "feat1Desc": "Arap alfabesinin yazım yönüne göre ters açılır, eliniz spirale veya cilde çarpmaz.",
+    "feat2Icon": "🌿",
+    "feat2Title": "Zarif Motifli Sert Kapak:",
+    "feat2Desc": "Kuş ve çiçek işlemeleriyle çalışma masanıza estetik ve huzur katar.",
+    "image": "assets/defter_ic_sayfa.jpg",
+    "btnText": "🛒 240 TL · Hemen Satın Al"
+  },
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "Defter kağıdının kalitesi ve dokusu nasıldır?",
+      "answer": "Defterlerimizde 1. hamur yüksek kaliteli lüks kağıt kullanılmıştır. Jel, roller, tükenmez ve kurşun kalemlerle pürüzsüz, dağılma yapmayan son derece akıcı ve keyifli bir yazı deneyimi sunar."
+    },
+    {
+      "id": "faq-2",
+      "question": "Kampanyalardan nasıl yararlanırım?",
+      "answer": "Sepetinize 3 adet defter eklediğinizde kargo ücreti otomatik olarak 0 TL olur. 5 adet eklediğinizde ise 1 defter hediye edilerek faturanızdan 240 TL düşülür ve kargo yine ücretsiz olur."
+    },
+    {
+      "id": "faq-3",
+      "question": "Siparişler ne zaman kargolanır?",
+      "answer": "Hafta içi saat 15:00'e kadar verilen tüm siparişler aynı gün özenli ve korumalı paketlemeyle kargoya teslim edilir."
+    },
+    {
+      "id": "faq-4",
+      "question": "Sağdan sola açılmanın faydası nedir?",
+      "answer": "Arap alfabesi sağdan sola yazıldığı için standart defterlerde el sürekli spirale veya sırta çarpar. Kâfkef Not ters açılır yapısıyla kesintisiz ve rahat bir yazım deneyimi sunar."
+    }
+  ],
+  "liveEdits": {},
+  "sectionVisibility": {
+    "announcement": true,
+    "highlights": true,
+    "hero": true,
+    "trust": true,
+    "campaigns": true,
+    "products": true,
+    "interior": true,
+    "mission": true,
+    "faqs": true
+  }
+}
