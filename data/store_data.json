@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T20:30:00Z",
+  "updatedAt": "2026-10-14T18:02:03.754Z",
   "products": [
     {
       "id": "kafkef-ilk-adim-defteri",
@@ -34,7 +34,7 @@
     },
     {
       "id": "kafkef-kelime-defteri",
-      "title": "Arapça Kelime Defteri · Mu'cem Notu",
+      "title": "Arapça Kelime Defteri",
       "subtitle": "Kök-Vezin Tablolu · Sağdan Sola",
       "category": "defter",
       "price": 240,
@@ -50,7 +50,7 @@
       ],
       "arabicLetter": "ق",
       "arabicSub": "المُعْجَم الشَّامِل",
-      "desc": "Fa-Ayn-Lam sülasi kök harfleri, mazi-muzari fiil çekimleri ve cem'i/çoğul sütunları ile Arapça kelime haznenizi zirveye taşıyacak özel kelime defterimiz çok yakında sizlerle buluşuyor.",
+      "desc": "",
       "features": [
         "Sülasi Kök Tablosu",
         "Mazi-Muzari-Masdar Düzeni",
@@ -203,7 +203,6 @@
       "answer": "Arap alfabesi sağdan sola yazıldığı için standart defterlerde el sürekli spirale veya sırta çarpar. Kâfkef Not ters açılır yapısıyla kesintisiz ve rahat bir yazım deneyimi sunar."
     }
   ],
-  "liveEdits": {},
   "siteContent": {
     "announce1": "🚚 <strong>3 Defter Alana KARGO BEDAVA!</strong> • <strong>5 Defter Alana 1 Defter HEDİYE</strong> + Kargo Bedava!",
     "announce2": "📖 <strong>Arapça İlk Adım Defteri</strong> Satışta! Sadece <strong>240 TL</strong> (Aynı Gün Kargo)",
@@ -214,6 +213,7 @@
     "instagramUrl": "https://www.instagram.com/kafkefnot/",
     "whatsappPhone": "0555 123 45 67"
   },
+  "liveEdits": {},
   "sectionVisibility": {
     "announcement": true,
     "highlights": true,
