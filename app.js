@@ -1697,6 +1697,7 @@ const DEFAULT_SECTION_VISIBILITY = {
   campaigns: true,
   products: true,
   interior: true,
+  mission: true,
   faqs: true
 };
 
@@ -1707,6 +1708,7 @@ const SECTION_CONFIGS = [
   { key: 'campaigns', id: 'kampanyalar', name: '🎯 Kampanyalar Bölümü (3 Alana Kargo Bedava & 5 Alana 1 Hediye)' },
   { key: 'products', id: 'urunler', name: '📚 Defter Koleksiyonu & Ürünler Vitrini' },
   { key: 'interior', id: 'ic-sayfalar', name: '📖 "Defterimizin İçini İnceleyin" Bölümü' },
+  { key: 'mission', id: 'misyon-vizyon-bolumu', name: '🌱 Misyon & Vizyonumuz Bölümü' },
   { key: 'faqs', id: 'sss-bolumu', name: '❓ Sıkça Sorulan Sorular & Bilgiler Bölümü' }
 ];
 

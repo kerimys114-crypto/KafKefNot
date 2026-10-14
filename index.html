@@ -65,6 +65,7 @@
           <li><a href="#urunler" class="nav-link" onclick="renderProducts('active')">Arapça İlk Adım Defteri (240 TL)</a></li>
           <li><a href="#kampanyalar" class="nav-link">Kampanyalar</a></li>
           <li><a href="#ic-sayfalar" class="nav-link">İç Sayfa Tasarımı</a></li>
+          <li><a href="#misyon-vizyon-bolumu" class="nav-link">Misyon & Vizyon</a></li>
           <li><a href="#urunler" class="nav-link" onclick="renderProducts('upcoming')">Çok Yakında Gelecekler</a></li>
           <li>
             <a href="https://www.instagram.com/kafkefnot/" target="_blank" rel="noopener" class="nav-link" style="color:var(--primary);font-weight:700">
@@ -105,6 +106,12 @@
           <img src="assets/defter_ic_sayfa.jpg" alt="İç Sayfa">
         </div>
         <span class="story-title">İç Sayfalar</span>
+      </a>
+      <a href="#misyon-vizyon-bolumu" class="story-bubble-item">
+        <div class="story-circle ring-gold">
+          <span class="story-icon-inner">🌱</span>
+        </div>
+        <span class="story-title">Misyonumuz</span>
       </a>
       <a href="#kampanyalar" class="story-bubble-item">
         <div class="story-circle ring-gold">
@@ -381,6 +388,117 @@
           <img id="interiorPageImg" src="assets/defter_ic_sayfa.jpg" alt="Kâfkef Defter İç Sayfa" style="width:100%;max-width:440px;border-radius:16px;box-shadow:var(--shadow-lg);object-fit:cover" onclick="openPhotoModal('assets/defter_ic_sayfa.jpg', 'Kâfkef Not İç Sayfası')">
           <small style="display:block;margin-top:8px;color:var(--text-muted);font-size:12px">Büyütmek için fotoğrafa tıklayabilirsiniz</small>
         </div>
+      </div>
+    </section>
+
+    <!-- MİSYON VE VİZYON BÖLÜMÜ (DİNAMİK YÖNETİLEBİLİR & CANLI DÜZENLENEBİLİR) -->
+    <section class="container" style="margin-bottom:75px" id="misyon-vizyon-bolumu">
+      <!-- Admin Section Toolbar -->
+      <div class="admin-section-bar" data-section-for="mission" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🌱</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Misyon & Vizyon Bölümü</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="toggleLiveEditMode()" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Bu Bölümdeki Yazıları Canlı Düzenle
+          </button>
+          <button onclick="deleteSectionWithConfirm('mission', 'Misyon ve Vizyon Bölümü')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ Bu Bölümü Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
+
+      <div class="section-head" style="text-align:center;margin-bottom:34px">
+        <span class="section-tag" data-live-edit="missionSectionTag">DEĞERLERİMİZ VE HEDEFLERİMİZ</span>
+        <h2 class="section-title" data-live-edit="missionSectionTitle" style="font-family:var(--font-serif);font-size:32px;margin-top:6px">
+          Misyonumuz ve Gelecek Vizyonumuz
+        </h2>
+        <p class="section-subtitle" data-live-edit="missionSectionSubtitle" style="max-width:700px;margin:8px auto 0">
+          Arapça öğrenimini masanızda rehberlik eden güvenilir bir yol arkadaşına dönüştürüyor; geleceğe ilham veren etkileyici tasarımlar hazırlıyoruz.
+        </p>
+      </div>
+
+      <div class="mission-vision-grid">
+        <!-- 1. MİSYON KARTI (BUGÜNÜMÜZ) -->
+        <article class="mission-card mission-today">
+          <div class="mission-card-badge">
+            <span>🌱 BUGÜNÜMÜZ · MİSYONUMUZ</span>
+          </div>
+          <div class="mission-card-header">
+            <div class="mission-icon-box">🧭</div>
+            <div>
+              <h3 class="mission-card-title" data-live-edit="missionCard1Title">Arapça Öğreniminde Güvenilir Rehberlik</h3>
+              <span class="mission-card-motto">«Planlı, Motive Edici & Kalıcı Öğrenim»</span>
+            </div>
+          </div>
+          <p class="mission-card-desc" data-live-edit="missionCard1Desc">
+            Bugün en temel amacımız; güvenilir şekilde özellikle <strong>Arapça öğreniminde rehberlik sağlayabilecek defterler</strong> tasarlayıp insanların hizmetine sunmaktır. Dil öğrenim yolculuğunu hem <strong>daha planlı</strong>, hem de her sayfada <strong>daha motive edici ve ilham dolu</strong> bir hale getirmek için titizlikle üretiyoruz.
+          </p>
+          <div class="mission-points-list">
+            <div class="mission-point-item">
+              <span class="point-check">✓</span>
+              <div>
+                <strong data-live-edit="mPoint1T">Pedagojik ve Sistematik Düzen:</strong>
+                <p data-live-edit="mPoint1D">Kelime, kök analizi ve cümle pratiklerini zahmetsizce zihne yerleştiren özel sayfa mimarisi.</p>
+              </div>
+            </div>
+            <div class="mission-point-item">
+              <span class="point-check">✓</span>
+              <div>
+                <strong data-live-edit="mPoint2T">Güçlü Motivasyon & Alışkanlık:</strong>
+                <p data-live-edit="mPoint2D">Her gün çalışma isteği uyandıran naif kapak motifleri ve pürüzsüz yazı hazzı.</p>
+              </div>
+            </div>
+            <div class="mission-point-item">
+              <span class="point-check">✓</span>
+              <div>
+                <strong data-live-edit="mPoint3T">Sağdan Sola (RTL) Doğal Akış:</strong>
+                <p data-live-edit="mPoint3D">Arap alfabesinin yazım yönüne göre ters açılan, bileği yormayan lüks dikişli ciltleme.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. VİZYON KARTI (GELECEĞİMİZ) -->
+        <article class="mission-card vision-future">
+          <div class="mission-card-badge vision-badge">
+            <span>✨ GELECEĞİMİZ · VİZYONUMUZ</span>
+          </div>
+          <div class="mission-card-header">
+            <div class="mission-icon-box vision-icon-box">🚀</div>
+            <div>
+              <h3 class="mission-card-title" data-live-edit="visionCardTitle">Her Yaşa ve Seviyeye Yön Veren Defterler</h3>
+              <span class="mission-card-motto">«Zengin Çeşitlilik, Üstün Kalite & Rehberlik»</span>
+            </div>
+          </div>
+          <p class="mission-card-desc" data-live-edit="visionCardDesc">
+            Gelecekte ise ürün çeşitlerimizi adım adım artırarak; <strong>her yaş kategorisine</strong> ve <strong>her eğitim seviyesine uygun</strong> kaliteli, etkileyici ve yön verici defterler tasarlamayı hedefliyoruz. Masanızda sadece bir kırtasiye ürünü değil, hayallerinize ve hedeflerinize yön veren kalıcı bir başucu eseri bırakmak istiyoruz.
+          </p>
+          <div class="mission-points-list">
+            <div class="mission-point-item">
+              <span class="point-check star">★</span>
+              <div>
+                <strong data-live-edit="vPoint1T">Her Yaş ve Eğitim Kademesi:</strong>
+                <p data-live-edit="vPoint1D">Başlangıçtan ileri seviyeye, öğrencilerden akademisyenlere kadar herkes için zengin defter serisi.</p>
+              </div>
+            </div>
+            <div class="mission-point-item">
+              <span class="point-check star">★</span>
+              <div>
+                <strong data-live-edit="vPoint2T">Yön Verici & Dönüştürücü Tasarımlar:</strong>
+                <p data-live-edit="vPoint2D">Sıradan çizgilerin ötesine geçen; düşünmeye, üretmeye ve planlı yaşamaya sevk eden kurgular.</p>
+              </div>
+            </div>
+            <div class="mission-point-item">
+              <span class="point-check star">★</span>
+              <div>
+                <strong data-live-edit="vPoint3T">Kusursuz Butik Kalite:</strong>
+                <p data-live-edit="vPoint3D">Mürekkep geçirmeyen dayanıklı lüks kağıtlar ve estetik zanaat standartları.</p>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -1336,10 +1454,11 @@
       </div>
 
       <div class="footer-col">
-        <h4>Mağaza Yönetimi</h4>
+        <h4>Mağaza & Hakkımızda</h4>
         <ul class="footer-links">
-          <li><a href="javascript:void(0)" onclick="openAdminAccess()">🔒 Yönetici Girişi</a></li>
+          <li><a href="#misyon-vizyon-bolumu">🌱 Misyonumuz ve Vizyonumuz</a></li>
           <li><a href="#ic-sayfalar">İç Sayfa Önizlemesi</a></li>
+          <li><a href="javascript:void(0)" onclick="openAdminAccess()">🔒 Yönetici Girişi</a></li>
           <li><a href="https://www.instagram.com/kafkefnot/" target="_blank" rel="noopener">Müşteri Destek / Instagram</a></li>
         </ul>
       </div>
