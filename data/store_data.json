@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T18:02:03.754Z",
+  "updatedAt": "2026-10-14T18:02:18.838Z",
   "products": [
     {
       "id": "kafkef-ilk-adim-defteri",
@@ -60,7 +60,7 @@
     },
     {
       "id": "kafkef-sarf-nahiv-defteri",
-      "title": "Sarf & Nahiv Gramer Defteri",
+      "title": "Sarf  Defteri",
       "subtitle": "İrab Tahlil Tabloları & Kurallar",
       "category": "sarf",
       "price": 240,
@@ -68,7 +68,7 @@
       "status": "upcoming",
       "badges": [
         "Çok Yakında Sizinle",
-        "Gramer Serisi"
+        "Ön Talep Açık"
       ],
       "image": "assets/defter_samdan_1.jpg",
       "gallery": [
