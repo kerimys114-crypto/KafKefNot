@@ -205,34 +205,53 @@
     </section>
 
     <!-- BOUTIQUE TRUST BADGES STRIP (GÜVEN & KALİTE STANDARTLARI) -->
-    <div class="container" style="margin:20px auto 35px">
-      <div class="trust-strip">
+    <div class="container" id="guven-seridi-bolumu" style="margin:20px auto 35px">
+      <!-- Admin Section Toolbar -->
+      <div class="admin-section-bar" data-section-for="trust" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">🛡️</span>
+          <span style="font-size:13px;font-weight:800;color:var(--primary)">Güven & Kalite Standartları Şeridi</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="openEditTrustStripModal()" style="background:var(--primary);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✏️ Bu Şeridi Düzenle
+          </button>
+          <button onclick="toggleLiveEditMode()" style="background:#5E1729;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            ✍️ Canlı Yazı Değiştir
+          </button>
+          <button onclick="deleteSectionWithConfirm('trust', 'Güven ve Kalite Şeridi')" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">
+            🗑️ Şeridi Siteden Kaldır (Sil)
+          </button>
+        </div>
+      </div>
+
+      <div class="trust-strip" id="trustStripContainer">
         <div class="trust-strip-item">
-          <span class="trust-icon">🚚</span>
+          <span class="trust-icon" data-live-edit="trustIcon_0">🚚</span>
           <div>
-            <strong>Aynı Gün Kargo</strong>
-            <p>15:00'e kadar verilen siparişlerde</p>
+            <strong data-live-edit="trustTitle_0">Aynı Gün Kargo</strong>
+            <p data-live-edit="trustDesc_0">15:00'e kadar verilen siparişlerde</p>
           </div>
         </div>
         <div class="trust-strip-item">
-          <span class="trust-icon">📖</span>
+          <span class="trust-icon" data-live-edit="trustIcon_1">📖</span>
           <div>
-            <strong>Sağdan Sola Özel Cilt</strong>
-            <p>Arapça yazımına özel mimari</p>
+            <strong data-live-edit="trustTitle_1">Sağdan Sola Özel Cilt</strong>
+            <p data-live-edit="trustDesc_1">Arapça yazımına özel mimari</p>
           </div>
         </div>
         <div class="trust-strip-item">
-          <span class="trust-icon">✒️</span>
+          <span class="trust-icon" data-live-edit="trustIcon_2">🌸</span>
           <div>
-            <strong>Mürekkep Geçirmez</strong>
-            <p>1. hamur lüks kaliteli kağıt dokusu</p>
+            <strong data-live-edit="trustTitle_2">Pedagojik Tasarım</strong>
+            <p data-live-edit="trustDesc_2">Kelime ve cümle pratiğini kolaylaştıran özel düzen</p>
           </div>
         </div>
         <div class="trust-strip-item">
-          <span class="trust-icon">🛡️</span>
+          <span class="trust-icon" data-live-edit="trustIcon_3">🛡️</span>
           <div>
-            <strong>Güvenli Alışveriş</strong>
-            <p>256-Bit SSL & Havuz Koruması</p>
+            <strong data-live-edit="trustTitle_3">Güvenli Alışveriş</strong>
+            <p data-live-edit="trustDesc_3">256-Bit SSL & Havuz Koruması</p>
           </div>
         </div>
       </div>
@@ -494,7 +513,7 @@
               <span class="point-check star">★</span>
               <div>
                 <strong data-live-edit="vPoint3T">Kusursuz Butik Kalite:</strong>
-                <p data-live-edit="vPoint3D">Mürekkep geçirmeyen dayanıklı lüks kağıtlar ve estetik zanaat standartları.</p>
+                <p data-live-edit="vPoint3D">1. hamur dayanıklı lüks kağıtlar ve estetik butik zanaat standartları.</p>
               </div>
             </div>
           </div>
@@ -1408,6 +1427,42 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- GÜVEN VE KALİTE ŞERİDİ DÜZENLEME MODALI (POPUP) -->
+  <div class="modal-overlay" id="editTrustStripModal">
+    <div class="modal-box" style="max-width:680px;padding:28px">
+      <button class="modal-close-btn" onclick="closeEditTrustStripModal()">✕</button>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--border-light);padding-bottom:12px">
+        <span style="font-size:24px">🛡️</span>
+        <div>
+          <h2 style="font-size:18px;font-weight:800;color:var(--primary)">Güven & Kalite Şeridini Düzenle</h2>
+          <div style="font-size:12px;color:var(--text-muted)">Güvence kartlarının simgelerini, başlıklarını ve yazılarını düzenleyin; yeni madde ekleyin veya silin.</div>
+        </div>
+      </div>
+
+      <div id="modalTrustItemsContainer" style="max-height:55vh;overflow-y:auto;padding-right:6px;margin-bottom:16px">
+        <!-- app.js tarafından renderModalTrustItemsList() ile doldurulur -->
+      </div>
+
+      <div style="margin-bottom:16px">
+        <button type="button" onclick="addModalTrustItem()" style="background:#FAF0F4;color:var(--primary);border:1px dashed #E8B9C6;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:700;width:100%;cursor:pointer">
+          ➕ Yeni Güvence Maddesi Ekle
+        </button>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="button" onclick="handleSaveTrustStripModalForm()" class="btn-primary" style="flex:1;justify-content:center;padding:12px">
+          💾 Değişiklikleri Kaydet
+        </button>
+        <button type="button" onclick="handleResetTrustStrip()" style="background:#F3F4F6;color:#4B5563;border:1px solid #D1D5DB;padding:12px 16px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">
+          🔄 Orijinale Dön
+        </button>
+        <button type="button" onclick="deleteSectionWithConfirm('trust', 'Güven ve Kalite Şeridi'); closeEditTrustStripModal();" style="background:#fee2e2;color:#b91c1c;border:none;padding:12px 16px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">
+          🗑️ Şeridi Kaldır (Sil)
+        </button>
+      </div>
     </div>
   </div>
 

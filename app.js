@@ -20,8 +20,8 @@ const DEFAULT_PRODUCTS = [
     ],
     arabicLetter: 'ق ك',
     arabicSub: 'اللُّغَةُ العَرَبِيَّة',
-    desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Dolma kalemle arkaya sızdırmayan lüks fildişi kağıt.',
-    features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', 'Mürekkep Geçirmez Lüks Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak']
+    desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Özel dokulu pürüzsüz kaliteli yazı kağıdı.',
+    features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', '1. Hamur Kaliteli Lüks Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak']
   },
   {
     id: 'kafkef-kelime-defteri',
@@ -1071,6 +1071,11 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCheckoutIbanDisplay();
   renderWalletUI();
 
+  // Güven Şeridi Başlatma
+  if (typeof renderTrustStrip === 'function') {
+    renderTrustStrip();
+  }
+
   // Site Metinleri ve Canlı Değişiklikleri Uygula
   if (typeof applySiteContent === 'function') {
     applySiteContent();
@@ -1511,8 +1516,8 @@ function handleResetCampaignSettings() {
 const DEFAULT_FAQS = [
   {
     id: 'faq-1',
-    question: 'Kağıt dolma kalemle arkaya geçirir mi?',
-    answer: 'Defterlerimizde 1. hamur lüks kaliteli kağıt kullanılmıştır. Dolma kalem, divit, jel ve mürekkepli kalemlerle arkaya geçme veya kanama yapmaz.'
+    question: 'Defter kağıdının kalitesi ve dokusu nasıldır?',
+    answer: 'Defterlerimizde 1. hamur yüksek kaliteli lüks kağıt kullanılmıştır. Jel, roller, tükenmez ve kurşun kalemlerle pürüzsüz, dağılma yapmayan son derece akıcı ve keyifli bir yazı deneyimi sunar.'
   },
   {
     id: 'faq-2',
@@ -1694,6 +1699,7 @@ const DEFAULT_SECTION_VISIBILITY = {
   announcement: true,
   highlights: true,
   hero: true,
+  trust: true,
   campaigns: true,
   products: true,
   interior: true,
@@ -1705,6 +1711,7 @@ const SECTION_CONFIGS = [
   { key: 'announcement', id: 'duyuru-cubugu', name: '📢 Üst Kayan Duyuru Çubuğu (Ticker)' },
   { key: 'highlights', id: 'story-highlights-bar', name: '🌸 Instagram Hikaye Baloncukları (Highlights)' },
   { key: 'hero', id: 'hero-bolumu', name: '🌟 Giriş / Hero Defter Tanıtım Bölümü' },
+  { key: 'trust', id: 'guven-seridi-bolumu', name: '🛡️ Güven & Kalite Standartları Şeridi' },
   { key: 'campaigns', id: 'kampanyalar', name: '🎯 Kampanyalar Bölümü (3 Alana Kargo Bedava & 5 Alana 1 Hediye)' },
   { key: 'products', id: 'urunler', name: '📚 Defter Koleksiyonu & Ürünler Vitrini' },
   { key: 'interior', id: 'ic-sayfalar', name: '📖 "Defterimizin İçini İnceleyin" Bölümü' },
@@ -1985,5 +1992,130 @@ function handleSaveInteriorModalForm(e) {
   closeEditInteriorModal();
   triggerStickyNotification('✅ "Defterimizin İçini İnceleyin" bölümü güncellendi!');
 }
+
+// 17. GÜVEN & KALİTE ŞERİDİ YÖNETİMİ (TAM KONTROL, SİLME, MADDE EKLEME/ÇIKARMA & DÜZENLEME)
+const DEFAULT_TRUST_ITEMS = [
+  { icon: '🚚', title: 'Aynı Gün Kargo', desc: "15:00'e kadar verilen siparişlerde" },
+  { icon: '📖', title: 'Sağdan Sola Özel Cilt', desc: 'Arapça yazımına özel mimari' },
+  { icon: '🌸', title: 'Pedagojik Tasarım', desc: 'Kelime ve cümle pratiğini kolaylaştıran özel düzen' },
+  { icon: '🛡️', title: 'Güvenli Alışveriş', desc: '256-Bit SSL & Havuz Koruması' }
+];
+
+function getTrustItems() {
+  const stored = localStorage.getItem('kafkef_trust_items_v2');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch (e) { }
+  }
+  return DEFAULT_TRUST_ITEMS;
+}
+
+function renderTrustStrip() {
+  const container = document.getElementById('trustStripContainer');
+  if (!container) return;
+  const items = getTrustItems();
+  container.innerHTML = items.map((item, idx) => `
+    <div class="trust-strip-item" data-trust-index="${idx}">
+      <span class="trust-icon" data-live-edit="trustIcon_${idx}">${item.icon}</span>
+      <div>
+        <strong data-live-edit="trustTitle_${idx}">${item.title}</strong>
+        <p data-live-edit="trustDesc_${idx}">${item.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+let tempTrustItems = [];
+
+function openEditTrustStripModal() {
+  tempTrustItems = JSON.parse(JSON.stringify(getTrustItems()));
+  renderModalTrustItemsList();
+  const modal = document.getElementById('editTrustStripModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeEditTrustStripModal() {
+  const modal = document.getElementById('editTrustStripModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function renderModalTrustItemsList() {
+  const container = document.getElementById('modalTrustItemsContainer');
+  if (!container) return;
+  container.innerHTML = tempTrustItems.map((item, idx) => `
+    <div style="background:#FAF2F5;border:1px solid #E8B9C6;border-radius:12px;padding:14px;margin-bottom:12px;position:relative">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <strong style="color:var(--primary);font-size:13px">Madde #${idx + 1}</strong>
+        <button type="button" onclick="removeModalTrustItem(${idx})" style="background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">
+          🗑️ Sil
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr;gap:10px;margin-bottom:8px">
+        <div class="admin-form-group">
+          <label style="font-size:11px">İkon / Emoji:</label>
+          <input type="text" value="${item.icon}" onchange="updateModalTrustItem(${idx}, 'icon', this.value)" style="text-align:center;font-size:18px">
+        </div>
+        <div class="admin-form-group">
+          <label style="font-size:11px">Başlık:</label>
+          <input type="text" value="${item.title}" onchange="updateModalTrustItem(${idx}, 'title', this.value)">
+        </div>
+      </div>
+      <div class="admin-form-group">
+        <label style="font-size:11px">Alt Açıklama:</label>
+        <input type="text" value="${item.desc}" onchange="updateModalTrustItem(${idx}, 'desc', this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateModalTrustItem(idx, field, value) {
+  if (tempTrustItems[idx]) {
+    tempTrustItems[idx][field] = value;
+  }
+}
+
+function addModalTrustItem() {
+  tempTrustItems.push({
+    icon: '✨',
+    title: 'Yeni Güvence',
+    desc: 'Buraya güvence açıklama metnini yazın'
+  });
+  renderModalTrustItemsList();
+}
+
+function removeModalTrustItem(idx) {
+  if (tempTrustItems.length <= 1) {
+    alert('En az 1 adet güvence maddesi bulunmalıdır.');
+    return;
+  }
+  tempTrustItems.splice(idx, 1);
+  renderModalTrustItemsList();
+}
+
+function handleSaveTrustStripModalForm(e) {
+  if (e) e.preventDefault();
+  localStorage.setItem('kafkef_trust_items_v2', JSON.stringify(tempTrustItems));
+  renderTrustStrip();
+  closeEditTrustStripModal();
+  triggerStickyNotification('✅ Güven ve Kalite Şeridi güncellendi!');
+}
+
+function handleResetTrustStrip() {
+  if (confirm('Güven şeridini orijinal varsayılan haline getirmek istiyor musunuz?')) {
+    localStorage.removeItem('kafkef_trust_items_v2');
+    renderTrustStrip();
+    closeEditTrustStripModal();
+    triggerStickyNotification('🔄 Güven şeridi orijinal haline getirildi.');
+  }
+}
+
 
 
