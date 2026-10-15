@@ -21,7 +21,8 @@ const DEFAULT_PRODUCTS = [
     arabicLetter: 'ق ك',
     arabicSub: 'اللُّغَةُ العَرَبِيَّة',
     desc: 'Büyük Hayaller İçin Küçük Bir Defter (دفتر صغير لأحلام كبيرة). Sağdan sola açılan ergonomik cilt yapısı, kelime, cümle, dilbilgisi ve pratik alanları ile Arapça öğreniminde başucu eseriniz. Özel dokulu pürüzsüz kaliteli yazı kağıdı.',
-    features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', '1. Hamur Kaliteli Lüks Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak']
+    features: ['Sağdan Sola Özel Ciltleme', 'Kelime · Cümle · Dilbilgisi Şablonları', '1. Hamur Kaliteli Lüks Kağıt', 'Özel Çiçek & Kuş Motifli Lüks Sert Kapak'],
+    shopierUrl: 'https://www.shopier.com/KafKefTasarm/51595537'
   },
   {
     id: 'kafkef-kelime-defteri',
@@ -262,9 +263,14 @@ function renderProducts(filter = 'all') {
 
           <!-- Full-width Action Button -->
           ${isActive ? `
-            <button class="fobi-cart-btn" onclick="addToCart('${product.id}')">
-              Sepete Ekle
-            </button>
+            <div style="display:flex;gap:6px">
+              <button class="fobi-cart-btn" onclick="addToCart('${product.id}')" style="flex:1.1;padding:10px 4px;font-size:12.5px">
+                Sepete Ekle
+              </button>
+              <a href="${product.shopierUrl || 'https://www.shopier.com/KafKefTasarm/51595537'}" target="_blank" class="fobi-cart-btn fobi-shopier-btn" style="flex:1;font-size:12px;font-weight:700;padding:10px 4px" title="Shopier 3D Secure ile Güvenli Satın Al">
+                💳 Kartla Al
+              </a>
+            </div>
           ` : `
             <button class="fobi-cart-btn fobi-notify-btn" onclick="notifyMeUpcoming('${product.title}')">
               Haber Ver
@@ -476,9 +482,14 @@ function openQuickView(productId) {
         </div>
 
         ${isActive ? `
-          <button class="checkout-btn" onclick="addToCart('${prod.id}');closeQuickView();">
-            🛒 Hemen Sepete Ekle
-          </button>
+          <div style="display:flex;gap:10px">
+            <button class="checkout-btn" style="flex:1" onclick="addToCart('${prod.id}');closeQuickView();">
+              🛒 Sepete Ekle
+            </button>
+            <a href="${prod.shopierUrl || 'https://www.shopier.com/KafKefTasarm/51595537'}" target="_blank" style="flex:1.2;background:#5B21B6;color:#fff;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:13.5px;font-weight:700;text-decoration:none;padding:12px;box-shadow:0 3px 10px rgba(91,33,182,0.25)">
+              💳 Shopier Kartla Al
+            </a>
+          </div>
         ` : `
           <button class="btn-primary" style="width:100%;justify-content:center" onclick="notifyMeUpcoming('${prod.title}');closeQuickView();">
             🔔 Satışa Çıktığında Haber Ver
@@ -625,6 +636,7 @@ function handleAddProduct(e) {
   const category = document.getElementById('admCategory').value;
   const image = document.getElementById('admImage').value.trim() || 'assets/defter_kapak_kus.jpg';
   const desc = document.getElementById('admDesc').value.trim();
+  const shopierUrl = document.getElementById('admShopierUrl') ? document.getElementById('admShopierUrl').value.trim() : '';
 
   const newId = 'kafkef-custom-' + Date.now();
   const newProd = {
@@ -641,7 +653,8 @@ function handleAddProduct(e) {
     arabicLetter: 'ق ك',
     arabicSub: 'كِتَاب جَدِيد',
     desc,
-    features: ['Sağdan Sola Cilt', 'Lüks 1. Hamur Kağıt', 'Kâfkef Özel Tasarımı']
+    features: ['Sağdan Sola Cilt', 'Lüks 1. Hamur Kağıt', 'Kâfkef Özel Tasarımı'],
+    shopierUrl
   };
 
   PRODUCTS.unshift(newProd);
@@ -864,6 +877,9 @@ function openEditProductModal(prodId) {
   document.getElementById('editProdImage').value = prod.image || '';
   document.getElementById('editProdDesc').value = prod.desc || '';
 
+  const shopierInput = document.getElementById('editProdShopierUrl');
+  if (shopierInput) shopierInput.value = prod.shopierUrl || '';
+
   const pImg = document.getElementById('editProdPreviewImg');
   if (pImg) pImg.src = prod.image || 'assets/defter_kapak_kus.jpg';
   const pWrap = document.getElementById('editProdImagePreview');
@@ -902,12 +918,14 @@ function handleSaveEditProduct(e) {
   const subtitle = document.getElementById('editProdSubtitle').value.trim();
   const image = document.getElementById('editProdImage').value.trim() || prod.image;
   const desc = document.getElementById('editProdDesc').value.trim();
+  const shopierUrl = document.getElementById('editProdShopierUrl') ? document.getElementById('editProdShopierUrl').value.trim() : '';
 
   prod.title = title;
   prod.price = price;
   prod.oldPrice = oldPrice;
   prod.status = status;
   prod.subtitle = subtitle;
+  prod.shopierUrl = shopierUrl;
   
   if (currentEditGallery && currentEditGallery.length > 0) {
     prod.gallery = [...currentEditGallery];
@@ -996,12 +1014,15 @@ function completeCheckoutOrder(e) {
   const address = document.getElementById('coAddress').value.trim();
 
   const payRadio = document.querySelector('input[name="payMethod"]:checked');
-  const payMethod = payRadio ? payRadio.value : 'iban';
-  const payLabel = payMethod === 'iban' ? 'Havale & FAST (Havuz IBAN)' : (payMethod === 'card' ? 'Kart (Güvenli Havuz)' : 'Kapıda Ödeme');
+  const payMethod = payRadio ? payRadio.value : 'card';
+  const payLabel = payMethod === 'iban' ? 'Havale & FAST' : (payMethod === 'card' ? 'Kredi / Banka Kartı (Shopier 3D Secure)' : 'Kapıda Ödeme');
 
   const orderNumber = 'KF-' + Math.floor(100000 + Math.random() * 900000);
   const now = new Date().toLocaleDateString('tr-TR');
   const orderAmount = Number(totals.total.toFixed(0));
+
+  const primaryCartItem = cart && cart.length > 0 ? PRODUCTS.find(p => p.id === cart[0].id) : null;
+  const shopierTargetUrl = (primaryCartItem && primaryCartItem.shopierUrl) || 'https://www.shopier.com/KafKefTasarm/51595537';
 
   const newOrder = {
     code: orderNumber,
@@ -1034,12 +1055,12 @@ function completeCheckoutOrder(e) {
   const container = document.getElementById('checkoutModalContent');
   if (container) {
     container.innerHTML = `
-      <div style="text-align:center;padding:30px 16px">
+      <div style="text-align:center;padding:26px 14px">
         <div style="width:64px;height:64px;border-radius:50%;background:#e9f8ee;color:#167144;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px">✓</div>
         <h2 style="color:var(--primary);font-size:22px;margin-bottom:6px">Siparişiniz Başarıyla Alındı! 🎉</h2>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Kâfkef Not defterleriniz özenle hazırlanıp en kısa sürede kargoya verilecektir.</p>
         
-        <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:10px;padding:16px;max-width:420px;margin:0 auto 20px;text-align:left">
+        <div style="background:var(--bg-warm);border:1px solid var(--border-color);border-radius:10px;padding:16px;max-width:440px;margin:0 auto 20px;text-align:left">
           <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
             <span>Sipariş Kodu:</span>
             <strong>${orderNumber}</strong>
@@ -1050,7 +1071,7 @@ function completeCheckoutOrder(e) {
           </div>
           <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
             <span>Ödeme Şekli:</span>
-            <span>${payLabel}</span>
+            <span style="font-weight:700;color:var(--primary)">${payLabel}</span>
           </div>
           ${totals.freeGiftCount > 0 ? `
             <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;color:#167144">
@@ -1064,18 +1085,37 @@ function completeCheckoutOrder(e) {
           </div>
         </div>
 
+        ${payMethod === 'card' ? `
+          <div style="background:#f5f3ff;border:1.5px solid #8b5cf6;border-radius:12px;padding:22px;max-width:440px;margin:0 auto 20px;text-align:center">
+            <div style="font-size:36px;margin-bottom:6px">💳</div>
+            <div style="font-weight:800;color:#5B21B6;font-size:17px;margin-bottom:6px">Shopier Güvenli Kart Ödeme Ekranı</div>
+            <p style="font-size:13px;color:#4c1d95;margin-bottom:16px;line-height:1.5">
+              Siparişiniz sisteme kaydedildi. <strong>256-Bit SSL & 3D Secure</strong> korumasıyla kart ödemenizi tamamlamak için aşağıdaki butona basınız:
+            </p>
+            <a href="${shopierTargetUrl}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#5B21B6;color:#fff;padding:15px 24px;border-radius:10px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 4px 14px rgba(91,33,182,0.3);width:100%">
+              🛍️ Shopier ile Kartla Güvenli Öde (${orderAmount} TL) ➔
+            </a>
+            <div style="font-size:11px;color:#6d28d9;margin-top:10px">
+              🔒 Ödeme Shopier güvencesiyle bankanızdan gelen 3D Secure SMS şifrenizle onaylanır.
+            </div>
+          </div>
+        ` : ''}
+
         ${payMethod === 'iban' ? `
-          <div style="background:#fff;border:1px dashed var(--border-color);border-radius:10px;padding:14px;max-width:420px;margin:0 auto 20px;text-align:left;font-size:12.5px">
-            <div style="font-weight:700;color:var(--primary);margin-bottom:6px">🏦 FAST / Havale Yapılacak Havuz Hesabı:</div>
+          <div style="background:#fff;border:1px dashed var(--border-color);border-radius:10px;padding:14px;max-width:440px;margin:0 auto 20px;text-align:left;font-size:12.5px">
+            <div style="font-weight:700;color:var(--primary);margin-bottom:6px">🏦 FAST / Havale Yapılacak Banka Hesabı:</div>
             <div style="margin-bottom:3px"><strong>Banka:</strong> ${ibanCfg.bankName}</div>
             <div style="margin-bottom:3px"><strong>Alıcı:</strong> ${ibanCfg.holderName}</div>
             <div style="background:var(--bg-warm);padding:8px;border-radius:6px;margin:6px 0;display:flex;align-items:center;justify-content:space-between">
               <span style="font-family:monospace;font-weight:700;font-size:12px;color:var(--primary)">${ibanCfg.ibanNo}</span>
               <button type="button" onclick="copyIbanToClipboard()" class="copy-pill-btn">Kopyala</button>
             </div>
-            <div style="font-size:11px;color:var(--text-muted)">
-              📌 Açıklama alanına <strong>${orderNumber}</strong> yazarak <strong>${orderAmount} TL</strong> transfer ediniz. Paranız Kâfkef Not havuzuna geçtiğinde siparişiniz anında sevk edilir.
+            <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">
+              📌 Açıklama alanına <strong>${orderNumber}</strong> yazarak <strong>${orderAmount} TL</strong> transfer ediniz.
             </div>
+            <a href="https://wa.me/905551234567?text=${encodeURIComponent(`Merhaba Kâfkef Not, #${orderNumber} numaralı siparişimi verdim. Tutar: ${orderAmount} TL. Ad Soyad: ${name}. Dekontumu iletiyorum.`)}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#16a34a;color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;font-size:13.5px;text-decoration:none;width:100%;box-shadow:0 3px 8px rgba(22,163,74,0.25)">
+              📲 WhatsApp'tan Dekont Gönder & Siparişi Onayla
+            </a>
           </div>
         ` : ''}
 
@@ -1084,6 +1124,10 @@ function completeCheckoutOrder(e) {
         </button>
       </div>
     `;
+
+    if (payMethod === 'card') {
+      window.open(shopierTargetUrl, '_blank');
+    }
   }
 }
 
@@ -1492,7 +1536,8 @@ const DEFAULT_SITE_CONTENT = {
   heroTitle: 'Arapça İlk Adım <span>Defteri</span>',
   heroDesc: '<strong>Kelime · Cümle · Dilbilgisi · Pratik</strong><br>Arapça\'nın sağdan sola doğal yazım yönüne göre özel olarak tasarlandı. Masanızda ilham verecek zarif kapak, kaliteli ve pürüzsüz yazı kağıdı.',
   instagramUrl: 'https://www.instagram.com/kafkefnot/',
-  whatsappPhone: '0555 123 45 67'
+  whatsappPhone: '0555 123 45 67',
+  shopierStoreUrl: 'https://www.shopier.com/KafKefTasarm'
 };
 
 function getSiteContent() {

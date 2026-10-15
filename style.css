@@ -2591,5 +2591,22 @@ body {
   margin: 0;
 }
 
+/* Shopier Direct Card Payment Button */
+.fobi-shopier-btn {
+  background: #5B21B6 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(91, 33, 182, 0.25);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.25s ease;
+}
 
-
+.fobi-shopier-btn:hover {
+  background: #4C1D95 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(91, 33, 182, 0.35);
+  color: #ffffff !important;
+}

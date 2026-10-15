@@ -600,6 +600,9 @@
       <button class="checkout-btn" onclick="openCheckoutModal()">
         Siparişi Tamamla →
       </button>
+      <a href="https://www.shopier.com/KafKefTasarm/51595537" target="_blank" style="margin-top:8px;background:#5B21B6;color:#fff;border-radius:12px;padding:12px;font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 10px rgba(91,33,182,0.2)">
+        💳 Shopier ile Kartla Hızlı Al
+      </a>
       <div style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:10px">
         🔒 256-Bit SSL Güvenli Alışveriş & İade Güvencesi
       </div>
@@ -618,9 +621,12 @@
           <small style="text-decoration:line-through;color:#9ca3af;font-size:11px">290 TL</small>
           <div style="font-weight:900;color:var(--primary);font-size:18px">240 TL</div>
         </div>
-        <button class="add-cart-btn" style="height:42px;padding:0 24px;font-size:13px" onclick="addToCart('kafkef-ilk-adim-defteri')">
+        <button class="add-cart-btn" style="height:42px;padding:0 18px;font-size:13px" onclick="addToCart('kafkef-ilk-adim-defteri')">
           SEPETE EKLE
         </button>
+        <a href="https://www.shopier.com/KafKefTasarm/51595537" target="_blank" class="add-cart-btn" style="height:42px;padding:0 18px;font-size:13px;background:#5B21B6;color:#fff;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px">
+          💳 KARTLA AL
+        </a>
       </div>
     </div>
   </aside>
@@ -704,12 +710,19 @@
             <!-- Seçenek 2: Kartla Ödeme -->
             <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:8px;cursor:pointer;font-weight:600">
               <input type="radio" name="payMethod" value="card" onchange="toggleCheckoutPayment(this.value)"> 
-              <span>💳 Kredi / Banka Kartı (3D Secure Güvenli Havuz)</span>
+              <span>💳 Kredi / Banka Kartı (Shopier · 3D Secure ile Güvenli Öde)</span>
             </label>
 
-            <div id="checkoutCardBox" style="display:none;background:#fff;border:1px dashed var(--border-color);border-radius:10px;padding:12px;margin:6px 0 14px;font-size:12px;color:var(--text-muted)">
+            <div id="checkoutCardBox" style="display:none;background:#f5f3ff;border:1px dashed #8b5cf6;border-radius:10px;padding:14px;margin:6px 0 14px;font-size:12.5px;color:#4c1d95">
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-                <span>🛡️ 256-Bit SSL & 3D Secure güvencesiyle kart ödemeniz mağaza havuzuna aktarılır.</span>
+                <span style="font-size:18px">🛡️</span>
+                <strong>Shopier 256-Bit SSL & 3D Secure Güvencesi</strong>
+              </div>
+              <div style="line-height:1.5;margin-bottom:8px">
+                Tüm banka ve kredi kartlarıyla tek çekim veya taksitle güvenle ödeyebilirsiniz. Kart bilgileriniz sitenizde değil, doğrudan Shopier lisanslı güvenli ödeme altyapısında korunur.
+              </div>
+              <div style="font-size:11.5px;font-weight:700;color:#5b21b6">
+                ✓ Siparişi Onayla butonuna bastığınızda güvenli Shopier 3D Secure ödeme ekranı açılacaktır.
               </div>
             </div>
 
@@ -861,6 +874,11 @@
             <div id="newProdGalleryThumbs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
               <span style="font-size:11px;color:var(--text-muted)">Henüz ek fotoğraf seçilmedi. (İsteğe bağlı)</span>
             </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label>Shopier Satın Alma Linki (Opsiyonel):</label>
+            <input type="url" id="admShopierUrl" placeholder="Örn: https://www.shopier.com/KafKefTasarm/51595537">
           </div>
 
           <div class="admin-form-group">
@@ -1373,6 +1391,11 @@
         </div>
 
         <div class="admin-form-group">
+          <label>Shopier Satın Alma Linki (Opsiyonel):</label>
+          <input type="url" id="editProdShopierUrl" placeholder="Örn: https://www.shopier.com/KafKefTasarm/51595537">
+        </div>
+
+        <div class="admin-form-group">
           <label>Açıklama</label>
           <textarea id="editProdDesc" rows="3"></textarea>
         </div>
@@ -1599,8 +1622,8 @@
       <div>
         © 2026 Kâfkef Not (@kafkefnot). Tüm hakları saklıdır.
       </div>
-      <div style="display:flex;align-items:center;gap:12px;font-size:18px">
-        <span>💳 İyzico</span>
+      <div style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600">
+        <span>🛍️ Shopier</span>
         <span>🛡️ 3D Secure</span>
         <span>🔒 256-Bit SSL</span>
       </div>
